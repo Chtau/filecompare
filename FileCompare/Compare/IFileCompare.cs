@@ -10,5 +10,6 @@ namespace Compare
         int Similar(string targetPath, string tarCompareValue);
         string GetSourceCompareValue();
         string GetTargetCompareValue();
+        string CreateCompareValue(string path);
     }
 }

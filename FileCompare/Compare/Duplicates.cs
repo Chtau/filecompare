@@ -13,6 +13,7 @@ namespace Compare
         private Dictionary<string, string> cacheCompareValue;
 
         public event EventHandler<string> ProcessFile;
+        public event EventHandler<bool> PrepareCompareValues;
 
         public Duplicates()
         {
@@ -37,16 +38,36 @@ namespace Compare
         {
             return await Task.Run(() =>
             {
+                PrepareCompareValues?.Invoke(this, false);
+                OnPrepareCompareValue();
+                PrepareCompareValues?.Invoke(this, true);
                 var result = new List<DuplicatesResult>();
-                for (int i = 0; i < files.Count; i++)
+                Parallel.For(0, files.Count, (int index) =>
+                {
+                    ProcessFile?.Invoke(this, files[index]);
+                    var dup = OnCompareDuplicates(files[index], index);
+                    if (dup != null)
+                        result.Add(dup);
+                });
+                /*for (int i = 0; i < files.Count; i++)
                 {
                     ProcessFile?.Invoke(this, files[i]);
                     var dup = OnCompareDuplicates(files[i], i);
                     if (dup != null)
                         result.Add(dup);
-                }
+                }*/
                 return result;
             });
+        }
+
+        private void OnPrepareCompareValue()
+        {
+            var comp = new FileComparison();
+            for (int i = 0; i < files.Count; i++)
+            {
+                if (!cacheCompareValue.ContainsKey(files[i]))
+                    cacheCompareValue.Add(files[i], comp.CreateCompareValue(files[i]));
+            }
         }
 
         private DuplicatesResult OnCompareDuplicates(string sourceFile, int fileStartIndex)

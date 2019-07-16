@@ -9,6 +9,13 @@ namespace ConsoleApp1
         {
             var dup = new Duplicates();
             dup.Collect(@"D:\Downloads").GetAwaiter().GetResult();
+            dup.PrepareCompareValues += (object sender, bool e) =>
+            {
+                if (e)
+                    Console.WriteLine("Prepare compare value complete");
+                else
+                    Console.WriteLine("Prepare compare value starting");
+            };
             dup.ProcessFile += (object sender, string e) =>
             {
                 Console.WriteLine("Process file: " + e);

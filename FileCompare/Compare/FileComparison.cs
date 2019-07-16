@@ -60,5 +60,10 @@ namespace Compare
         {
             return targetMD5Hash;
         }
+
+        public string CreateCompareValue(string path)
+        {
+            return OnGetMD5(path);
+        }
     }
 }
