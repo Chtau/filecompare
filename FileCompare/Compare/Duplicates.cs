@@ -9,8 +9,9 @@ namespace Compare
     public class Duplicates
     {
         public List<string> Files { get; private set; }
+        public Dictionary<string, string> CacheCompareValue { get; private set; }
+
         private readonly CollectFiles _collectFiles;
-        private Dictionary<string, string> cacheCompareValue;
 
         public event EventHandler<string> ProcessFile;
         public event EventHandler<bool> PrepareCompareValues;
@@ -19,13 +20,17 @@ namespace Compare
         {
             Files = new List<string>();
             _collectFiles = new CollectFiles();
-            cacheCompareValue = new Dictionary<string, string>();
+            CacheCompareValue = new Dictionary<string, string>();
+        }
+
+        public void SetCache(Dictionary<string, string> cache)
+        {
+            CacheCompareValue = cache;
         }
 
         public async Task Collect(params string[] path)
         {
             Files = new List<string>();
-            cacheCompareValue = new Dictionary<string, string>();
             foreach (var item in path)
             {
                 var colFiles = await _collectFiles.Collect(item);
@@ -56,7 +61,7 @@ namespace Compare
         private void OnPrepareCompareValue()
         {
             var comp = new FileComparison();
-            System.Collections.Concurrent.ConcurrentDictionary<string, string> compare = new System.Collections.Concurrent.ConcurrentDictionary<string, string>(cacheCompareValue);
+            System.Collections.Concurrent.ConcurrentDictionary<string, string> compare = new System.Collections.Concurrent.ConcurrentDictionary<string, string>(CacheCompareValue);
             Parallel.For(0, Files.Count, (int index) =>
             {
                 if (!compare.ContainsKey(Files[index]))
@@ -66,12 +71,12 @@ namespace Compare
                         compare.GetOrAdd(Files[index], compareValue);
                 }
             });
-            cacheCompareValue = new Dictionary<string, string>(compare);
+            CacheCompareValue = new Dictionary<string, string>(compare);
         }
 
         private DuplicatesResult OnCompareDuplicates(string sourceFile, int fileStartIndex)
         {
-            System.Collections.Concurrent.ConcurrentDictionary<string, string> compareCache = new System.Collections.Concurrent.ConcurrentDictionary<string, string>(cacheCompareValue);
+            System.Collections.Concurrent.ConcurrentDictionary<string, string> compareCache = new System.Collections.Concurrent.ConcurrentDictionary<string, string>(CacheCompareValue);
             var result = new DuplicatesResult();
             var comp = new FileComparison();
             comp.Init(sourceFile, compareCache.FirstOrDefault(x => x.Key == sourceFile).Value);
@@ -89,7 +94,7 @@ namespace Compare
             }
             if (!compareCache.ContainsKey(sourceFile))
                 compareCache.GetOrAdd(sourceFile, comp.GetSourceCompareValue());
-            cacheCompareValue = new Dictionary<string, string>(compareCache);
+            CacheCompareValue = new Dictionary<string, string>(compareCache);
             if (result.FileResults.Count > 0)
             {
                 result.FileResults.Add(new DuplicatesResult.FileResult
