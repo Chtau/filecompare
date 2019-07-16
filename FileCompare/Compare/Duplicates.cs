@@ -8,7 +8,7 @@ namespace Compare
 {
     public class Duplicates
     {
-        private List<string> files;
+        public List<string> Files { get; private set; }
         private readonly CollectFiles _collectFiles;
         private Dictionary<string, string> cacheCompareValue;
 
@@ -17,20 +17,20 @@ namespace Compare
 
         public Duplicates()
         {
-            files = new List<string>();
+            Files = new List<string>();
             _collectFiles = new CollectFiles();
             cacheCompareValue = new Dictionary<string, string>();
         }
 
         public async Task Collect(params string[] path)
         {
-            files = new List<string>();
+            Files = new List<string>();
             cacheCompareValue = new Dictionary<string, string>();
             foreach (var item in path)
             {
                 var colFiles = await _collectFiles.Collect(item);
                 if (colFiles.Any())
-                    files.AddRange(colFiles);
+                    Files.AddRange(colFiles);
             }
         }
 
@@ -42,20 +42,13 @@ namespace Compare
                 OnPrepareCompareValue();
                 PrepareCompareValues?.Invoke(this, true);
                 var result = new List<DuplicatesResult>();
-                Parallel.For(0, files.Count, (int index) =>
+                Parallel.For(0, Files.Count, (int index) =>
                 {
-                    ProcessFile?.Invoke(this, files[index]);
-                    var dup = OnCompareDuplicates(files[index], index);
+                    ProcessFile?.Invoke(this, Files[index]);
+                    var dup = OnCompareDuplicates(Files[index], index);
                     if (dup != null)
                         result.Add(dup);
                 });
-                /*for (int i = 0; i < files.Count; i++)
-                {
-                    ProcessFile?.Invoke(this, files[i]);
-                    var dup = OnCompareDuplicates(files[i], i);
-                    if (dup != null)
-                        result.Add(dup);
-                }*/
                 return result;
             });
         }
@@ -63,10 +56,10 @@ namespace Compare
         private void OnPrepareCompareValue()
         {
             var comp = new FileComparison();
-            for (int i = 0; i < files.Count; i++)
+            for (int i = 0; i < Files.Count; i++)
             {
-                if (!cacheCompareValue.ContainsKey(files[i]))
-                    cacheCompareValue.Add(files[i], comp.CreateCompareValue(files[i]));
+                if (!cacheCompareValue.ContainsKey(Files[i]))
+                    cacheCompareValue.Add(Files[i], comp.CreateCompareValue(Files[i]));
             }
         }
 
@@ -75,17 +68,17 @@ namespace Compare
             var result = new DuplicatesResult();
             var comp = new FileComparison();
             comp.Init(sourceFile, cacheCompareValue.FirstOrDefault(x => x.Key == sourceFile).Value);
-            for (int i = fileStartIndex + 1; i < files.Count; i++)
+            for (int i = fileStartIndex + 1; i < Files.Count; i++)
             {
-                var similar = comp.Similar(files[i], cacheCompareValue.FirstOrDefault(x => x.Key == files[i]).Value);
+                var similar = comp.Similar(Files[i], cacheCompareValue.FirstOrDefault(x => x.Key == Files[i]).Value);
                 if (similar >= 90)
                     result.FileResults.Add(new DuplicatesResult.FileResult
                     {
                         CompareValue = similar,
-                        FilePath = files[i]
+                        FilePath = Files[i]
                     });
-                if (!cacheCompareValue.ContainsKey(files[i]))
-                    cacheCompareValue.Add(files[i], comp.GetTargetCompareValue());
+                if (!cacheCompareValue.ContainsKey(Files[i]))
+                    cacheCompareValue.Add(Files[i], comp.GetTargetCompareValue());
             }
             if (!cacheCompareValue.ContainsKey(sourceFile))
                 cacheCompareValue.Add(sourceFile, comp.GetSourceCompareValue());
