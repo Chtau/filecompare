@@ -10,16 +10,19 @@ namespace Compare
     {
         private List<string> files;
         private readonly CollectFiles _collectFiles;
+        private Dictionary<string, string> cacheCompareValue;
 
         public Duplicates()
         {
             files = new List<string>();
             _collectFiles = new CollectFiles();
+            cacheCompareValue = new Dictionary<string, string>();
         }
 
         public async Task Collect(params string[] path)
         {
             files = new List<string>();
+            cacheCompareValue = new Dictionary<string, string>();
             foreach (var item in path)
             {
                 var colFiles = await _collectFiles.Collect(item);
@@ -28,25 +31,29 @@ namespace Compare
             }
         }
 
-        public List<DuplicatesResult> Find()
+        public async Task<List<DuplicatesResult>> Find()
         {
-            var result = new List<DuplicatesResult>();
-            for (int i = 0; i < files.Count; i++)
+            return await Task.Run(() =>
             {
-                var dup = OnCompareDuplicates(files[i], i);
-                if (dup != null)
-                    result.Add(dup);
-            }
-            return result;
+                var result = new List<DuplicatesResult>();
+                for (int i = 0; i < files.Count; i++)
+                {
+                    var dup = OnCompareDuplicates(files[i], i);
+                    if (dup != null)
+                        result.Add(dup);
+                }
+                return result;
+            });
         }
 
         private DuplicatesResult OnCompareDuplicates(string sourceFile, int fileStartIndex)
         {
             var result = new DuplicatesResult();
-            var comp = new FileComparison(sourceFile);
+            var comp = new FileComparison();
+            comp.Init(sourceFile, cacheCompareValue.FirstOrDefault(x => x.Key == sourceFile).Value);
             for (int i = fileStartIndex + 1; i < files.Count; i++)
             {
-                var similar = comp.Similar(files[i]);
+                var similar = comp.Similar(files[i], cacheCompareValue.FirstOrDefault(x => x.Key == files[i]).Value);
                 if (similar >= 90)
                     result.FileResults.Add(new DuplicatesResult.FileResult
                     {

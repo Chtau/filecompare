@@ -30,7 +30,10 @@ namespace Compare
                 if (!fInfo.IsReadOnly)
                 {
                     if (System.IO.File.Exists(path))
+                    {
+                        System.IO.File.OpenRead(path);
                         return true;
+                    }
                 }
             } catch (Exception)
             {

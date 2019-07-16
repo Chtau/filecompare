@@ -6,20 +6,33 @@ using System.Text;
 
 namespace Compare
 {
-    class FileComparison
+    class FileComparison : IFileCompare
     {
         private string sourcePath;
-        private string md5Hash = null;
+        private string sourceMD5Hash = null;
+        private string targetMD5Hash = null;
 
-        public FileComparison(string path)
+        public FileComparison()
         {
-            sourcePath = path;
-            md5Hash = OnGetMD5(sourcePath);
+           
         }
 
-        public int Similar(string targetPath)
+        public void Init(string path, string srcCompareValue)
         {
-            return md5Hash == OnGetMD5(targetPath) ? 100 : 0;
+            sourcePath = path;
+            if (!string.IsNullOrWhiteSpace(srcCompareValue))
+                sourceMD5Hash = srcCompareValue;
+            else
+                sourceMD5Hash = OnGetMD5(sourcePath);
+        }
+
+        public int Similar(string targetPath, string tarCompareValue)
+        {
+            if (!string.IsNullOrWhiteSpace(tarCompareValue))
+                targetMD5Hash = tarCompareValue;
+            else
+                targetMD5Hash = OnGetMD5(targetPath);
+            return sourceMD5Hash == targetMD5Hash ? 100 : 0;
         }
 
         private string OnGetMD5(string path)
@@ -36,6 +49,16 @@ namespace Compare
                 }
             }
             return null;
+        }
+
+        public string GetSourceCompareValue()
+        {
+            return sourceMD5Hash;
+        }
+
+        public string GetTargetCompareValue()
+        {
+            return targetMD5Hash;
         }
     }
 }

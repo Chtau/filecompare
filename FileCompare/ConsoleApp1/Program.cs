@@ -9,7 +9,7 @@ namespace ConsoleApp1
         {
             var dup = new Duplicates();
             dup.Collect(@"C:\Users\tauch\Documents\").GetAwaiter().GetResult();
-            var result = dup.Find();
+            var result = dup.Find().GetAwaiter().GetResult();
             Console.ReadKey();
         }
     }
