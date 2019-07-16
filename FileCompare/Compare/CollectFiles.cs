@@ -20,8 +20,7 @@ namespace Compare
         private IEnumerable<string> OnCollect(string path)
         {
             var result = new List<string>();
-            var dirInfo = new DirectoryInfo(path);
-            if (!dirInfo.Attributes.HasFlag(FileAttributes.Hidden))
+            if (AccessControl.Directory(path))
             {
                 var files = Directory.EnumerateFiles(path);
                 if (files.Any())

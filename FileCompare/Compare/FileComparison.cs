@@ -24,8 +24,7 @@ namespace Compare
 
         private string OnGetMD5(string path)
         {
-            var fInfo = new FileInfo(path);
-            if (!fInfo.IsReadOnly)
+            if (AccessControl.File(path))
             {
                 using (var md5 = MD5.Create())
                 {
