@@ -7,8 +7,10 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
+            string path = @"D:\Downloads";
             var dup = new Duplicates();
-            dup.Collect(@"D:\Downloads").GetAwaiter().GetResult();
+            dup.Collect(path).GetAwaiter().GetResult();
+            Console.WriteLine($"Files found: " + dup.Files.Count);
             dup.PrepareCompareValues += (object sender, bool e) =>
             {
                 if (e)

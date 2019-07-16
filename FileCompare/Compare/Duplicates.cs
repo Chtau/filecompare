@@ -56,32 +56,40 @@ namespace Compare
         private void OnPrepareCompareValue()
         {
             var comp = new FileComparison();
-            for (int i = 0; i < Files.Count; i++)
+            System.Collections.Concurrent.ConcurrentDictionary<string, string> compare = new System.Collections.Concurrent.ConcurrentDictionary<string, string>(cacheCompareValue);
+            Parallel.For(0, Files.Count, (int index) =>
             {
-                if (!cacheCompareValue.ContainsKey(Files[i]))
-                    cacheCompareValue.Add(Files[i], comp.CreateCompareValue(Files[i]));
-            }
+                if (!compare.ContainsKey(Files[index]))
+                {
+                    var compareValue = comp.CreateCompareValue(Files[index]);
+                    if (!string.IsNullOrWhiteSpace(compareValue))
+                        compare.GetOrAdd(Files[index], compareValue);
+                }
+            });
+            cacheCompareValue = new Dictionary<string, string>(compare);
         }
 
         private DuplicatesResult OnCompareDuplicates(string sourceFile, int fileStartIndex)
         {
+            System.Collections.Concurrent.ConcurrentDictionary<string, string> compareCache = new System.Collections.Concurrent.ConcurrentDictionary<string, string>(cacheCompareValue);
             var result = new DuplicatesResult();
             var comp = new FileComparison();
-            comp.Init(sourceFile, cacheCompareValue.FirstOrDefault(x => x.Key == sourceFile).Value);
+            comp.Init(sourceFile, compareCache.FirstOrDefault(x => x.Key == sourceFile).Value);
             for (int i = fileStartIndex + 1; i < Files.Count; i++)
             {
-                var similar = comp.Similar(Files[i], cacheCompareValue.FirstOrDefault(x => x.Key == Files[i]).Value);
+                var similar = comp.Similar(Files[i], compareCache.FirstOrDefault(x => x.Key == Files[i]).Value);
                 if (similar >= 90)
                     result.FileResults.Add(new DuplicatesResult.FileResult
                     {
                         CompareValue = similar,
                         FilePath = Files[i]
                     });
-                if (!cacheCompareValue.ContainsKey(Files[i]))
-                    cacheCompareValue.Add(Files[i], comp.GetTargetCompareValue());
+                if (!compareCache.ContainsKey(Files[i]))
+                    compareCache.GetOrAdd(Files[i], comp.GetTargetCompareValue());
             }
-            if (!cacheCompareValue.ContainsKey(sourceFile))
-                cacheCompareValue.Add(sourceFile, comp.GetSourceCompareValue());
+            if (!compareCache.ContainsKey(sourceFile))
+                compareCache.GetOrAdd(sourceFile, comp.GetSourceCompareValue());
+            cacheCompareValue = new Dictionary<string, string>(compareCache);
             if (result.FileResults.Count > 0)
             {
                 result.FileResults.Add(new DuplicatesResult.FileResult
