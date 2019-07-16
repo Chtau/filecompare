@@ -12,6 +12,8 @@ namespace Compare
         private readonly CollectFiles _collectFiles;
         private Dictionary<string, string> cacheCompareValue;
 
+        public event EventHandler<string> ProcessFile;
+
         public Duplicates()
         {
             files = new List<string>();
@@ -38,6 +40,7 @@ namespace Compare
                 var result = new List<DuplicatesResult>();
                 for (int i = 0; i < files.Count; i++)
                 {
+                    ProcessFile?.Invoke(this, files[i]);
                     var dup = OnCompareDuplicates(files[i], i);
                     if (dup != null)
                         result.Add(dup);
@@ -60,7 +63,11 @@ namespace Compare
                         CompareValue = similar,
                         FilePath = files[i]
                     });
+                if (!cacheCompareValue.ContainsKey(files[i]))
+                    cacheCompareValue.Add(files[i], comp.GetTargetCompareValue());
             }
+            if (!cacheCompareValue.ContainsKey(sourceFile))
+                cacheCompareValue.Add(sourceFile, comp.GetSourceCompareValue());
             if (result.FileResults.Count > 0)
             {
                 result.FileResults.Add(new DuplicatesResult.FileResult

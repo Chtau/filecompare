@@ -8,9 +8,14 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             var dup = new Duplicates();
-            dup.Collect(@"C:\Users\tauch\Documents\").GetAwaiter().GetResult();
+            dup.Collect(@"D:\Downloads").GetAwaiter().GetResult();
+            dup.ProcessFile += (object sender, string e) =>
+            {
+                Console.WriteLine("Process file: " + e);
+            };
             var result = dup.Find().GetAwaiter().GetResult();
             Console.ReadKey();
         }
+
     }
 }
