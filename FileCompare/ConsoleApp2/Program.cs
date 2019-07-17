@@ -25,6 +25,10 @@ namespace ConsoleApp2
                     else
                         Console.WriteLine("Prepare compare value starting");
                 };
+                dup.PrepareCompareValuesProgress += (object sender, decimal e) =>
+                {
+                    Console.WriteLine("Prepare compare value Progress:" + e);
+                };
                 dup.ProcessFile += (object sender, string e) =>
                 {
                     Console.WriteLine("Process file: " + e);
