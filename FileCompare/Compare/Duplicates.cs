@@ -16,6 +16,7 @@ namespace Compare
 
         public event EventHandler<string> ProcessFile;
         public event EventHandler<bool> PrepareCompareValues;
+        public event EventHandler<decimal> PrepareCompareValuesProgress;
 
         public Duplicates()
         {
@@ -63,8 +64,11 @@ namespace Compare
         {
             var comp = new FileComparison();
             ConcurrentDictionary<string, string> compare = new ConcurrentDictionary<string, string>(CacheCompareValue);
+            int itemCounter = 0;
             Parallel.For(0, Files.Count, (int index) =>
             {
+                itemCounter += 1;
+                PrepareCompareValuesProgress?.Invoke(this, Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2));
                 if (!compare.ContainsKey(Files[index]))
                 {
                     var compareValue = comp.CreateCompareValue(Files[index]);
@@ -72,6 +76,7 @@ namespace Compare
                         compare.GetOrAdd(Files[index], compareValue);
                 }
             });
+            PrepareCompareValuesProgress?.Invoke(this, 100);
             CacheCompareValue = new Dictionary<string, string>(compare);
         }
 
