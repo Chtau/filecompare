@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -61,7 +62,7 @@ namespace Compare
         private void OnPrepareCompareValue()
         {
             var comp = new FileComparison();
-            System.Collections.Concurrent.ConcurrentDictionary<string, string> compare = new System.Collections.Concurrent.ConcurrentDictionary<string, string>(CacheCompareValue);
+            ConcurrentDictionary<string, string> compare = new ConcurrentDictionary<string, string>(CacheCompareValue);
             Parallel.For(0, Files.Count, (int index) =>
             {
                 if (!compare.ContainsKey(Files[index]))
@@ -76,7 +77,7 @@ namespace Compare
 
         private DuplicatesResult OnCompareDuplicates(string sourceFile, int fileStartIndex)
         {
-            System.Collections.Concurrent.ConcurrentDictionary<string, string> compareCache = new System.Collections.Concurrent.ConcurrentDictionary<string, string>(CacheCompareValue);
+            ConcurrentDictionary<string, string> compareCache = new ConcurrentDictionary<string, string>(CacheCompareValue);
             var result = new DuplicatesResult();
             var comp = new FileComparison();
             comp.Init(sourceFile, compareCache.FirstOrDefault(x => x.Key == sourceFile).Value);
