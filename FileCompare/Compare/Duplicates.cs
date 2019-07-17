@@ -10,7 +10,7 @@ namespace Compare
     public class Duplicates
     {
         public List<string> Files { get; private set; }
-        public Dictionary<string, string> CacheCompareValue { get; private set; }
+        public Dictionary<string, CompareValue> CacheCompareValue { get; private set; }
 
         private readonly CollectFiles _collectFiles;
 
@@ -18,13 +18,13 @@ namespace Compare
         public event EventHandler<bool> PrepareCompareValues;
         public event EventHandler<decimal> PrepareCompareValuesProgress;
 
-        private int similarMinValue = 90;
+        private int similarMinValue = 70;
 
         public Duplicates()
         {
             Files = new List<string>();
             _collectFiles = new CollectFiles();
-            CacheCompareValue = new Dictionary<string, string>();
+            CacheCompareValue = new Dictionary<string, CompareValue>();
         }
 
         public void SetSimilarMinValue(int value)
@@ -32,7 +32,7 @@ namespace Compare
             similarMinValue = value;
         }
 
-        public void SetCache(Dictionary<string, string> cache)
+        public void SetCache(Dictionary<string, CompareValue> cache)
         {
             CacheCompareValue = cache;
         }
@@ -70,7 +70,7 @@ namespace Compare
         private void OnPrepareCompareValue()
         {
             var comp = new FileComparison();
-            ConcurrentDictionary<string, string> compare = new ConcurrentDictionary<string, string>(CacheCompareValue);
+            ConcurrentDictionary<string, CompareValue> compare = new ConcurrentDictionary<string, CompareValue>(CacheCompareValue);
             int itemCounter = 0;
             PrepareCompareValuesProgress?.Invoke(this, 0);
             Parallel.For(0, Files.Count, (int index) =>
@@ -80,35 +80,30 @@ namespace Compare
                 if (!compare.ContainsKey(Files[index]))
                 {
                     var compareValue = comp.CreateCompareValue(Files[index]);
-                    if (!string.IsNullOrWhiteSpace(compareValue))
+                    if (compareValue != null)
                         compare.GetOrAdd(Files[index], compareValue);
                 }
             });
             PrepareCompareValuesProgress?.Invoke(this, 100);
-            CacheCompareValue = new Dictionary<string, string>(compare);
+            CacheCompareValue = new Dictionary<string, CompareValue>(compare);
         }
 
         private DuplicatesResult OnCompareDuplicates(string sourceFile, int fileStartIndex)
         {
-            ConcurrentDictionary<string, string> compareCache = new ConcurrentDictionary<string, string>(CacheCompareValue);
+            ConcurrentDictionary<string, CompareValue> compareCache = new ConcurrentDictionary<string, CompareValue>(CacheCompareValue);
             var result = new DuplicatesResult();
             var comp = new FileComparison();
-            comp.Init(sourceFile, compareCache.FirstOrDefault(x => x.Key == sourceFile).Value);
             for (int i = fileStartIndex + 1; i < Files.Count; i++)
             {
-                var similar = comp.Similar(Files[i], compareCache.FirstOrDefault(x => x.Key == Files[i]).Value);
+                var similar = comp.Similar(compareCache.FirstOrDefault(x => x.Key == sourceFile).Value, compareCache.FirstOrDefault(x => x.Key == Files[i]).Value);
                 if (similar >= similarMinValue)
                     result.FileResults.Add(new DuplicatesResult.FileResult
                     {
                         CompareValue = similar,
                         FilePath = Files[i]
                     });
-                if (!compareCache.ContainsKey(Files[i]))
-                    compareCache.GetOrAdd(Files[i], comp.GetTargetCompareValue());
             }
-            if (!compareCache.ContainsKey(sourceFile))
-                compareCache.GetOrAdd(sourceFile, comp.GetSourceCompareValue());
-            CacheCompareValue = new Dictionary<string, string>(compareCache);
+            CacheCompareValue = new Dictionary<string, CompareValue>(compareCache);
             if (result.FileResults.Count > 0)
             {
                 result.FileResults.Add(new DuplicatesResult.FileResult

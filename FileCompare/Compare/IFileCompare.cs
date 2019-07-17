@@ -6,10 +6,7 @@ namespace Compare
 {
     interface IFileCompare
     {
-        void Init(string path, string srcCompareValue);
-        int Similar(string targetPath, string tarCompareValue);
-        string GetSourceCompareValue();
-        string GetTargetCompareValue();
-        string CreateCompareValue(string path);
+        int Similar(CompareValue srcCompareValue, CompareValue tarCompareValue);
+        CompareValue CreateCompareValue(string path);
     }
 }

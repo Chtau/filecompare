@@ -8,31 +8,34 @@ namespace Compare
 {
     class FileComparison : IFileCompare
     {
-        private string sourcePath;
-        private string sourceMD5Hash = null;
-        private string targetMD5Hash = null;
 
         public FileComparison()
         {
            
         }
 
-        public void Init(string path, string srcCompareValue)
+        public int Similar(CompareValue srcCompareValue, CompareValue tarCompareValue)
         {
-            sourcePath = path;
-            if (!string.IsNullOrWhiteSpace(srcCompareValue))
-                sourceMD5Hash = srcCompareValue;
-            else
-                sourceMD5Hash = OnGetMD5(sourcePath);
-        }
-
-        public int Similar(string targetPath, string tarCompareValue)
-        {
-            if (!string.IsNullOrWhiteSpace(tarCompareValue))
-                targetMD5Hash = tarCompareValue;
-            else
-                targetMD5Hash = OnGetMD5(targetPath);
-            return sourceMD5Hash == targetMD5Hash ? 100 : 0;
+            int similarValue = 0;
+            if (srcCompareValue.Hash?.ToLower() == tarCompareValue.Hash?.ToLower())
+            {
+                similarValue += 90;
+            }
+            if (srcCompareValue.Directory?.ToLower() == tarCompareValue.Directory?.ToLower())
+            {
+                similarValue += 5;
+            }
+            if (srcCompareValue.Extension?.ToLower() == tarCompareValue.Extension?.ToLower())
+            {
+                similarValue += 10;
+            }
+            if (srcCompareValue.FileName?.ToLower() == tarCompareValue.FileName?.ToLower())
+            {
+                similarValue += 25;
+            }
+            if (similarValue > 100)
+                similarValue = 100;
+            return similarValue;
         }
 
         private string OnGetMD5(string path)
@@ -51,19 +54,15 @@ namespace Compare
             return null;
         }
 
-        public string GetSourceCompareValue()
+        public CompareValue CreateCompareValue(string path)
         {
-            return sourceMD5Hash;
-        }
-
-        public string GetTargetCompareValue()
-        {
-            return targetMD5Hash;
-        }
-
-        public string CreateCompareValue(string path)
-        {
-            return OnGetMD5(path);
+            return new CompareValue
+            {
+                Hash = OnGetMD5(path),
+                FileName = Path.GetFileNameWithoutExtension(path),
+                Directory = Path.GetDirectoryName(path),
+                Extension = Path.GetExtension(path)
+            };
         }
     }
 }

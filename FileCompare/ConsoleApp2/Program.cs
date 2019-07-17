@@ -43,6 +43,7 @@ namespace ConsoleApp2
                         System.IO.File.AppendAllText(outputPath, Environment.NewLine + Environment.NewLine);
                     }
                 }
+                Console.WriteLine("Complete");
             }
             else
             {

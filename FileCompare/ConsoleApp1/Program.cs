@@ -43,6 +43,7 @@ namespace ConsoleApp1
                         System.IO.File.AppendAllText(outputPath, Environment.NewLine + Environment.NewLine);
                     }
                 }
+                Console.WriteLine("Complete");
             } else
             {
                 Console.WriteLine("No Path to check provided");
