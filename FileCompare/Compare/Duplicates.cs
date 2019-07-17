@@ -18,11 +18,18 @@ namespace Compare
         public event EventHandler<bool> PrepareCompareValues;
         public event EventHandler<decimal> PrepareCompareValuesProgress;
 
+        private int similarMinValue = 90;
+
         public Duplicates()
         {
             Files = new List<string>();
             _collectFiles = new CollectFiles();
             CacheCompareValue = new Dictionary<string, string>();
+        }
+
+        public void SetSimilarMinValue(int value)
+        {
+            similarMinValue = value;
         }
 
         public void SetCache(Dictionary<string, string> cache)
@@ -65,6 +72,7 @@ namespace Compare
             var comp = new FileComparison();
             ConcurrentDictionary<string, string> compare = new ConcurrentDictionary<string, string>(CacheCompareValue);
             int itemCounter = 0;
+            PrepareCompareValuesProgress?.Invoke(this, 0);
             Parallel.For(0, Files.Count, (int index) =>
             {
                 itemCounter += 1;
@@ -89,7 +97,7 @@ namespace Compare
             for (int i = fileStartIndex + 1; i < Files.Count; i++)
             {
                 var similar = comp.Similar(Files[i], compareCache.FirstOrDefault(x => x.Key == Files[i]).Value);
-                if (similar >= 90)
+                if (similar >= similarMinValue)
                     result.FileResults.Add(new DuplicatesResult.FileResult
                     {
                         CompareValue = similar,
