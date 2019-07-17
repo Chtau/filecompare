@@ -9,12 +9,12 @@ namespace Compare
         public class FileResult
         {
             public string FilePath { get; set; }
-            public int CompareValue { get; set; }
+            public CompareValue.Types CompareValue { get; set; }
 
             public override string ToString()
             {
                 if (!string.IsNullOrWhiteSpace(FilePath))
-                    return $"File: {FilePath}|Value: {CompareValue}";
+                    return $"File: {FilePath}|Value: {CompareValue.ToString()}";
                 return base.ToString();
             }
         }

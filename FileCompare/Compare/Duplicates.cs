@@ -18,7 +18,7 @@ namespace Compare
         public event EventHandler<bool> PrepareCompareValues;
         public event EventHandler<decimal> PrepareCompareValuesProgress;
 
-        private int similarMinValue = 70;
+        private CompareValue.Types similarMinValue = CompareValue.Types.Hash;
 
         public Duplicates()
         {
@@ -27,7 +27,7 @@ namespace Compare
             CacheCompareValue = new Dictionary<string, CompareValue>();
         }
 
-        public void SetSimilarMinValue(int value)
+        public void SetSimilarMinValue(CompareValue.Types value)
         {
             similarMinValue = value;
         }
@@ -96,7 +96,7 @@ namespace Compare
             for (int i = fileStartIndex + 1; i < Files.Count; i++)
             {
                 var similar = comp.Similar(compareCache.FirstOrDefault(x => x.Key == sourceFile).Value, compareCache.FirstOrDefault(x => x.Key == Files[i]).Value);
-                if (similar >= similarMinValue)
+                if (similar.HasFlag(similarMinValue))
                     result.FileResults.Add(new DuplicatesResult.FileResult
                     {
                         CompareValue = similar,
@@ -108,7 +108,7 @@ namespace Compare
             {
                 result.FileResults.Add(new DuplicatesResult.FileResult
                 {
-                    CompareValue = 100,
+                    CompareValue = CompareValue.Types.Hash | CompareValue.Types.FileName | CompareValue.Types.Extension | CompareValue.Types.Directory,
                     FilePath = sourceFile
                 });
                 return result;

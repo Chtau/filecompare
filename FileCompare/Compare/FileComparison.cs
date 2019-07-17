@@ -14,27 +14,25 @@ namespace Compare
            
         }
 
-        public int Similar(CompareValue srcCompareValue, CompareValue tarCompareValue)
+        public CompareValue.Types Similar(CompareValue srcCompareValue, CompareValue tarCompareValue)
         {
-            int similarValue = 0;
+            CompareValue.Types similarValue = CompareValue.Types.None;
             if (srcCompareValue.Hash?.ToLower() == tarCompareValue.Hash?.ToLower())
             {
-                similarValue += 90;
+                similarValue |= CompareValue.Types.Hash;
             }
             if (srcCompareValue.Directory?.ToLower() == tarCompareValue.Directory?.ToLower())
             {
-                similarValue += 5;
+                similarValue |= CompareValue.Types.Directory;
             }
             if (srcCompareValue.Extension?.ToLower() == tarCompareValue.Extension?.ToLower())
             {
-                similarValue += 10;
+                similarValue |= CompareValue.Types.Extension;
             }
             if (srcCompareValue.FileName?.ToLower() == tarCompareValue.FileName?.ToLower())
             {
-                similarValue += 25;
+                similarValue |= CompareValue.Types.FileName;
             }
-            if (similarValue > 100)
-                similarValue = 100;
             return similarValue;
         }
 
