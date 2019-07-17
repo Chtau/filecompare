@@ -14,7 +14,7 @@ namespace Compare
             public override string ToString()
             {
                 if (!string.IsNullOrWhiteSpace(FilePath))
-                    return $"File: {FilePath}|Value: {CompareValue.ToString()}";
+                    return $"File: {FilePath};Value: {CompareValue.ToString()}";
                 return base.ToString();
             }
         }
@@ -30,7 +30,7 @@ namespace Compare
         {
             if (FileResults.Count > 0)
             {
-                return $"1.File:{FileResults[0].FilePath}| Similar File: {FileResults.Count}";
+                return $"1.File:{FileResults[0].FilePath};Similar File: {FileResults.Count}";
             }
             return base.ToString();
         }
