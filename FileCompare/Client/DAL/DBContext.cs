@@ -27,7 +27,15 @@ namespace Client.DAL
 
         private async Task OnBuildModel()
         {
-            //await DB.CreateTableAsync<Models.ClipText>();
+            await DB.CreateTableAsync<Features.Folders.Models.CollectPath>();
+        }
+
+        public SQLiteAsyncConnection Instance
+        {
+            get
+            {
+                return DB;
+            }
         }
     }
 }

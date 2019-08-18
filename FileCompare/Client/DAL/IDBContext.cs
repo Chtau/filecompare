@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,6 @@ namespace Client.DAL
     public interface IDBContext
     {
         Task Connect();
+        SQLiteAsyncConnection Instance { get; }
     }
 }

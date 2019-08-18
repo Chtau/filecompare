@@ -6,6 +6,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
+        xmlns:featuresFolders="clr-namespace:Client.Features.Folders"
         mc:Ignorable="d"
         Title="File Compare" Height="450" Width="800">
     <Grid>
@@ -31,6 +32,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    <featuresFolders:FoldersContent Grid.Row="1"></featuresFolders:FoldersContent>
                     <!--<DataGrid Grid.Row="1" 
                               ItemsSource="{Binding Path=ClipDataTexts, Mode=TwoWay}"
                               RowHeaderWidth="0"
