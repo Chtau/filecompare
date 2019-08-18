@@ -43,8 +43,9 @@ namespace Client
         private void OnSetupServices()
         {
             IServiceCollection service = new ServiceCollection();
-            //service.AddSingleton<Main.Plugin.IPluginService, Main.Plugin.PluginService>();
-            //service.AddSingleton<Main.Logger.ILoggerService, Main.Logger.LoggerService>();
+            service.AddSingleton<Globalize.ILocalize, Globalize.Localize>();
+            service.AddSingleton<Internal.ILogger, Internal.Logger>();
+            service.AddSingleton<Internal.ISettings, Internal.Settings>();
 
             Services = service.BuildServiceProvider();
         }
