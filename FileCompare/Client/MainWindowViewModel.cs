@@ -15,6 +15,8 @@ namespace Client
         public MainWindowViewModel()
         {
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
+
+            Task.Run(OnRefresh).Wait();
         }
 
         public enum Tabs

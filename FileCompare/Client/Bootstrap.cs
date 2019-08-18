@@ -47,6 +47,8 @@ namespace Client
             service.AddSingleton<Internal.ILogger, Internal.Logger>();
             service.AddSingleton<Internal.ISettings, Internal.Settings>();
 
+            service.AddSingleton<DAL.IDBContext, DAL.DBContext>();
+
             Services = service.BuildServiceProvider();
         }
     }

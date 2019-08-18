@@ -9,5 +9,6 @@ namespace Client.Internal
     public interface ISettings
     {
         Globalize.Localize.Language Culture { get; set; }
+        string DBPath { get; set; }
     }
 }

@@ -15,5 +15,6 @@ namespace Client.Internal
         }
 
         public Localize.Language Culture { get; set; }
+        public string DBPath { get; set; }
     }
 }
