@@ -12,6 +12,7 @@ namespace Client.Internal
         public Settings()
         {
             Culture = Localize.Language.English;
+            DBPath = System.IO.Path.Combine(StaticFolders.GetUserFolder(), GlobalValues.DBFileName);
         }
 
         public Localize.Language Culture { get; set; }
