@@ -36,47 +36,6 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <featuresFolders:FoldersContent Grid.Row="1" Grid.Column="1"></featuresFolders:FoldersContent>
-                    <!--<DataGrid Grid.Row="1" 
-                              ItemsSource="{Binding Path=ClipDataTexts, Mode=TwoWay}"
-                              RowHeaderWidth="0"
-                              SelectionUnit="FullRow"
-                              AutoGenerateColumns="false"
-                              Margin="5"
-                              HeadersVisibility="All" IsReadOnly="True" RowHeight="1" HorizontalGridLinesBrush="#FF555555" VerticalGridLinesBrush="#FF505050" IsTextSearchEnabled="True" GridLinesVisibility="Horizontal"
-                              FrozenColumnCount="1"
-                              x:Name="TextGrid"
-                              >
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn MaxWidth="75">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button x:Name="DeleteItem" Click="DeleteItem_Click" Height="10" MaxHeight="1" Margin="0">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <iconPacks:PackIconModern Width="16" Height="10" Kind="Delete" />
-                                                </StackPanel>
-                                            </Button>
-                                            <Button x:Name="CopyItem" Click="CopyItem_Click" Height="10" MaxHeight="1" Margin="0">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <iconPacks:PackIconModern Width="16" Height="10" Kind="PageCopy" />
-                                                </StackPanel>
-                                            </Button>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Width="350" Binding="{Binding Preview}" Header="{Binding Source='Content',Converter={ StaticResource LocalizeConverter}}" >
-                                <DataGridTextColumn.CellStyle>
-                                    <Style TargetType="DataGridCell">
-                                        <Setter Property="ToolTip" Value="{Binding Value}" />
-                                    </Style>
-                                </DataGridTextColumn.CellStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Binding="{Binding DateCreated}" Header="{Binding Source='Created',Converter={ StaticResource LocalizeConverter}}" />
-                            <DataGridTextColumn Binding="{Binding ApplicationName}" Header="{Binding Source='Application',Converter={ StaticResource LocalizeConverter}}" />
-                            <DataGridTextColumn Binding="{Binding ApplicationWindowTitle}" Header="{Binding Source='Window',Converter={ StaticResource LocalizeConverter}}" />
-                        </DataGrid.Columns>
-                    </DataGrid>-->
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding Source='Duplicates',Converter={ StaticResource LocalizeConverter}}" x:Name="TabDuplicates">
@@ -85,55 +44,14 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <!--<DataGrid Grid.Row="1" 
-                              ItemsSource="{Binding Path=ClipDataImages}"
-                              RowHeaderWidth="0"
-                              SelectionUnit="FullRow"
-                              AutoGenerateColumns="false"
-                              Margin="5"
-                              HeadersVisibility="All" IsReadOnly="True" RowHeight="1" HorizontalGridLinesBrush="#FF555555" VerticalGridLinesBrush="#FF505050" IsTextSearchEnabled="True" GridLinesVisibility="Horizontal"
-                              FrozenColumnCount="1"
-                              x:Name="ImageGrid"
-                              >
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn MaxWidth="75">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button x:Name="DeleteItem" Click="DeleteItem_Click" Height="10" MaxHeight="1" Margin="0">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <iconPacks:PackIconModern Width="16" Height="10" Kind="Delete" />
-                                                </StackPanel>
-                                            </Button>
-                                            <Button x:Name="CopyItem" Click="CopyItem_Click" Height="10" MaxHeight="1" Margin="0">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <iconPacks:PackIconModern Width="16" Height="10" Kind="PageCopy" />
-                                                </StackPanel>
-                                            </Button>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="{Binding Source='Image',Converter={ StaticResource LocalizeConverter}}" Width="75">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Image Source="{Binding Preview}">
-                                            <Image.ToolTip>
-                                                <ToolTip>
-                                                    <StackPanel>
-                                                        <Image Source="{Binding Preview}" />
-                                                    </StackPanel>
-                                                </ToolTip>
-                                            </Image.ToolTip>
-                                        </Image>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Binding="{Binding DateCreated}" Header="{Binding Source='Created',Converter={ StaticResource LocalizeConverter}}" />
-                            <DataGridTextColumn Binding="{Binding ApplicationName}" Header="{Binding Source='Application',Converter={ StaticResource LocalizeConverter}}" />
-                            <DataGridTextColumn Binding="{Binding ApplicationWindowTitle}" Header="{Binding Source='Window',Converter={ StaticResource LocalizeConverter}}" />
-                        </DataGrid.Columns>
-                    </DataGrid>-->
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding Source='Jobs',Converter={ StaticResource LocalizeConverter}}" x:Name="TabJobs">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
                 </Grid>
             </TabItem>
         </Controls:MetroAnimatedSingleRowTabControl>

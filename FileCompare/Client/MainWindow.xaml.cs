@@ -55,6 +55,10 @@ namespace Client
                 {
                     _viewModel.ActiveTab = MainWindowViewModel.Tabs.Duplicates;
                 }
+                else if (tab.Name == "TabJobs")
+                {
+                    _viewModel.ActiveTab = MainWindowViewModel.Tabs.Jobs;
+                }
             }
         }
     }

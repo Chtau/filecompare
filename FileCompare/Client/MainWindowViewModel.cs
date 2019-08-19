@@ -22,18 +22,8 @@ namespace Client
         public enum Tabs
         {
             Folders,
-            Duplicates
-        }
-
-        private ObservableCollection<object> folders;
-        public ObservableCollection<object> Folders
-        {
-            get { return folders; }
-            set
-            {
-                folders = value;
-                RaisePropertyChanged("Folders");
-            }
+            Duplicates,
+            Jobs
         }
 
         private ObservableCollection<object> duplicates;
@@ -106,12 +96,16 @@ namespace Client
             switch (ActiveTab)
             {
                 case Tabs.Folders:
-                    if (Folders != null)
-                        ActiveTabRows = Folders.Count;
+                    /*if (Folders != null)
+                        ActiveTabRows = Folders.Count;*/
                     break;
                 case Tabs.Duplicates:
                     if (Duplicates != null)
                         ActiveTabRows = Duplicates.Count;
+                    break;
+                case Tabs.Jobs:
+                    /*if (Folders != null)
+                        ActiveTabRows = Folders.Count;*/
                     break;
             }
         }
@@ -125,7 +119,6 @@ namespace Client
             {
                 if (disposing)
                 {
-                    folders = null;
                     duplicates = null;
                 }
                 disposedValue = true;
