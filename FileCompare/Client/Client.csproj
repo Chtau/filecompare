@@ -106,6 +106,7 @@
     <Compile Include="Features\Folders\FoldersContent.xaml.cs">
       <DependentUpon>FoldersContent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Features\Folders\FoldersContentViewModel.cs" />
     <Compile Include="Features\Folders\IFolderRepository.cs" />
     <Compile Include="Features\Folders\Models\CollectPath.cs" />
     <Compile Include="Globalize\Resource.Designer.cs">

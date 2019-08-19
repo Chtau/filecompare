@@ -20,9 +20,18 @@ namespace Client.Features.Folders
     /// </summary>
     public partial class FoldersContent : UserControl
     {
+        private readonly FoldersContentViewModel _viewModel;
+        private readonly Internal.ILogger _logger;
+
         public FoldersContent()
         {
+            _viewModel = new FoldersContentViewModel();
+            DataContext = _viewModel;
+
             InitializeComponent();
+
+            _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
+            _viewModel.RefreshCommand.Execute(null);
         }
 
         private void UserFolder_Click(object sender, RoutedEventArgs e)
@@ -38,7 +47,36 @@ namespace Client.Features.Folders
 
         private void AddFolder_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                var folder = txtFolder.Text;
+                Task.Run(async () =>
+                {
+                    if (await _viewModel.InsertCollectPath(folder))
+                    {
+                        _viewModel.RefreshCommand.Execute(null);
+                    }
+                    else
+                    {
 
+                    }
+                });
+            } catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+        }
+
+        private void DeleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (e.Source is Button button && button.DataContext != null)
+            {
+                if (button.DataContext is Models.CollectPath collectPath)
+                {
+                    Task.Run(async () => await _viewModel.DeleteCollectPath(collectPath)).Wait();
+                    _viewModel.RefreshCommand.Execute(null);
+                }
+            }
         }
     }
 }

@@ -38,5 +38,37 @@
                 </StackPanel>
             </Button>
         </Grid>
+        <Grid Grid.Row="1">
+            <DataGrid
+                  ItemsSource="{Binding Path=CollectPathItems, Mode=TwoWay}"
+                  RowHeaderWidth="0"
+                    SelectionUnit="FullRow"
+                    AutoGenerateColumns="false"
+                    Margin="5"
+                    HeadersVisibility="All" IsReadOnly="True" RowHeight="1" HorizontalGridLinesBrush="#FF555555" VerticalGridLinesBrush="#FF505050" IsTextSearchEnabled="True" GridLinesVisibility="Horizontal"
+                    FrozenColumnCount="1"
+                    x:Name="collectPathsGrid">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn MaxWidth="35">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="DeleteItem" Click="DeleteItem_Click" Height="10" MaxHeight="1" Margin="0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconModern Width="16" Height="10" Kind="Delete" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding Path}" Width="*" Header="{Binding Source='Folders',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding FilesFound}" Width="Auto" Header="{Binding Source='File_found',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding SubFoldersFound}" Width="Auto" Header="{Binding Source='Folders_found',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding Added}" Width="Auto" Header="{Binding Source='Added',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding LastCheck}" Width="Auto" Header="{Binding Source='Last_Check',Converter={ StaticResource LocalizeConverter}}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </UserControl>

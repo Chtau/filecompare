@@ -17,6 +17,7 @@ namespace Client.DAL
         {
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _settings = (Internal.ISettings)Bootstrap.Instance.Services.GetService(typeof(Internal.ISettings));
+            Connect().GetAwaiter();
         }
 
         public async Task Connect()
