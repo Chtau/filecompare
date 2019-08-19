@@ -78,5 +78,15 @@ namespace Client.Features.Folders
                 }
             }
         }
+
+        private void StartItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void StopItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

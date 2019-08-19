@@ -39,15 +39,19 @@
             </Button>
         </Grid>
         <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="95*"/>
+                <ColumnDefinition Width="127*"/>
+            </Grid.ColumnDefinitions>
             <DataGrid
                   ItemsSource="{Binding Path=CollectPathItems, Mode=TwoWay}"
                   RowHeaderWidth="0"
                     SelectionUnit="FullRow"
                     AutoGenerateColumns="false"
-                    Margin="5"
+                    Margin="5,5,5,4.667"
                     HeadersVisibility="All" IsReadOnly="True" RowHeight="1" HorizontalGridLinesBrush="#FF555555" VerticalGridLinesBrush="#FF505050" IsTextSearchEnabled="True" GridLinesVisibility="Horizontal"
                     FrozenColumnCount="1"
-                    x:Name="collectPathsGrid">
+                    x:Name="collectPathsGrid" Grid.ColumnSpan="2">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn MaxWidth="35">
                         <DataGridTemplateColumn.CellTemplate>
@@ -62,6 +66,20 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MaxWidth="35">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="StartItem" Click="StartItem_Click" Height="10" MaxHeight="1" Margin="0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconModern Width="16" Height="10" Kind="ControlPlay" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridCheckBoxColumn Binding="{Binding CheckSubFolders}" Width="Auto" Header="{Binding Source='Inclue_Subfolders',Converter={ StaticResource LocalizeConverter}}" />
                     <DataGridTextColumn Binding="{Binding Path}" Width="*" Header="{Binding Source='Folders',Converter={ StaticResource LocalizeConverter}}" />
                     <DataGridTextColumn Binding="{Binding FilesFound}" Width="Auto" Header="{Binding Source='File_found',Converter={ StaticResource LocalizeConverter}}" />
                     <DataGridTextColumn Binding="{Binding SubFoldersFound}" Width="Auto" Header="{Binding Source='Folders_found',Converter={ StaticResource LocalizeConverter}}" />
