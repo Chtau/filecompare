@@ -109,6 +109,10 @@
     <Compile Include="Features\Folders\FoldersContentViewModel.cs" />
     <Compile Include="Features\Folders\IFolderRepository.cs" />
     <Compile Include="Features\Folders\Models\CollectPath.cs" />
+    <Compile Include="Features\Jobs\Enums.cs" />
+    <Compile Include="Features\Jobs\Models\Job.cs" />
+    <Compile Include="Features\Jobs\Models\JobCollectPath.cs" />
+    <Compile Include="Features\Jobs\Models\JobConfiguration.cs" />
     <Compile Include="Globalize\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

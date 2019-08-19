@@ -29,6 +29,9 @@ namespace Client.DAL
         private async Task OnBuildModel()
         {
             await DB.CreateTableAsync<Features.Folders.Models.CollectPath>();
+            await DB.CreateTableAsync<Features.Jobs.Models.Job>();
+            await DB.CreateTableAsync<Features.Jobs.Models.JobCollectPath>();
+            await DB.CreateTableAsync<Features.Jobs.Models.JobConfiguration>();
         }
 
         public SQLiteAsyncConnection Instance
