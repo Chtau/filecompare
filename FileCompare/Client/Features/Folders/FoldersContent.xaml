@@ -79,7 +79,6 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridCheckBoxColumn Binding="{Binding CheckSubFolders}" Width="Auto" Header="{Binding Source='Inclue_Subfolders',Converter={ StaticResource LocalizeConverter}}" />
                     <DataGridTextColumn Binding="{Binding Path}" Width="*" Header="{Binding Source='Folders',Converter={ StaticResource LocalizeConverter}}" />
                     <DataGridTextColumn Binding="{Binding FilesFound}" Width="Auto" Header="{Binding Source='File_found',Converter={ StaticResource LocalizeConverter}}" />
                     <DataGridTextColumn Binding="{Binding SubFoldersFound}" Width="Auto" Header="{Binding Source='Folders_found',Converter={ StaticResource LocalizeConverter}}" />

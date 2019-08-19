@@ -16,6 +16,5 @@ namespace Client.Features.Folders.Models
         public DateTime? LastCheck { get; set; }
         public int FilesFound { get; set; }
         public int SubFoldersFound { get; set; }
-        public bool CheckSubFolders { get; set; }
     }
 }
