@@ -31,9 +31,14 @@ namespace Client.Features.Folders
             {
                 if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    System.Diagnostics.Debug.Print(dialog.SelectedPath);
+                    txtFolder.Text = dialog.SelectedPath;
                 }
             }
+        }
+
+        private void AddFolder_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

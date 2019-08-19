@@ -32,7 +32,10 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <featuresFolders:FoldersContent Grid.Row="1"></featuresFolders:FoldersContent>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <featuresFolders:FoldersContent Grid.Row="1" Grid.Column="1"></featuresFolders:FoldersContent>
                     <!--<DataGrid Grid.Row="1" 
                               ItemsSource="{Binding Path=ClipDataTexts, Mode=TwoWay}"
                               RowHeaderWidth="0"
