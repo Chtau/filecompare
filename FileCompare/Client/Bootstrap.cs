@@ -49,6 +49,8 @@ namespace Client
 
             service.AddSingleton<DAL.IDBContext, DAL.DBContext>();
 
+            service.AddSingleton<Features.Folders.IFolderRepository, Features.Folders.FolderRepository>();
+
             Services = service.BuildServiceProvider();
         }
     }

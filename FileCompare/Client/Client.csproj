@@ -102,9 +102,11 @@
     </ApplicationDefinition>
     <Compile Include="DAL\DBContext.cs" />
     <Compile Include="DAL\IDBContext.cs" />
+    <Compile Include="Features\Folders\FolderRepository.cs" />
     <Compile Include="Features\Folders\FoldersContent.xaml.cs">
       <DependentUpon>FoldersContent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Features\Folders\IFolderRepository.cs" />
     <Compile Include="Features\Folders\Models\CollectPath.cs" />
     <Compile Include="Globalize\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
