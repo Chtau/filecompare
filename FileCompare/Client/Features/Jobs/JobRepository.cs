@@ -28,19 +28,19 @@ namespace Client.Features.Jobs
             throw new NotImplementedException();
         }
 
-        public Task<List<JobCollectPath>> GetJobCollectPath(Guid jobId)
+        public async Task<List<JobCollectPath>> GetJobCollectPath(Guid jobId)
         {
-            throw new NotImplementedException();
+            return await _dBContext.Instance.Table<Models.JobCollectPath>().Where(x => x.JobId == jobId).ToListAsync();
         }
 
-        public Task<JobConfiguration> GetJobConfiguration(Guid jobId)
+        public async Task<JobConfiguration> GetJobConfiguration(Guid jobId)
         {
-            throw new NotImplementedException();
+            return await _dBContext.Instance.Table<Models.JobConfiguration>().Where(x => x.JobId == jobId).FirstOrDefaultAsync();
         }
 
-        public Task<List<Job>> GetJobs()
+        public async Task<List<Job>> GetJobs()
         {
-            throw new NotImplementedException();
+            return await _dBContext.Instance.Table<Models.Job>().ToListAsync();
         }
 
         public Task<bool> Insert(Job job)

@@ -20,7 +20,7 @@
         </Grid>
         <Grid Grid.Row="1">
             <DataGrid
-                  ItemsSource="{Binding Path=CollectPathItems, Mode=TwoWay}"
+                  ItemsSource="{Binding Path=JobItems, Mode=TwoWay}"
                   RowHeaderWidth="0"
                     SelectionUnit="FullRow"
                     AutoGenerateColumns="false"
@@ -55,11 +55,11 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Binding="{Binding Path}" Width="*" Header="{Binding Source='Folders',Converter={ StaticResource LocalizeConverter}}" />
-                    <DataGridTextColumn Binding="{Binding FilesFound}" Width="Auto" Header="{Binding Source='File_found',Converter={ StaticResource LocalizeConverter}}" />
-                    <DataGridTextColumn Binding="{Binding SubFoldersFound}" Width="Auto" Header="{Binding Source='Folders_found',Converter={ StaticResource LocalizeConverter}}" />
-                    <DataGridTextColumn Binding="{Binding Added}" Width="Auto" Header="{Binding Source='Added',Converter={ StaticResource LocalizeConverter}}" />
-                    <DataGridTextColumn Binding="{Binding LastCheck}" Width="Auto" Header="{Binding Source='Last_Check',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding Name}" Width="*" Header="{Binding Source='Name',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding JobType}" Width="Auto" Header="{Binding Source='JobType',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding LastExecuted}" Width="Auto" Header="{Binding Source='LastExecuted',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding NextExecution}" Width="Auto" Header="{Binding Source='NextExecution',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding JobState}" Width="Auto" Header="{Binding Source='JobState',Converter={ StaticResource LocalizeConverter}}" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

@@ -7,6 +7,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         xmlns:featuresFolders="clr-namespace:Client.Features.Folders"
+        xmlns:featuresJobs="clr-namespace:Client.Features.Jobs"
         mc:Ignorable="d"
         Title="File Compare" Height="450" Width="800">
     <Grid>
@@ -52,6 +53,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    <featuresJobs:JobsContent Grid.Row="1" Grid.Column="1"></featuresJobs:JobsContent>
                 </Grid>
             </TabItem>
         </Controls:MetroAnimatedSingleRowTabControl>

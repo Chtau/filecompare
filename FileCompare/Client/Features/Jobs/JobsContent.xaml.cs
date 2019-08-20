@@ -20,9 +20,18 @@ namespace Client.Features.Jobs
     /// </summary>
     public partial class JobsContent : UserControl
     {
+        private readonly JobsContentViewModel _viewModel;
+        private readonly Internal.ILogger _logger;
+
         public JobsContent()
         {
+            _viewModel = new JobsContentViewModel();
+            DataContext = _viewModel;
+
             InitializeComponent();
+
+            _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
+            _viewModel.RefreshCommand.Execute(null);
         }
 
         private void ConfigItem_Click(object sender, RoutedEventArgs e)
@@ -32,7 +41,14 @@ namespace Client.Features.Jobs
 
         private void DeleteItem_Click(object sender, RoutedEventArgs e)
         {
-
+            if (e.Source is Button button && button.DataContext != null)
+            {
+                if (button.DataContext is Models.Job job)
+                {
+                    Task.Run(async () => await _viewModel.DeleteJob(job)).Wait();
+                    _viewModel.RefreshCommand.Execute(null);
+                }
+            }
         }
     }
 }
