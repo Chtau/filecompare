@@ -24,6 +24,15 @@ namespace Client.Features.Jobs
             {
                 if (job != null)
                 {
+                    var result1 = await GetJobCollectPath(job.Id);
+                    if (result1 != null && result1.Count > 0)
+                        result1.ForEach(async item =>
+                        {
+                            await _dBContext.Instance.DeleteAsync(item);
+                        });
+                    var result2 = await GetJobConfiguration(job.Id);
+                    if (result2 != null)
+                        await _dBContext.Instance.DeleteAsync(result2);
                     await _dBContext.Instance.DeleteAsync(job);
 
                     return true;
