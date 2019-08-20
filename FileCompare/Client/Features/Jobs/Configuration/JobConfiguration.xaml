@@ -57,7 +57,7 @@
         <Grid Grid.Column="1">
             <Grid>
                 <DataGrid
-                  ItemsSource="{Binding Path=JobItems, Mode=TwoWay}"
+                  ItemsSource="{Binding Path=JobCollectPathItems, Mode=TwoWay}"
                   RowHeaderWidth="0"
                     SelectionUnit="FullRow"
                     AutoGenerateColumns="false"
@@ -80,10 +80,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn Binding="{Binding Name}" Width="*" Header="{Binding Source='Name',Converter={ StaticResource LocalizeConverter}}" />
-                        <DataGridTextColumn Binding="{Binding JobType}" Width="Auto" Header="{Binding Source='JobType',Converter={ StaticResource LocalizeConverter}}" />
-                        <DataGridTextColumn Binding="{Binding LastExecuted}" Width="Auto" Header="{Binding Source='LastExecuted',Converter={ StaticResource LocalizeConverter}}" />
-                        <DataGridTextColumn Binding="{Binding NextExecution}" Width="Auto" Header="{Binding Source='NextExecution',Converter={ StaticResource LocalizeConverter}}" />
-                        <DataGridTextColumn Binding="{Binding JobState}" Width="Auto" Header="{Binding Source='JobState',Converter={ StaticResource LocalizeConverter}}" />
+                        <DataGridTextColumn Binding="{Binding IncludeSubFolders}" Width="Auto" Header="{Binding Source='IncludeSubFolders',Converter={ StaticResource LocalizeConverter}}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

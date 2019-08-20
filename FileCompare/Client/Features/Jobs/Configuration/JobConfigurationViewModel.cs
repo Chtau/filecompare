@@ -21,8 +21,8 @@ namespace Client.Features.Jobs.Configuration
             JobId = jobId;
         }
 
-        private ObservableCollection<Models.JobCollectPath> jobCollectPathItems;
-        public ObservableCollection<Models.JobCollectPath> JobCollectPathItems
+        private ObservableCollection<ViewModels.JobPathView> jobCollectPathItems;
+        public ObservableCollection<ViewModels.JobPathView> JobCollectPathItems
         {
             get { return jobCollectPathItems; }
             set
@@ -151,7 +151,7 @@ namespace Client.Features.Jobs.Configuration
             try
             {
                 if (JobId != Guid.Empty)
-                    JobCollectPathItems = new ObservableCollection<Models.JobCollectPath>(await _repository.GetJobCollectPath(JobId));
+                    JobCollectPathItems = new ObservableCollection<ViewModels.JobPathView>(await _repository.GetJobCollectPath(JobId));
             }
             catch (Exception ex)
             {

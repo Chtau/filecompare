@@ -63,9 +63,18 @@ namespace Client.Features.Jobs
             return false;
         }
 
-        public async Task<List<JobCollectPath>> GetJobCollectPath(Guid jobId)
+        public async Task<List<ViewModels.JobPathView>> GetJobCollectPath(Guid jobId)
         {
-            return await _dBContext.Instance.Table<Models.JobCollectPath>().Where(x => x.JobId == jobId).ToListAsync();
+            return (from x in await _dBContext.Instance.Table<Models.JobCollectPath>().ToListAsync()
+                   join y in await _dBContext.Instance.Table<Features.Folders.Models.CollectPath>().ToListAsync() on x.CollectPathId equals y.Id
+                   select new ViewModels.JobPathView
+                   {
+                       JobId = x.JobId,
+                       CollectPathId = y.Id,
+                       IncludeSubFolders = x.IncludeSubFolders,
+                       JobCollectPathId = x.Id,
+                       Path = y.Path
+                   }).ToList();
         }
 
         public async Task<JobConfiguration> GetJobConfiguration(Guid jobId)

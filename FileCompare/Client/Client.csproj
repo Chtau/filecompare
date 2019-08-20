@@ -123,6 +123,7 @@
     <Compile Include="Features\Jobs\Models\Job.cs" />
     <Compile Include="Features\Jobs\Models\JobCollectPath.cs" />
     <Compile Include="Features\Jobs\Models\JobConfiguration.cs" />
+    <Compile Include="Features\Jobs\ViewModels\JobPathView.cs" />
     <Compile Include="Globalize\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
