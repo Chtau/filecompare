@@ -1,0 +1,93 @@
+﻿<Controls:MetroWindow x:Class="Client.Features.Jobs.Configuration.JobConfiguration"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Features.Jobs.Configuration"
+        mc:Ignorable="d"
+        Title="{Binding Source='JobConfiguration',Converter={ StaticResource LocalizeConverter}}" Height="450" MinWidth="600" Width="800">
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Content="{Binding Source='Name',Converter={ StaticResource LocalizeConverter}}"/>
+            <TextBox Grid.Row="0" Grid.Column="1"></TextBox>
+            <Label Grid.Row="1" Grid.Column="0" Content="{Binding Source='FileExtensions',Converter={ StaticResource LocalizeConverter}}"/>
+            <TextBox Grid.Row="1" Grid.Column="1"></TextBox>
+            <Label Grid.Row="2" Grid.ColumnSpan="2" Content="{Binding Source='Interval',Converter={ StaticResource LocalizeConverter}}"/>
+            <StackPanel Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="2" Height="Auto">
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="{Binding Source='Monday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                    <CheckBox Content="{Binding Source='Tuesday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                    <CheckBox Content="{Binding Source='Wednesday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0, 5">
+                    <CheckBox Content="{Binding Source='Thursday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                    <CheckBox Content="{Binding Source='Friday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="{Binding Source='Saturday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                    <CheckBox Content="{Binding Source='Sunday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                </StackPanel>
+            </StackPanel>
+            <Label Grid.Row="4" Grid.Column="0" Content="{Binding Source='Hour',Converter={ StaticResource LocalizeConverter}}"/>
+            <Controls:NumericUpDown Grid.Row="4" Grid.Column="1" Minimum="0" Maximum="23"></Controls:NumericUpDown>
+            <Label Grid.Row="5" Grid.Column="0" Content="{Binding Source='Minute',Converter={ StaticResource LocalizeConverter}}"/>
+            <Controls:NumericUpDown Grid.Row="5" Grid.Column="1" Minimum="0" Maximum="59"></Controls:NumericUpDown>
+            <Label Grid.Row="6" Grid.Column="0" Content="{Binding Source='MaxRuntimeMinutes',Converter={ StaticResource LocalizeConverter}}"/>
+            <Controls:NumericUpDown Grid.Row="6" Grid.Column="1" Minimum="0" Maximum="120"></Controls:NumericUpDown>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid>
+                <DataGrid
+                  ItemsSource="{Binding Path=JobItems, Mode=TwoWay}"
+                  RowHeaderWidth="0"
+                    SelectionUnit="FullRow"
+                    AutoGenerateColumns="false"
+                    Margin="5,5,5,4.667"
+                    HeadersVisibility="All" IsReadOnly="True" RowHeight="1" HorizontalGridLinesBrush="#FF555555" VerticalGridLinesBrush="#FF505050" IsTextSearchEnabled="True" GridLinesVisibility="Horizontal"
+                    FrozenColumnCount="1"
+                    x:Name="jobsGrid">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn MaxWidth="35">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button x:Name="DeletePathItem" Click="DeletePathItem_Click" Height="10" MaxHeight="1" Margin="0">
+                                            <StackPanel Orientation="Horizontal">
+                                                <iconPacks:PackIconModern Width="16" Height="10" Kind="Delete" />
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Binding="{Binding Name}" Width="*" Header="{Binding Source='Name',Converter={ StaticResource LocalizeConverter}}" />
+                        <DataGridTextColumn Binding="{Binding JobType}" Width="Auto" Header="{Binding Source='JobType',Converter={ StaticResource LocalizeConverter}}" />
+                        <DataGridTextColumn Binding="{Binding LastExecuted}" Width="Auto" Header="{Binding Source='LastExecuted',Converter={ StaticResource LocalizeConverter}}" />
+                        <DataGridTextColumn Binding="{Binding NextExecution}" Width="Auto" Header="{Binding Source='NextExecution',Converter={ StaticResource LocalizeConverter}}" />
+                        <DataGridTextColumn Binding="{Binding JobState}" Width="Auto" Header="{Binding Source='JobState',Converter={ StaticResource LocalizeConverter}}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Grid>
+    </Grid>
+    
+</Controls:MetroWindow>

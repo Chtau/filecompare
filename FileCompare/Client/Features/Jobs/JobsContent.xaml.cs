@@ -36,7 +36,19 @@ namespace Client.Features.Jobs
 
         private void ConfigItem_Click(object sender, RoutedEventArgs e)
         {
+            if (e.Source is Button button && button.DataContext != null)
+            {
+                if (button.DataContext is Models.Job job)
+                {
+                    var result = new Configuration.JobConfiguration().ShowDialog();
+                    if (result == true)
+                    {
 
+                    }
+                    _viewModel.RefreshCommand.Execute(null);
+                }
+            }
+            
         }
 
         private void DeleteItem_Click(object sender, RoutedEventArgs e)
@@ -48,6 +60,15 @@ namespace Client.Features.Jobs
                     Task.Run(async () => await _viewModel.DeleteJob(job)).Wait();
                     _viewModel.RefreshCommand.Execute(null);
                 }
+            }
+        }
+
+        private void AddJob_Click(object sender, RoutedEventArgs e)
+        {
+            var result = new Configuration.JobConfiguration().ShowDialog();
+            if (result == true)
+            {
+                _viewModel.RefreshCommand.Execute(null);
             }
         }
     }

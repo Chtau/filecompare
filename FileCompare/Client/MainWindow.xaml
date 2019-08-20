@@ -9,7 +9,7 @@
         xmlns:featuresFolders="clr-namespace:Client.Features.Folders"
         xmlns:featuresJobs="clr-namespace:Client.Features.Jobs"
         mc:Ignorable="d"
-        Title="File Compare" Height="450" Width="800">
+        Title="{Binding Source='FileCompare',Converter={ StaticResource LocalizeConverter}}" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
