@@ -40,7 +40,7 @@ namespace Client.Features.Jobs
             {
                 if (button.DataContext is Models.Job job)
                 {
-                    var result = new Configuration.JobConfiguration().ShowDialog();
+                    var result = new Configuration.JobConfiguration(job.Id).ShowDialog();
                     if (result == true)
                     {
 
@@ -48,7 +48,6 @@ namespace Client.Features.Jobs
                     _viewModel.RefreshCommand.Execute(null);
                 }
             }
-            
         }
 
         private void DeleteItem_Click(object sender, RoutedEventArgs e)
@@ -65,11 +64,12 @@ namespace Client.Features.Jobs
 
         private void AddJob_Click(object sender, RoutedEventArgs e)
         {
-            var result = new Configuration.JobConfiguration().ShowDialog();
+            var result = new Configuration.JobConfiguration(Guid.Empty).ShowDialog();
             if (result == true)
             {
-                _viewModel.RefreshCommand.Execute(null);
+
             }
+            _viewModel.RefreshCommand.Execute(null);
         }
     }
 }

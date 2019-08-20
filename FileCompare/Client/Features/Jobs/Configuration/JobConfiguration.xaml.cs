@@ -20,9 +20,18 @@ namespace Client.Features.Jobs.Configuration
     /// </summary>
     public partial class JobConfiguration : MetroWindow
     {
-        public JobConfiguration()
+        private readonly JobConfigurationViewModel _viewModel;
+        private readonly Internal.ILogger _logger;
+
+        public JobConfiguration(Guid jobId)
         {
+            _viewModel = new JobConfigurationViewModel(jobId);
+            DataContext = _viewModel;
+
             InitializeComponent();
+
+            _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
+            _viewModel.RefreshCommand.Execute(null);
         }
 
         private void DeletePathItem_Click(object sender, RoutedEventArgs e)

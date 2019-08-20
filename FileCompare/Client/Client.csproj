@@ -112,6 +112,7 @@
     <Compile Include="Features\Jobs\Configuration\JobConfiguration.xaml.cs">
       <DependentUpon>JobConfiguration.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Features\Jobs\Configuration\JobConfigurationViewModel.cs" />
     <Compile Include="Features\Jobs\Enums.cs" />
     <Compile Include="Features\Jobs\IJobRepository.cs" />
     <Compile Include="Features\Jobs\JobRepository.cs" />
