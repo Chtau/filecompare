@@ -9,6 +9,16 @@ namespace Client.Internal
 {
     public class Logger : ILogger
     {
+        public Logger()
+        {
+            Log.Logger = new LoggerConfiguration()
+                   .MinimumLevel.Information()
+                   .WriteTo.File(System.IO.Path.Combine(StaticFolders.GetUserFolder(), GlobalValues.LogFile),
+                       rollingInterval: RollingInterval.Day,
+                       rollOnFileSizeLimit: true)
+                   .CreateLogger();
+        }
+
         public void Diagnostic(string message)
         {
             Log.Debug(message);

@@ -48,7 +48,7 @@
                                 <StackPanel Orientation="Horizontal">
                                     <Button x:Name="ConfigItem" Click="ConfigItem_Click" Height="10" MaxHeight="1" Margin="0">
                                         <StackPanel Orientation="Horizontal">
-                                            <iconPacks:PackIconModern Width="16" Height="10" Kind="ControlPlay" />
+                                            <iconPacks:PackIconModern Width="16" Height="10" Kind="Settings" />
                                         </StackPanel>
                                     </Button>
                                 </StackPanel>
