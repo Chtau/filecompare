@@ -1,13 +1,12 @@
-﻿<UserControl x:Class="Client.Features.Folders.FoldersContent"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Client.Features.Folders"
-      >
-
+﻿<UserControl x:Class="Client.Features.Jobs.JobsContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Client.Features.Jobs"
+             mc:Ignorable="d">
     <Grid Margin="10, 0, 10, 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -17,26 +16,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0" Grid.Column="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" x:Name="txtFolder"></TextBox>
-            <Button Grid.Column="1" Margin="10, 0, 10, 0" Height="24" Padding="5,0" x:Name="addFolder" Style="{StaticResource AccentedSquareButtonStyle}"
-                    Click="AddFolder_Click">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconModern VerticalAlignment="Center" Kind="Add" />
-                </StackPanel>
-            </Button>
-            <Button Grid.Column="2" x:Name="userFolder" Style="{StaticResource AccentedSquareButtonStyle}"
-                    Click="UserFolder_Click"
-                    Width="160" Height="24" Padding="5,0">
-                <StackPanel Orientation="Horizontal">
-                    <iconPacks:PackIconModern VerticalAlignment="Center" Kind="FolderOpen" />
-                    <Label Content="{Binding Source='Browse_Folder',Converter={ StaticResource LocalizeConverter}}"/>
-                </StackPanel>
-            </Button>
+            
         </Grid>
         <Grid Grid.Row="1">
             <DataGrid
@@ -47,7 +27,7 @@
                     Margin="5,5,5,4.667"
                     HeadersVisibility="All" IsReadOnly="True" RowHeight="1" HorizontalGridLinesBrush="#FF555555" VerticalGridLinesBrush="#FF505050" IsTextSearchEnabled="True" GridLinesVisibility="Horizontal"
                     FrozenColumnCount="1"
-                    x:Name="collectPathsGrid">
+                    x:Name="jobsGrid">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn MaxWidth="35">
                         <DataGridTemplateColumn.CellTemplate>
@@ -66,7 +46,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button x:Name="StartItem" Click="StartItem_Click" Height="10" MaxHeight="1" Margin="0">
+                                    <Button x:Name="ConfigItem" Click="ConfigItem_Click" Height="10" MaxHeight="1" Margin="0">
                                         <StackPanel Orientation="Horizontal">
                                             <iconPacks:PackIconModern Width="16" Height="10" Kind="ControlPlay" />
                                         </StackPanel>

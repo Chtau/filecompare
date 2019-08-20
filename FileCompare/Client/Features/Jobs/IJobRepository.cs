@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Client.Features.Jobs
+{
+    public interface IJobRepository
+    {
+        Task<List<Models.Job>> GetJobs();
+        Task<bool> Insert(Models.Job job);
+        Task<bool> Delete(Models.Job job);
+        Task<bool> Update(Models.Job job);
+
+        Task<Models.JobConfiguration> GetJobConfiguration(Guid jobId);
+        Task<bool> Update(Models.JobConfiguration jobConfiguration);
+
+        Task<List<Models.JobCollectPath>> GetJobCollectPath(Guid jobId);
+        Task<bool> Insert(Models.JobCollectPath jobCollectPath);
+        Task<bool> Delete(Models.JobCollectPath jobCollectPath);
+        Task<bool> Update(Models.JobCollectPath jobCollectPath);
+    }
+}

@@ -110,6 +110,12 @@
     <Compile Include="Features\Folders\IFolderRepository.cs" />
     <Compile Include="Features\Folders\Models\CollectPath.cs" />
     <Compile Include="Features\Jobs\Enums.cs" />
+    <Compile Include="Features\Jobs\IJobRepository.cs" />
+    <Compile Include="Features\Jobs\JobRepository.cs" />
+    <Compile Include="Features\Jobs\JobsContent.xaml.cs">
+      <DependentUpon>JobsContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Jobs\JobsContentViewModel.cs" />
     <Compile Include="Features\Jobs\Models\Job.cs" />
     <Compile Include="Features\Jobs\Models\JobCollectPath.cs" />
     <Compile Include="Features\Jobs\Models\JobConfiguration.cs" />
@@ -129,6 +135,10 @@
     <Compile Include="Internal\StaticFolders.cs" />
     <Compile Include="RelayCommand.cs" />
     <Page Include="Features\Folders\FoldersContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Features\Jobs\JobsContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

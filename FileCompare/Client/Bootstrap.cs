@@ -50,6 +50,7 @@ namespace Client
             service.AddSingleton<DAL.IDBContext, DAL.DBContext>();
 
             service.AddSingleton<Features.Folders.IFolderRepository, Features.Folders.FolderRepository>();
+            service.AddSingleton<Features.Jobs.IJobRepository, Features.Jobs.JobRepository>();
 
             Services = service.BuildServiceProvider();
         }
