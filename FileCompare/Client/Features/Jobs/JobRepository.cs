@@ -18,14 +18,40 @@ namespace Client.Features.Jobs
             _dBContext = (DAL.IDBContext)Bootstrap.Instance.Services.GetService(typeof(DAL.IDBContext));
         }
 
-        public Task<bool> Delete(Job job)
+        public async Task<bool> Delete(Job job)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (job != null)
+                {
+                    await _dBContext.Instance.DeleteAsync(job);
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to delete Job item");
+            }
+            return false;
         }
 
-        public Task<bool> Delete(JobCollectPath jobCollectPath)
+        public async Task<bool> Delete(JobCollectPath jobCollectPath)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (jobCollectPath != null)
+                {
+                    await _dBContext.Instance.DeleteAsync(jobCollectPath);
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to delete JobCollectPath item");
+            }
+            return false;
         }
 
         public async Task<List<JobCollectPath>> GetJobCollectPath(Guid jobId)
@@ -43,29 +69,94 @@ namespace Client.Features.Jobs
             return await _dBContext.Instance.Table<Models.Job>().ToListAsync();
         }
 
-        public Task<bool> Insert(Job job)
+        public async Task<bool> Insert(Job job)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (job != null)
+                {
+                    await _dBContext.Instance.InsertAsync(job);
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to insert new Job item");
+            }
+            return false;
         }
 
-        public Task<bool> Insert(JobCollectPath jobCollectPath)
+        public async Task<bool> Insert(JobCollectPath jobCollectPath)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (jobCollectPath != null)
+                {
+                    await _dBContext.Instance.InsertAsync(jobCollectPath);
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to insert new JobCollectPath item");
+            }
+            return false;
         }
 
-        public Task<bool> Update(Job job)
+        public async Task<bool> Update(Job job)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (job != null)
+                {
+                    await _dBContext.Instance.UpdateAsync(job);
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to update new Job item");
+            }
+            return false;
         }
 
-        public Task<bool> Update(JobConfiguration jobConfiguration)
+        public async Task<bool> Update(JobConfiguration jobConfiguration)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (jobConfiguration != null)
+                {
+                    await _dBContext.Instance.UpdateAsync(jobConfiguration);
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to update new JobConfiguration item");
+            }
+            return false;
         }
 
-        public Task<bool> Update(JobCollectPath jobCollectPath)
+        public async Task<bool> Update(JobCollectPath jobCollectPath)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (jobCollectPath != null)
+                {
+                    await _dBContext.Instance.UpdateAsync(jobCollectPath);
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to update new JobCollectPath item");
+            }
+            return false;
         }
     }
 }
