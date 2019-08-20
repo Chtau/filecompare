@@ -15,6 +15,8 @@ namespace Client.Features.Folders.Models
         public DateTime Added { get; set; }
         public DateTime? LastCheck { get; set; }
         public int FilesFound { get; set; }
+        public int TotalFilesFound { get; set; }
+        public int SubFoldersFilesFound { get; set; }
         public int SubFoldersFound { get; set; }
     }
 }

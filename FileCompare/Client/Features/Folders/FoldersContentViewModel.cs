@@ -70,7 +70,9 @@ namespace Client.Features.Folders
                         Id = Guid.NewGuid(),
                         LastCheck = null,
                         Path = folder,
-                        SubFoldersFound = 0
+                        SubFoldersFound = 0,
+                        SubFoldersFilesFound = 0,
+                        TotalFilesFound = 0
                     };
                     await _repository.Insert(model);
                     return true;
