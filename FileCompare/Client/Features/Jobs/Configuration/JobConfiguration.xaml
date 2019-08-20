@@ -56,7 +56,26 @@
         </Grid>
         <Grid Grid.Column="1">
             <Grid>
-                <DataGrid
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Grid.Row="0"></ComboBox>
+                    <CheckBox Grid.Column="1" Content="{Binding Source='IncludeSubFolders',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                    <Button Grid.Column="2" Margin="10, 0, 10, 0" Height="24" Padding="5,0" x:Name="addPath" Style="{StaticResource AccentedSquareButtonStyle}"
+                    Click="AddPath_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconModern VerticalAlignment="Center" Kind="Add" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+                <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Path=JobCollectPathItems, Mode=TwoWay}"
                   RowHeaderWidth="0"
                     SelectionUnit="FullRow"
@@ -79,7 +98,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Binding="{Binding Name}" Width="*" Header="{Binding Source='Name',Converter={ StaticResource LocalizeConverter}}" />
+                        <DataGridTextColumn Binding="{Binding Path}" Width="*" Header="{Binding Source='Path',Converter={ StaticResource LocalizeConverter}}" />
                         <DataGridTextColumn Binding="{Binding IncludeSubFolders}" Width="Auto" Header="{Binding Source='IncludeSubFolders',Converter={ StaticResource LocalizeConverter}}" />
                     </DataGrid.Columns>
                 </DataGrid>

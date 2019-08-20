@@ -38,5 +38,10 @@ namespace Client.Features.Jobs.Configuration
         {
 
         }
+
+        private void AddPath_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
