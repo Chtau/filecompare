@@ -7,7 +7,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client.Features.Jobs.Configuration"
         mc:Ignorable="d"
-        Title="{Binding Source='JobConfiguration',Converter={ StaticResource LocalizeConverter}}" Height="300" MinHeight="300" MinWidth="600" Width="800">
+        Title="{Binding Source='JobConfiguration',Converter={ StaticResource LocalizeConverter}}" Height="350" MinHeight="350" MinWidth="600" Width="800">
     <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="300"/>
@@ -26,37 +26,40 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Content="{Binding Source='Name',Converter={ StaticResource LocalizeConverter}}"/>
-            <TextBox Grid.Row="0" Grid.Column="1"></TextBox>
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=JobName, Mode=TwoWay}"></TextBox>
             <Label Grid.Row="1" Grid.Column="0" Content="{Binding Source='FileExtensions',Converter={ StaticResource LocalizeConverter}}"/>
-            <TextBox Grid.Row="1" Grid.Column="1"></TextBox>
-            <Label Grid.Row="2" Grid.ColumnSpan="2" Content="{Binding Source='Interval',Converter={ StaticResource LocalizeConverter}}"/>
-            <StackPanel Orientation="Vertical" Grid.Row="3" Grid.ColumnSpan="2" Height="Auto">
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=JobConfigurationFileExtensions, Mode=TwoWay}"></TextBox>
+            <Label Grid.Row="2" Grid.Column="0" Content="{Binding Source='JobType',Converter={ StaticResource LocalizeConverter}}"/>
+            <ComboBox Grid.Row="2" Grid.Column="1"></ComboBox>
+            <Label Grid.Row="3" Grid.ColumnSpan="2" Content="{Binding Source='Interval',Converter={ StaticResource LocalizeConverter}}"/>
+            <StackPanel Orientation="Vertical" Grid.Row="4" Grid.ColumnSpan="2" Height="Auto">
                 <StackPanel Orientation="Horizontal">
-                    <CheckBox Content="{Binding Source='Monday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
-                    <CheckBox Content="{Binding Source='Tuesday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
-                    <CheckBox Content="{Binding Source='Wednesday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                    <CheckBox IsChecked="{Binding Path=JobConfigurationDaysMonday, Mode=TwoWay}" Content="{Binding Source='Monday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                    <CheckBox IsChecked="{Binding Path=JobConfigurationDaysTuesday, Mode=TwoWay}" Content="{Binding Source='Tuesday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                    <CheckBox IsChecked="{Binding Path=JobConfigurationDaysWednesday, Mode=TwoWay}" Content="{Binding Source='Wednesday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0, 5">
-                    <CheckBox Content="{Binding Source='Thursday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
-                    <CheckBox Content="{Binding Source='Friday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                    <CheckBox IsChecked="{Binding Path=JobConfigurationDaysThursday, Mode=TwoWay}" Content="{Binding Source='Thursday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                    <CheckBox IsChecked="{Binding Path=JobConfigurationDaysFriday, Mode=TwoWay}" Content="{Binding Source='Friday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <CheckBox Content="{Binding Source='Saturday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
-                    <CheckBox Content="{Binding Source='Sunday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                    <CheckBox IsChecked="{Binding Path=JobConfigurationDaysSaturday, Mode=TwoWay}" Content="{Binding Source='Saturday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                    <CheckBox IsChecked="{Binding Path=JobConfigurationDaysSunday, Mode=TwoWay}" Content="{Binding Source='Sunday',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
                 </StackPanel>
             </StackPanel>
-            <Label Grid.Row="4" Grid.Column="0" Content="{Binding Source='Hour',Converter={ StaticResource LocalizeConverter}}"/>
-            <Controls:NumericUpDown Grid.Row="4" Grid.Column="1" Minimum="0" Maximum="23"></Controls:NumericUpDown>
-            <Label Grid.Row="5" Grid.Column="0" Content="{Binding Source='Minute',Converter={ StaticResource LocalizeConverter}}"/>
-            <Controls:NumericUpDown Grid.Row="5" Grid.Column="1" Minimum="0" Maximum="59"></Controls:NumericUpDown>
-            <Label Grid.Row="6" Grid.Column="0" Content="{Binding Source='MaxRuntimeMinutes',Converter={ StaticResource LocalizeConverter}}"/>
-            <Controls:NumericUpDown Grid.Row="6" Grid.Column="1" Minimum="0" Maximum="120"></Controls:NumericUpDown>
+            <Label Grid.Row="5" Grid.Column="0" Content="{Binding Source='Hour',Converter={ StaticResource LocalizeConverter}}"/>
+            <Controls:NumericUpDown Grid.Row="5" Grid.Column="1" Minimum="0" Maximum="23" Value="{Binding Path=JobConfigurationHours, Mode=TwoWay}"></Controls:NumericUpDown>
+            <Label Grid.Row="6" Grid.Column="0" Content="{Binding Source='Minute',Converter={ StaticResource LocalizeConverter}}"/>
+            <Controls:NumericUpDown Grid.Row="6" Grid.Column="1" Minimum="0" Maximum="59" Value="{Binding Path=JobConfigurationMinutes, Mode=TwoWay}"></Controls:NumericUpDown>
+            <Label Grid.Row="7" Grid.Column="0" Content="{Binding Source='MaxRuntimeMinutes',Converter={ StaticResource LocalizeConverter}}"/>
+            <Controls:NumericUpDown Grid.Row="7" Grid.Column="1" Minimum="0" Maximum="120" Value="{Binding Path=JobConfigurationMaxRuntimeMinutes, Mode=TwoWay}"></Controls:NumericUpDown>
         </Grid>
         <Grid Grid.Column="1" Grid.Row="0">
             <Grid Margin="5,0,0,0">

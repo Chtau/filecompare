@@ -84,7 +84,135 @@ namespace Client.Features.Jobs.Configuration
             {
                 jobConfigurationDays = value;
                 RaisePropertyChanged("JobConfigurationDays");
+                OnSetJobConfigurationDays();
             }
+        }
+
+        private bool jobConfigurationDaysMonday;
+        public bool JobConfigurationDaysMonday
+        {
+            get { return (JobConfigurationDays & Day.Monday) == Day.Monday; }
+            set
+            {
+                jobConfigurationDaysMonday = value;
+                RaisePropertyChanged("JobConfigurationDaysMonday");
+                OnChangeJobConfigurationDays();
+            }
+        }
+
+        private bool jobConfigurationDaysTuesday;
+        public bool JobConfigurationDaysTuesday
+        {
+            get { return (JobConfigurationDays & Day.Tuesday) == Day.Tuesday; }
+            set
+            {
+                jobConfigurationDaysTuesday = value;
+                RaisePropertyChanged("JobConfigurationDaysTuesday");
+                OnChangeJobConfigurationDays();
+            }
+        }
+
+        private bool jobConfigurationDaysWednesday;
+        public bool JobConfigurationDaysWednesday
+        {
+            get { return (JobConfigurationDays & Day.Wednesday) == Day.Wednesday; }
+            set
+            {
+                jobConfigurationDaysWednesday = value;
+                RaisePropertyChanged("JobConfigurationDaysWednesday");
+                OnChangeJobConfigurationDays();
+            }
+        }
+
+        private bool jobConfigurationDaysThursday;
+        public bool JobConfigurationDaysThursday
+        {
+            get { return (JobConfigurationDays & Day.Thursday) == Day.Thursday; }
+            set
+            {
+                jobConfigurationDaysThursday = value;
+                RaisePropertyChanged("JobConfigurationDaysThursday");
+                OnChangeJobConfigurationDays();
+            }
+        }
+
+        private bool jobConfigurationDaysFriday;
+        public bool JobConfigurationDaysFriday
+        {
+            get { return (JobConfigurationDays & Day.Friday) == Day.Friday; }
+            set
+            {
+                jobConfigurationDaysFriday = value;
+                RaisePropertyChanged("JobConfigurationDaysFriday");
+                OnChangeJobConfigurationDays();
+            }
+        }
+
+        private bool jobConfigurationDaysSaturday;
+        public bool JobConfigurationDaysSaturday
+        {
+            get { return (JobConfigurationDays & Day.Saturday) == Day.Saturday; }
+            set
+            {
+                jobConfigurationDaysSaturday = value;
+                RaisePropertyChanged("JobConfigurationDaysSaturday");
+                OnChangeJobConfigurationDays();
+            }
+        }
+
+        private bool jobConfigurationDaysSunday;
+        public bool JobConfigurationDaysSunday
+        {
+            get { return (JobConfigurationDays & Day.Sunday) == Day.Sunday; }
+            set
+            {
+                jobConfigurationDaysSunday = value;
+                RaisePropertyChanged("JobConfigurationDaysSunday");
+                OnChangeJobConfigurationDays();
+            }
+        }
+
+        private void OnChangeJobConfigurationDays()
+        {
+            if (internJobDayChange == false)
+            {
+                var days = Day.None;
+                if (jobConfigurationDaysMonday)
+                    days |= Day.Monday;
+                if (jobConfigurationDaysTuesday)
+                    days |= Day.Tuesday;
+                if (jobConfigurationDaysWednesday)
+                    days |= Day.Wednesday;
+                if (jobConfigurationDaysThursday)
+                    days |= Day.Thursday;
+                if (jobConfigurationDaysFriday)
+                    days |= Day.Friday;
+                if (jobConfigurationDaysSaturday)
+                    days |= Day.Saturday;
+                if (jobConfigurationDaysSunday)
+                    days |= Day.Sunday;
+                JobConfigurationDays = days;
+            }
+        }
+        private bool internJobDayChange = false;
+        private void OnSetJobConfigurationDays()
+        {
+            internJobDayChange = true;
+            if ((jobConfigurationDays & Day.Monday) == Day.Monday)
+                JobConfigurationDaysMonday = true;
+            if ((jobConfigurationDays & Day.Tuesday) == Day.Tuesday)
+                JobConfigurationDaysTuesday = true;
+            if ((jobConfigurationDays & Day.Wednesday) == Day.Wednesday)
+                JobConfigurationDaysWednesday = true;
+            if ((jobConfigurationDays & Day.Thursday) == Day.Thursday)
+                JobConfigurationDaysThursday = true;
+            if ((jobConfigurationDays & Day.Friday) == Day.Friday)
+                JobConfigurationDaysFriday = true;
+            if ((jobConfigurationDays & Day.Saturday) == Day.Saturday)
+                JobConfigurationDaysSaturday = true;
+            if ((jobConfigurationDays & Day.Sunday) == Day.Sunday)
+                JobConfigurationDaysSunday = true;
+            internJobDayChange = false;
         }
 
         private int jobConfigurationHours;
