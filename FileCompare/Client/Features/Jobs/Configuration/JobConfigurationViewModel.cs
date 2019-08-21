@@ -37,6 +37,16 @@ namespace Client.Features.Jobs.Configuration
             }
         }
 
+        public bool IsNew
+        {
+            get { return JobId == Guid.Empty; }
+        }
+
+        public bool IsNotNew
+        {
+            get { return JobId != Guid.Empty; }
+        }
+
         private Guid jobId = Guid.Empty;
 
         public Guid JobId
@@ -46,6 +56,8 @@ namespace Client.Features.Jobs.Configuration
             {
                 jobId = value;
                 RaisePropertyChanged(nameof(JobId));
+                RaisePropertyChanged(nameof(IsNew));
+                RaisePropertyChanged(nameof(IsNotNew));
             }
         }
 
@@ -359,6 +371,7 @@ namespace Client.Features.Jobs.Configuration
                 {
                     Paths.Add(new KeyValuePair<Guid, string>(item.Id, item.Path));
                 }
+                PathsSelected = Guid.Empty;
                 if (JobId != Guid.Empty)
                 {
                     var jobModel = await _repository.GetJobs(jobId);
@@ -455,6 +468,7 @@ namespace Client.Features.Jobs.Configuration
                     if (!await _repository.Update(jobConfiguration))
                         throw new Exception("Could not update JobConfiguration");
                 }
+                JobId = job.Id;
                 await OnRefresh();
             }
             catch (Exception ex)
