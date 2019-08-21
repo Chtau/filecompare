@@ -26,6 +26,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private ObservableCollection<ViewModels.JobPathView> jobCollectPathItems;
+
         public ObservableCollection<ViewModels.JobPathView> JobCollectPathItems
         {
             get { return jobCollectPathItems; }
@@ -37,6 +38,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private Guid jobId = Guid.Empty;
+
         public Guid JobId
         {
             get { return jobId; }
@@ -48,6 +50,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private string jobName;
+
         public string JobName
         {
             get { return jobName; }
@@ -59,6 +62,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private JobType jobType;
+
         public JobType JobType
         {
             get { return jobType; }
@@ -70,6 +74,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private Guid jobConfigurationId;
+
         public Guid JobConfigurationId
         {
             get { return jobConfigurationId; }
@@ -81,6 +86,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private Day jobConfigurationDays;
+
         public Day JobConfigurationDays
         {
             get { return jobConfigurationDays; }
@@ -93,6 +99,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private bool jobConfigurationDaysMonday;
+
         public bool JobConfigurationDaysMonday
         {
             get { return (JobConfigurationDays & Day.Monday) == Day.Monday; }
@@ -105,6 +112,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private bool jobConfigurationDaysTuesday;
+
         public bool JobConfigurationDaysTuesday
         {
             get { return (JobConfigurationDays & Day.Tuesday) == Day.Tuesday; }
@@ -117,6 +125,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private bool jobConfigurationDaysWednesday;
+
         public bool JobConfigurationDaysWednesday
         {
             get { return (JobConfigurationDays & Day.Wednesday) == Day.Wednesday; }
@@ -129,6 +138,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private bool jobConfigurationDaysThursday;
+
         public bool JobConfigurationDaysThursday
         {
             get { return (JobConfigurationDays & Day.Thursday) == Day.Thursday; }
@@ -141,6 +151,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private bool jobConfigurationDaysFriday;
+
         public bool JobConfigurationDaysFriday
         {
             get { return (JobConfigurationDays & Day.Friday) == Day.Friday; }
@@ -153,6 +164,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private bool jobConfigurationDaysSaturday;
+
         public bool JobConfigurationDaysSaturday
         {
             get { return (JobConfigurationDays & Day.Saturday) == Day.Saturday; }
@@ -165,6 +177,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private bool jobConfigurationDaysSunday;
+
         public bool JobConfigurationDaysSunday
         {
             get { return (JobConfigurationDays & Day.Sunday) == Day.Sunday; }
@@ -178,7 +191,7 @@ namespace Client.Features.Jobs.Configuration
 
         private void OnChangeJobConfigurationDays()
         {
-            if (internJobDayChange == false)
+            if (!internJobDayChange)
             {
                 var days = Day.None;
                 if (jobConfigurationDaysMonday)
@@ -198,7 +211,9 @@ namespace Client.Features.Jobs.Configuration
                 JobConfigurationDays = days;
             }
         }
-        private bool internJobDayChange = false;
+
+        private bool internJobDayChange;
+
         private void OnSetJobConfigurationDays()
         {
             internJobDayChange = true;
@@ -220,6 +235,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private int jobConfigurationHours;
+
         public int JobConfigurationHours
         {
             get { return jobConfigurationHours; }
@@ -231,6 +247,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private int jobConfigurationMinutes;
+
         public int JobConfigurationMinutes
         {
             get { return jobConfigurationMinutes; }
@@ -242,6 +259,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private int jobConfigurationMaxRuntimeMinutes;
+
         public int JobConfigurationMaxRuntimeMinutes
         {
             get { return jobConfigurationMaxRuntimeMinutes; }
@@ -253,6 +271,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private string jobConfigurationFileExtensions;
+
         public string JobConfigurationFileExtensions
         {
             get { return jobConfigurationFileExtensions; }
@@ -264,7 +283,9 @@ namespace Client.Features.Jobs.Configuration
         }
 
         public List<KeyValuePair<int, string>> JobTypeEnum { get; set; }
-        public int jobTypeEnumSelected = 0;
+
+        public int jobTypeEnumSelected;
+
         public int JobTypeEnumSelected
         {
             get { return jobTypeEnumSelected; }
@@ -276,6 +297,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         public ObservableCollection<KeyValuePair<Guid, string>> paths;
+
         public ObservableCollection<KeyValuePair<Guid, string>> Paths
         {
             get { return paths; }
@@ -287,6 +309,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         public Guid pathsSelected = Guid.Empty;
+
         public Guid PathsSelected
         {
             get { return pathsSelected; }
@@ -298,6 +321,7 @@ namespace Client.Features.Jobs.Configuration
         }
 
         private ICommand _refreshCommand;
+
         public ICommand RefreshCommand
         {
             get
