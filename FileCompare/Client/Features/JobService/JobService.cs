@@ -71,7 +71,12 @@ namespace Client.Features.JobService
                     // when stopping we stop the task for the job
                 } else if (job.JobState == Jobs.JobState.Running)
                 {
-                    // when running we have nothing to do
+                    // when running we check against start time and max runtime in minutes
+                    if (OnShouldStopRunningJob(job, config))
+                    {
+                        job.JobState = Jobs.JobState.Stopping;
+                        await _repository.Update(job);
+                    }
                 } else if (job.JobState == Jobs.JobState.Starting)
                 {
                     // when starting we should start the task for this job
@@ -109,6 +114,24 @@ namespace Client.Features.JobService
                     {
                         var currentMinute = DateTime.Now.Minute;
                         if (currentMinute >= config.Minutes && (currentMinute + 5 <= config.Minutes))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        private bool OnShouldStopRunningJob(Job job, JobConfiguration config)
+        {
+            if (config != null)
+            {
+                if (config.MaxRuntimeMinutes != 0)
+                {
+                    if (job.LastExecuted.HasValue)
+                    {
+                        if (job.LastExecuted.Value.AddMinutes(config.MaxRuntimeMinutes) > DateTime.Now)
                         {
                             return true;
                         }
