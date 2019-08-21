@@ -71,5 +71,41 @@ namespace Client.Features.Jobs
                 return false;
             }
         }
+
+        public async Task<bool> StartJob(Models.Job job)
+        {
+            try
+            {
+                if (job != null && job.JobState == JobState.Idle)
+                {
+                    job.JobState = JobState.Starting;
+                    return await _repository.Update(job);
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+                return false;
+            }
+        }
+
+        public async Task<bool> StopJob(Models.Job job)
+        {
+            try
+            {
+                if (job != null && job.JobState == JobState.Running)
+                {
+                    job.JobState = JobState.Stopping;
+                    return await _repository.Update(job);
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+                return false;
+            }
+        }
     }
 }

@@ -60,6 +60,32 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MaxWidth="35">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="StartJobItem" Click="StartJobItem_Click" Height="10" MaxHeight="1" Margin="0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconModern Width="16" Height="10" Kind="ControlPlay" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn MaxWidth="35">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="StopJobItem" Click="StopJobItem_Click" Height="10" MaxHeight="1" Margin="0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconModern Width="16" Height="10" Kind="Stop" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Binding="{Binding Name}" Width="*" Header="{Binding Source='Name',Converter={ StaticResource LocalizeConverter}}" />
                     <DataGridTextColumn Binding="{Binding JobType}" Width="Auto" Header="{Binding Source='JobType',Converter={ StaticResource LocalizeConverter}}" />
                     <DataGridTextColumn Binding="{Binding LastExecuted}" Width="Auto" Header="{Binding Source='LastExecuted',Converter={ StaticResource LocalizeConverter}}" />

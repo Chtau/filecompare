@@ -13,10 +13,10 @@ namespace Client.Features.Jobs
 
     public enum JobState
     {
-        None = 0,
-        Running = 1,
-        Stopped = 2,
-        Aborted = 3
+        Idle = 0,
+        Starting = 1,
+        Running = 2,
+        Stopping = 3,
     }
 
     [Flags]

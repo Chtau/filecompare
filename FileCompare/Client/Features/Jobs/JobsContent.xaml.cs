@@ -71,5 +71,29 @@ namespace Client.Features.Jobs
             }
             _viewModel.RefreshCommand.Execute(null);
         }
+
+        private void StartJobItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (e.Source is Button button && button.DataContext != null)
+            {
+                if (button.DataContext is Models.Job job)
+                {
+                    Task.Run(async () => await _viewModel.StartJob(job)).Wait();
+                    _viewModel.RefreshCommand.Execute(null);
+                }
+            }
+        }
+
+        private void StopJobItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (e.Source is Button button && button.DataContext != null)
+            {
+                if (button.DataContext is Models.Job job)
+                {
+                    Task.Run(async () => await _viewModel.StopJob(job)).Wait();
+                    _viewModel.RefreshCommand.Execute(null);
+                }
+            }
+        }
     }
 }
