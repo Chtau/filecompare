@@ -12,13 +12,17 @@ namespace Client.Features.Jobs.Configuration
     {
         private readonly Internal.ILogger _logger;
         private readonly IJobRepository _repository;
+        private readonly Folders.IFolderRepository _repositoryFolders;
 
         public JobConfigurationViewModel(Guid jobId)
         {
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _repository = (IJobRepository)Bootstrap.Instance.Services.GetService(typeof(IJobRepository));
+            _repositoryFolders = (Folders.IFolderRepository)Bootstrap.Instance.Services.GetService(typeof(Folders.IFolderRepository));
 
             JobId = jobId;
+            JobTypeEnum = Internal.ComboBoxBindingModelBuilder.FromEnum(typeof(JobType), false);
+            Paths = new ObservableCollection<KeyValuePair<Guid, string>>();
         }
 
         private ObservableCollection<ViewModels.JobPathView> jobCollectPathItems;
@@ -28,7 +32,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobCollectPathItems = value;
-                RaisePropertyChanged("JobCollectPathItems");
+                RaisePropertyChanged(nameof(JobCollectPathItems));
             }
         }
 
@@ -39,7 +43,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobId = value;
-                RaisePropertyChanged("JobId");
+                RaisePropertyChanged(nameof(JobId));
             }
         }
 
@@ -50,7 +54,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobName = value;
-                RaisePropertyChanged("JobName");
+                RaisePropertyChanged(nameof(JobName));
             }
         }
 
@@ -61,7 +65,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobType = value;
-                RaisePropertyChanged("JobType");
+                RaisePropertyChanged(nameof(JobType));
             }
         }
 
@@ -72,7 +76,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobConfigurationId = value;
-                RaisePropertyChanged("Job");
+                RaisePropertyChanged(nameof(JobConfigurationId));
             }
         }
 
@@ -83,7 +87,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobConfigurationDays = value;
-                RaisePropertyChanged("JobConfigurationDays");
+                RaisePropertyChanged(nameof(JobConfigurationDays));
                 OnSetJobConfigurationDays();
             }
         }
@@ -95,7 +99,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobConfigurationDaysMonday = value;
-                RaisePropertyChanged("JobConfigurationDaysMonday");
+                RaisePropertyChanged(nameof(JobConfigurationDaysMonday));
                 OnChangeJobConfigurationDays();
             }
         }
@@ -107,7 +111,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobConfigurationDaysTuesday = value;
-                RaisePropertyChanged("JobConfigurationDaysTuesday");
+                RaisePropertyChanged(nameof(JobConfigurationDaysTuesday));
                 OnChangeJobConfigurationDays();
             }
         }
@@ -119,7 +123,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobConfigurationDaysWednesday = value;
-                RaisePropertyChanged("JobConfigurationDaysWednesday");
+                RaisePropertyChanged(nameof(JobConfigurationDaysWednesday));
                 OnChangeJobConfigurationDays();
             }
         }
@@ -131,7 +135,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobConfigurationDaysThursday = value;
-                RaisePropertyChanged("JobConfigurationDaysThursday");
+                RaisePropertyChanged(nameof(JobConfigurationDaysThursday));
                 OnChangeJobConfigurationDays();
             }
         }
@@ -143,7 +147,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobConfigurationDaysFriday = value;
-                RaisePropertyChanged("JobConfigurationDaysFriday");
+                RaisePropertyChanged(nameof(JobConfigurationDaysFriday));
                 OnChangeJobConfigurationDays();
             }
         }
@@ -155,7 +159,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobConfigurationDaysSaturday = value;
-                RaisePropertyChanged("JobConfigurationDaysSaturday");
+                RaisePropertyChanged(nameof(JobConfigurationDaysSaturday));
                 OnChangeJobConfigurationDays();
             }
         }
@@ -167,7 +171,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobConfigurationDaysSunday = value;
-                RaisePropertyChanged("JobConfigurationDaysSunday");
+                RaisePropertyChanged(nameof(JobConfigurationDaysSunday));
                 OnChangeJobConfigurationDays();
             }
         }
@@ -222,7 +226,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobConfigurationHours = value;
-                RaisePropertyChanged("JobConfigurationHours");
+                RaisePropertyChanged(nameof(JobConfigurationHours));
             }
         }
 
@@ -233,7 +237,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobConfigurationMinutes = value;
-                RaisePropertyChanged("JobConfigurationMinutes");
+                RaisePropertyChanged(nameof(JobConfigurationMinutes));
             }
         }
 
@@ -244,7 +248,7 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobConfigurationMaxRuntimeMinutes = value;
-                RaisePropertyChanged("JobConfigurationMaxRuntimeMinutes");
+                RaisePropertyChanged(nameof(JobConfigurationMaxRuntimeMinutes));
             }
         }
 
@@ -255,7 +259,41 @@ namespace Client.Features.Jobs.Configuration
             set
             {
                 jobConfigurationFileExtensions = value;
-                RaisePropertyChanged("JobConfigurationFileExtensions");
+                RaisePropertyChanged(nameof(JobConfigurationFileExtensions));
+            }
+        }
+
+        public List<KeyValuePair<int, string>> JobTypeEnum { get; set; }
+        public int jobTypeEnumSelected = 0;
+        public int JobTypeEnumSelected
+        {
+            get { return jobTypeEnumSelected; }
+            set
+            {
+                jobTypeEnumSelected = value;
+                RaisePropertyChanged(nameof(JobTypeEnumSelected));
+            }
+        }
+
+        public ObservableCollection<KeyValuePair<Guid, string>> paths;
+        public ObservableCollection<KeyValuePair<Guid, string>> Paths
+        {
+            get { return paths; }
+            set
+            {
+                paths = value;
+                RaisePropertyChanged(nameof(Paths));
+            }
+        }
+
+        public Guid pathsSelected = Guid.Empty;
+        public Guid PathsSelected
+        {
+            get { return pathsSelected; }
+            set
+            {
+                pathsSelected = value;
+                RaisePropertyChanged(nameof(PathsSelected));
             }
         }
 
@@ -278,6 +316,13 @@ namespace Client.Features.Jobs.Configuration
         {
             try
             {
+                Paths = new ObservableCollection<KeyValuePair<Guid, string>>();
+                var paths = await _repositoryFolders.GetPaths();
+                Paths.Add(new KeyValuePair<Guid, string>(Guid.Empty, "---"));
+                foreach (var item in paths)
+                {
+                    Paths.Add(new KeyValuePair<Guid, string>(item.Id, item.Path));
+                }
                 if (JobId != Guid.Empty)
                     JobCollectPathItems = new ObservableCollection<ViewModels.JobPathView>(await _repository.GetJobCollectPath(JobId));
             }

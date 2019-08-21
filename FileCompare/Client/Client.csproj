@@ -132,6 +132,7 @@
     <Compile Include="Globalize\ILocalize.cs" />
     <Compile Include="Globalize\Localize.cs" />
     <Compile Include="Globalize\LocalizeConverter.cs" />
+    <Compile Include="Internal\ComboBoxBindingModelBuilder.cs" />
     <Compile Include="Internal\GlobalValues.cs" />
     <Compile Include="Internal\ILogger.cs" />
     <Compile Include="Internal\ISettings.cs" />
