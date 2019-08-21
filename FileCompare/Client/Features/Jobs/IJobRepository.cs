@@ -9,6 +9,7 @@ namespace Client.Features.Jobs
     public interface IJobRepository
     {
         Task<List<Models.Job>> GetJobs();
+        Task<Models.Job> GetJobs(Guid jobId);
         Task<bool> Insert(Models.Job job);
         Task<bool> Delete(Models.Job job);
         Task<bool> Update(Models.Job job);

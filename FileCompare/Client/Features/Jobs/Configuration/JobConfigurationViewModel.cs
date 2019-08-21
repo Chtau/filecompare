@@ -324,7 +324,21 @@ namespace Client.Features.Jobs.Configuration
                     Paths.Add(new KeyValuePair<Guid, string>(item.Id, item.Path));
                 }
                 if (JobId != Guid.Empty)
+                {
+                    var jobModel = await _repository.GetJobs(jobId);
+                    JobName = jobModel.Name;
+                    var jobConfigModel = await _repository.GetJobConfiguration(JobId);
+                    if (jobConfigModel != null)
+                    {
+                        JobConfigurationDays = jobConfigModel.Days;
+                        JobConfigurationFileExtensions = jobConfigModel.FileExtensions;
+                        JobConfigurationHours = jobConfigModel.Hours;
+                        JobConfigurationId = jobConfigModel.Id;
+                        JobConfigurationMaxRuntimeMinutes = jobConfigModel.MaxRuntimeMinutes;
+                        JobConfigurationMinutes = jobConfigModel.Minutes;
+                    }
                     JobCollectPathItems = new ObservableCollection<ViewModels.JobPathView>(await _repository.GetJobCollectPath(JobId));
+                }
             }
             catch (Exception ex)
             {

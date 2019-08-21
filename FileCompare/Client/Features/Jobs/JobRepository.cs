@@ -87,6 +87,11 @@ namespace Client.Features.Jobs
             return await _dBContext.Instance.Table<Models.Job>().ToListAsync();
         }
 
+        public async Task<Job> GetJobs(Guid jobId)
+        {
+            return await _dBContext.Instance.Table<Models.Job>().FirstAsync(x => x.Id == jobId);
+        }
+
         public async Task<bool> Insert(Job job)
         {
             try
