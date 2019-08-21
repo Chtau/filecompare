@@ -36,17 +36,23 @@ namespace Client.Features.Jobs.Configuration
 
         private void DeletePathItem_Click(object sender, RoutedEventArgs e)
         {
-
+            if (e.Source is Button button && button.DataContext != null)
+            {
+                if (button.DataContext is ViewModels.JobPathView path)
+                {
+                    Task.Run(async () => await _viewModel.DeleteCollectPath(path)).Wait();
+                }
+            }
         }
 
         private void AddPath_Click(object sender, RoutedEventArgs e)
         {
-
+            _viewModel.AddPathCommand.Execute(null);
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-
+            _viewModel.SaveCommand.Execute(null);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)

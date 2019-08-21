@@ -320,6 +320,18 @@ namespace Client.Features.Jobs.Configuration
             }
         }
 
+        public bool includeSubFolders;
+
+        public bool IncludeSubFolders
+        {
+            get { return includeSubFolders; }
+            set
+            {
+                includeSubFolders = value;
+                RaisePropertyChanged(nameof(IncludeSubFolders));
+            }
+        }
+
         private ICommand _refreshCommand;
 
         public ICommand RefreshCommand
@@ -361,12 +373,151 @@ namespace Client.Features.Jobs.Configuration
                         JobConfigurationMaxRuntimeMinutes = jobConfigModel.MaxRuntimeMinutes;
                         JobConfigurationMinutes = jobConfigModel.Minutes;
                     }
-                    JobCollectPathItems = new ObservableCollection<ViewModels.JobPathView>(await _repository.GetJobCollectPath(JobId));
+                    await OnRefreshCollectPaths();
                 }
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "OnRefresh failed to load data");
+            }
+        }
+
+        private async Task OnRefreshCollectPaths()
+        {
+            JobCollectPathItems = new ObservableCollection<ViewModels.JobPathView>(await _repository.GetJobCollectPath(JobId));
+        }
+
+        private ICommand _saveCommand;
+
+        public ICommand SaveCommand
+        {
+            get
+            {
+                if (_saveCommand == null)
+                {
+                    _saveCommand = new RelayCommand(
+                        p => true,
+                        async p => await OnSave());
+                }
+                return _saveCommand;
+            }
+        }
+
+        private async Task OnSave()
+        {
+            try
+            {
+                bool isNew = false;
+                Models.Job job;
+                Models.JobConfiguration jobConfiguration;
+                if (JobId == Guid.Empty)
+                {
+                    isNew = true;
+                    job = new Models.Job
+                    {
+                        Id = Guid.NewGuid(),
+                        JobType = (JobType)JobTypeEnumSelected,
+                        Name = JobName,
+                    };
+                    if (!await _repository.Insert(job))
+                        throw new Exception("Could not insert Job");
+                } else
+                {
+                    job = await _repository.GetJobs(JobId);
+                    job.Name = JobName;
+                    job.JobType = (JobType)JobTypeEnumSelected;
+                    if (!await _repository.Update(job))
+                        throw new Exception("Could not update Job");
+                }
+                job = await _repository.GetJobs(job.Id);
+                if (isNew)
+                {
+                    jobConfiguration = new Models.JobConfiguration
+                    {
+                        Id = Guid.NewGuid(),
+                        Days = JobConfigurationDays,
+                        FileExtensions = JobConfigurationFileExtensions,
+                        Hours = JobConfigurationHours,
+                        JobId = job.Id,
+                        MaxRuntimeMinutes = JobConfigurationMaxRuntimeMinutes,
+                        Minutes = JobConfigurationMinutes
+                    };
+                    if (!await _repository.Insert(jobConfiguration))
+                        throw new Exception("Could not insert JobConfiguration");
+                } else
+                {
+                    jobConfiguration = await _repository.GetJobConfiguration(job.Id);
+                    jobConfiguration.Days = JobConfigurationDays;
+                    jobConfiguration.FileExtensions = JobConfigurationFileExtensions;
+                    jobConfiguration.Hours = JobConfigurationHours;
+                    jobConfiguration.MaxRuntimeMinutes = JobConfigurationMaxRuntimeMinutes;
+                    jobConfiguration.Minutes = JobConfigurationMinutes;
+                    if (!await _repository.Update(jobConfiguration))
+                        throw new Exception("Could not update JobConfiguration");
+                }
+                await OnRefresh();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnSave failed to load data");
+            }
+        }
+
+        private ICommand _addPathCommand;
+
+        public ICommand AddPathCommand
+        {
+            get
+            {
+                if (_addPathCommand == null)
+                {
+                    _addPathCommand = new RelayCommand(
+                        p => true,
+                        async p => await OnAddPath());
+                }
+                return _addPathCommand;
+            }
+        }
+
+        private async Task OnAddPath()
+        {
+            try
+            {
+                if (JobId != Guid.Empty)
+                {
+                    var path = new Models.JobCollectPath
+                    {
+                        Id = Guid.NewGuid(),
+                        CollectPathId = PathsSelected,
+                        IncludeSubFolders = IncludeSubFolders,
+                        JobId = JobId
+                    };
+                    if (!await _repository.Insert(path))
+                        throw new Exception("Could not insert JobCollectPath");
+                    await OnRefreshCollectPaths();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnAddPath failed to add data");
+            }
+        }
+
+        public async Task DeleteCollectPath(ViewModels.JobPathView path)
+        {
+            try
+            {
+                if (path != null)
+                {
+                    var collectPath = await _repository.GetJobPath(path.JobCollectPathId);
+                    if (!await _repository.Delete(collectPath))
+                        throw new Exception("Could not delete JobCollectPath");
+                    await OnRefreshCollectPaths();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "DeleteCollectPath failed to delete data");
             }
         }
 

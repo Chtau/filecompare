@@ -24,7 +24,7 @@ namespace Client.Features.Jobs
             {
                 if (job != null)
                 {
-                    var result1 = await GetJobCollectPath(job.Id);
+                    var result1 = await GetJobCollect(job.Id);
                     if (result1 != null && result1.Count > 0)
                         result1.ForEach(async item =>
                         {
@@ -63,6 +63,11 @@ namespace Client.Features.Jobs
             return false;
         }
 
+        private async Task<List<Models.JobCollectPath>> GetJobCollect(Guid jobId)
+        {
+            return await _dBContext.Instance.Table<Models.JobCollectPath>().Where(x => x.JobId == jobId).ToListAsync();
+        }
+
         public async Task<List<ViewModels.JobPathView>> GetJobCollectPath(Guid jobId)
         {
             return (from x in await _dBContext.Instance.Table<Models.JobCollectPath>().ToListAsync()
@@ -80,6 +85,11 @@ namespace Client.Features.Jobs
         public async Task<JobConfiguration> GetJobConfiguration(Guid jobId)
         {
             return await _dBContext.Instance.Table<Models.JobConfiguration>().Where(x => x.JobId == jobId).FirstOrDefaultAsync();
+        }
+
+        public async Task<JobCollectPath> GetJobPath(Guid id)
+        {
+            return await _dBContext.Instance.Table<Models.JobCollectPath>().FirstAsync(x => x.Id == id);
         }
 
         public async Task<List<Job>> GetJobs()
@@ -124,6 +134,24 @@ namespace Client.Features.Jobs
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to insert new JobCollectPath item");
+            }
+            return false;
+        }
+
+        public async Task<bool> Insert(JobConfiguration jobConfiguration)
+        {
+            try
+            {
+                if (jobConfiguration != null)
+                {
+                    await _dBContext.Instance.InsertAsync(jobConfiguration);
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to insert new JobConfiguration item");
             }
             return false;
         }

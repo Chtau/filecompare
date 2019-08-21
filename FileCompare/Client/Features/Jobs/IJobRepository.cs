@@ -15,9 +15,11 @@ namespace Client.Features.Jobs
         Task<bool> Update(Models.Job job);
 
         Task<Models.JobConfiguration> GetJobConfiguration(Guid jobId);
+        Task<bool> Insert(Models.JobConfiguration jobConfiguration);
         Task<bool> Update(Models.JobConfiguration jobConfiguration);
 
         Task<List<ViewModels.JobPathView>> GetJobCollectPath(Guid jobId);
+        Task<Models.JobCollectPath> GetJobPath(Guid id);
         Task<bool> Insert(Models.JobCollectPath jobCollectPath);
         Task<bool> Delete(Models.JobCollectPath jobCollectPath);
         Task<bool> Update(Models.JobCollectPath jobCollectPath);

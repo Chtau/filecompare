@@ -82,7 +82,7 @@
                               DisplayMemberPath="Value" 
                               SelectedValuePath="Key"
                               SelectedValue="{Binding Path=PathsSelected, Mode=TwoWay}"></ComboBox>
-                    <CheckBox Grid.Column="1" Content="{Binding Source='IncludeSubFolders',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                    <CheckBox Grid.Column="1" IsChecked="{Binding Path=IncludeSubFolders, Mode=TwoWay}" Content="{Binding Source='IncludeSubFolders',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
                     <Button Grid.Column="2" Margin="10, 0, 10, 0" Height="24" Padding="5,0" x:Name="addPath" Style="{StaticResource AccentedSquareButtonStyle}"
                     Click="AddPath_Click">
                         <StackPanel Orientation="Horizontal">
