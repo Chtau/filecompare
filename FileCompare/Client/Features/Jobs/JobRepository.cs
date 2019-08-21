@@ -97,6 +97,11 @@ namespace Client.Features.Jobs
             return await _dBContext.Instance.Table<Models.Job>().ToListAsync();
         }
 
+        public async Task<List<Job>> GetJobsByState(JobState jobState)
+        {
+            return await _dBContext.Instance.Table<Models.Job>().Where(x => x.JobState == jobState).ToListAsync();
+        }
+
         public async Task<Job> GetJobs(Guid jobId)
         {
             return await _dBContext.Instance.Table<Models.Job>().FirstAsync(x => x.Id == jobId);

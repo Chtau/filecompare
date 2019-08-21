@@ -109,6 +109,8 @@
     <Compile Include="Features\Folders\FoldersContentViewModel.cs" />
     <Compile Include="Features\Folders\IFolderRepository.cs" />
     <Compile Include="Features\Folders\Models\CollectPath.cs" />
+    <Compile Include="Features\JobService\IJobService.cs" />
+    <Compile Include="Features\JobService\JobService.cs" />
     <Compile Include="Features\Jobs\Configuration\JobConfiguration.xaml.cs">
       <DependentUpon>JobConfiguration.xaml</DependentUpon>
     </Compile>

@@ -23,5 +23,6 @@ namespace Client.Features.Jobs
         Task<bool> Insert(Models.JobCollectPath jobCollectPath);
         Task<bool> Delete(Models.JobCollectPath jobCollectPath);
         Task<bool> Update(Models.JobCollectPath jobCollectPath);
+        Task<List<Models.Job>> GetJobsByState(JobState jobState);
     }
 }

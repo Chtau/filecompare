@@ -12,11 +12,13 @@ namespace Client.Features.Jobs
     {
         private readonly Internal.ILogger _logger;
         private readonly IJobRepository _repository;
+        private readonly Features.JobService.IJobService _jobService;
 
         public JobsContentViewModel()
         {
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _repository = (IJobRepository)Bootstrap.Instance.Services.GetService(typeof(IJobRepository));
+            _jobService = (JobService.IJobService)Bootstrap.Instance.Services.GetService(typeof(JobService.IJobService));
         }
 
         private ObservableCollection<Models.Job> jobItems;
@@ -79,7 +81,9 @@ namespace Client.Features.Jobs
                 if (job != null && job.JobState == JobState.Idle)
                 {
                     job.JobState = JobState.Starting;
-                    return await _repository.Update(job);
+                    var result = await _repository.Update(job);
+                    _jobService.StartJob(job);
+                    return result;
                 }
                 return false;
             }
@@ -97,7 +101,9 @@ namespace Client.Features.Jobs
                 if (job != null && job.JobState == JobState.Running)
                 {
                     job.JobState = JobState.Stopping;
-                    return await _repository.Update(job);
+                    var result = await _repository.Update(job);
+                    _jobService.StopJob(job);
+                    return result;
                 }
                 return false;
             }
