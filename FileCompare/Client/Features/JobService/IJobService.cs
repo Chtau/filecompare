@@ -9,6 +9,7 @@ namespace Client.Features.JobService
     public interface IJobService
     {
         void Run();
+        void Stop();
         void StartJob(Features.Jobs.Models.Job job);
         void StopJob(Features.Jobs.Models.Job job);
     }

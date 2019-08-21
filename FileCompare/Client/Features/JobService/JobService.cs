@@ -23,6 +23,13 @@ namespace Client.Features.JobService
             OnTaskRun();
         }
 
+        private bool stopTask;
+
+        public void Stop()
+        {
+            stopTask = true;
+        }
+
         private void OnTaskRun()
         {
             try
@@ -33,14 +40,18 @@ namespace Client.Features.JobService
                     {
                         do
                         {
-                            await Task.Delay(TimeSpan.FromMinutes(1));
-                            var jobs = await _repository.GetJobs();
-                            foreach (var job in jobs)
+                            if (!stopTask)
+                                await Task.Delay(TimeSpan.FromMinutes(1));
+                            if (!stopTask)
                             {
-                                await OnJobConfigSetState(job);
+                                var jobs = await _repository.GetJobs();
+                                foreach (var job in jobs)
+                                {
+                                    await OnJobConfigSetState(job);
+                                }
                             }
 
-                        } while (true);
+                        } while (!stopTask);
                     }
                     catch (Exception ex)
                     {
@@ -69,6 +80,7 @@ namespace Client.Features.JobService
                 } else if (job.JobState == Jobs.JobState.Stopping)
                 {
                     // when stopping we stop the task for the job
+                    OnStopJob(job, config);
                 } else if (job.JobState == Jobs.JobState.Running)
                 {
                     // when running we check against start time and max runtime in minutes
@@ -80,6 +92,7 @@ namespace Client.Features.JobService
                 } else if (job.JobState == Jobs.JobState.Starting)
                 {
                     // when starting we should start the task for this job
+                    OnStartJob(job, config);
                 }
             }
             catch (Exception ex)
@@ -141,14 +154,26 @@ namespace Client.Features.JobService
             return false;
         }
 
+        private void OnStartJob(Job job, JobConfiguration config)
+        {
+
+        }
+
+        private void OnStopJob(Job job, JobConfiguration config)
+        {
+
+        }
+
         public void StartJob(Job job)
         {
-            throw new NotImplementedException();
+            var config = _repository.GetJobConfiguration(job.Id).GetAwaiter().GetResult();
+            OnStartJob(job, config);
         }
 
         public void StopJob(Job job)
         {
-            throw new NotImplementedException();
+            var config = _repository.GetJobConfiguration(job.Id).GetAwaiter().GetResult();
+            OnStopJob(job, config);
         }
     }
 }
