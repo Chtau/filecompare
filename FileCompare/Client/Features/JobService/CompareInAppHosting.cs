@@ -43,7 +43,7 @@ namespace Client.Features.JobService
                     {
                         if (e.CompareFiles.Count > (lastCompareFiles + 20))
                         {
-                            OnSaveCompareFiles(e.CompareFiles);
+                            OnSaveCompareFiles(e.CompareFiles).GetAwaiter().GetResult();
                         }
                     }
                     if (e.Progress == 100)
@@ -52,7 +52,7 @@ namespace Client.Features.JobService
                         {
                             if (!isInSaveCompareFiles)
                             {
-                                OnSaveCompareFiles(e.CompareFiles);
+                                OnSaveCompareFiles(e.CompareFiles).GetAwaiter().GetResult();
                             } else
                             {
                                 Task.Run(async () =>
@@ -62,7 +62,7 @@ namespace Client.Features.JobService
                                         if (isInSaveCompareFiles)
                                             await Task.Delay(100);
                                         if (!isInSaveCompareFiles)
-                                            OnSaveCompareFiles(e.CompareFiles);
+                                            await OnSaveCompareFiles(e.CompareFiles);
                                     } while (!isInSaveCompareFiles);
                                 });
                             }
@@ -70,12 +70,12 @@ namespace Client.Features.JobService
                         {
                             _logger.Error(ex);
                         }
-                        
                     }
                     lastCompareFiles = e.CompareFiles.Count;
                 };
 
-                var result = duplicates.Find();
+                var result = await duplicates.Find();
+                await OnComplete(result, job, config);
             });
             return true;
         }
@@ -87,18 +87,54 @@ namespace Client.Features.JobService
 
         private bool isInSaveCompareFiles = false;
 
-        private void OnSaveCompareFiles(Dictionary<string, Compare.CompareValue> compareFiles)
+        private async Task OnSaveCompareFiles(Dictionary<string, Compare.CompareValue> compareFiles)
         {
             isInSaveCompareFiles = true;
             try
             {
-
+                foreach (var item in compareFiles)
+                {
+                    var comp = await _jobServiceRepository.Find(item.Key.ToUpper());
+                    if (comp != null)
+                    {
+                        // update
+                        comp.Hash = item.Value.Hash;
+                        comp.LastChange = DateTime.Now;
+                        await _jobServiceRepository.Update(comp);
+                    } else
+                    {
+                        // insert
+                        await _jobServiceRepository.Insert(new Models.PathCompareValue
+                        {
+                            Id = Guid.NewGuid(),
+                            Directory = item.Value.Directory.ToUpper(),
+                            Extension = item.Value.Extension.ToUpper(),
+                            FileName = item.Value.FileName.ToUpper(),
+                            FullFile = item.Key.ToUpper(),
+                            Hash = item.Value.Hash,
+                            LastChange = DateTime.Now
+                        });
+                    }
+                }
             } catch (Exception ex)
             {
                 _logger.Error(ex);
             } finally
             {
                 isInSaveCompareFiles = false;
+            }
+        }
+
+        private async Task OnComplete(List<Compare.DuplicatesResult> duplicatesResults, Job job, JobConfiguration config)
+        {
+            try
+            {
+                job.JobState = Jobs.JobState.Idle;
+                await _repository.Update(job);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
             }
         }
     }

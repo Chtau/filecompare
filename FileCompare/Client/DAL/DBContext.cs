@@ -33,6 +33,8 @@ namespace Client.DAL
             await DB.CreateTableAsync<Features.Jobs.Models.JobCollectPath>();
             await DB.CreateTableAsync<Features.Jobs.Models.JobConfiguration>();
             await DB.CreateTableAsync<Features.JobService.Models.PathCompareValue>();
+            await DB.CreateTableAsync<Features.JobService.Models.DuplicateValue>();
+            await DB.CreateTableAsync<Features.JobService.Models.PathDuplicate>();
         }
 
         public SQLiteAsyncConnection Instance
