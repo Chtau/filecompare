@@ -11,5 +11,6 @@ namespace Client.Features.Folders
         Task<List<Models.CollectPath>> GetPaths();
         Task<bool> Insert(Models.CollectPath collectPath);
         Task<bool> Delete(Models.CollectPath collectPath);
+        Task UpdateFolders(string directory);
     }
 }

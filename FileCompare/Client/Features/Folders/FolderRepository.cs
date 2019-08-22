@@ -57,5 +57,34 @@ namespace Client.Features.Folders
             }
             return false;
         }
+
+        public async Task UpdateFolders(string directory)
+        {
+            try
+            {
+                var paths = await _dBContext.Instance.Table<Models.CollectPath>().Where(x => x.Path.StartsWith(directory, StringComparison.OrdinalIgnoreCase)).ToListAsync();
+                if (paths != null && paths.Count > 0)
+                {
+                    foreach (var item in paths)
+                    {
+                        if (string.Equals(item.Path, directory, StringComparison.OrdinalIgnoreCase))
+                        {
+                            item.TotalFilesFound += 1;
+                            item.LastCheck = DateTime.Now;
+                        } else
+                        {
+                            item.TotalFilesFound += 1;
+                            item.SubFoldersFilesFound += 1;
+                            item.LastCheck = DateTime.Now;
+                        }
+                    }
+                    await _dBContext.Instance.UpdateAllAsync(paths);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to update Folders");
+            }
+        }
     }
 }

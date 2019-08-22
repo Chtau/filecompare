@@ -14,6 +14,7 @@ namespace Client.Features.JobService
         private readonly Compare.Duplicates duplicates;
         private readonly Internal.ILogger _logger;
         private readonly Jobs.IJobRepository _repository;
+        private readonly Folders.IFolderRepository _folderRepository;
         private readonly IJobServiceRepository _jobServiceRepository;
 
 
@@ -22,6 +23,7 @@ namespace Client.Features.JobService
             duplicates = new Compare.Duplicates();
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _repository = (Jobs.IJobRepository)Bootstrap.Instance.Services.GetService(typeof(Jobs.IJobRepository));
+            _folderRepository = (Folders.IFolderRepository)Bootstrap.Instance.Services.GetService(typeof(Folders.IFolderRepository));
             _jobServiceRepository = (IJobServiceRepository)Bootstrap.Instance.Services.GetService(typeof(IJobServiceRepository));
         }
 
@@ -115,6 +117,7 @@ namespace Client.Features.JobService
                             LastChange = DateTime.Now
                         });
                     }
+                    await _folderRepository.UpdateFolders(item.Value.Directory.ToUpper());
                 }
             } catch (Exception ex)
             {
