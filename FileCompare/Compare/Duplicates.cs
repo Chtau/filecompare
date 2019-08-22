@@ -9,6 +9,18 @@ namespace Compare
 {
     public class Duplicates
     {
+        public class PrepareComareProgressItem
+        {
+            public decimal Progress { get; set; }
+            public Dictionary<string, CompareValue> CompareFiles { get; set; }
+
+            public PrepareComareProgressItem(decimal progress, Dictionary<string, CompareValue> compareFiles)
+            {
+                Progress = progress;
+                CompareFiles = compareFiles;
+            }
+        }
+
         public List<string> Files { get; private set; }
         public Dictionary<string, CompareValue> CacheCompareValue { get; private set; }
 
@@ -17,6 +29,7 @@ namespace Compare
         public event EventHandler<string> ProcessFile;
         public event EventHandler<bool> PrepareCompareValues;
         public event EventHandler<decimal> PrepareCompareValuesProgress;
+        public event EventHandler<PrepareComareProgressItem> PrepareCompareValuesProgressWithItems;
 
         private CompareValue.Types similarMinValue = CompareValue.Types.Hash;
 
@@ -76,15 +89,18 @@ namespace Compare
             Parallel.For(0, Files.Count, (int index) =>
             {
                 itemCounter += 1;
-                PrepareCompareValuesProgress?.Invoke(this, Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2));
+                var progressValue = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
+                PrepareCompareValuesProgress?.Invoke(this, progressValue);
                 if (!compare.ContainsKey(Files[index]))
                 {
                     var compareValue = comp.CreateCompareValue(Files[index]);
                     if (compareValue != null)
                         compare.GetOrAdd(Files[index], compareValue);
                 }
+                PrepareCompareValuesProgressWithItems?.Invoke(this, new PrepareComareProgressItem(progressValue, new Dictionary<string, CompareValue>(compare)));
             });
             PrepareCompareValuesProgress?.Invoke(this, 100);
+            PrepareCompareValuesProgressWithItems?.Invoke(this, new PrepareComareProgressItem(100, new Dictionary<string, CompareValue>(compare)));
             CacheCompareValue = new Dictionary<string, CompareValue>(compare);
         }
 
