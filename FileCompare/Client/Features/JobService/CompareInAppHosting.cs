@@ -12,13 +12,17 @@ namespace Client.Features.JobService
         public event EventHandler<CompareProgressEventArgs> ReportProgress;
 
         private readonly Compare.Duplicates duplicates;
+        private readonly Internal.ILogger _logger;
         private readonly Jobs.IJobRepository _repository;
+        private readonly IJobServiceRepository _jobServiceRepository;
 
 
         public CompareInAppHosting()
         {
             duplicates = new Compare.Duplicates();
+            _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _repository = (Jobs.IJobRepository)Bootstrap.Instance.Services.GetService(typeof(Jobs.IJobRepository));
+            _jobServiceRepository = (IJobServiceRepository)Bootstrap.Instance.Services.GetService(typeof(IJobServiceRepository));
         }
 
         public bool StartJob(Job job, JobConfiguration config)
@@ -33,34 +37,44 @@ namespace Client.Features.JobService
                     pathsToCollect.Add(item.Path);
                 }
                 await duplicates.Collect(pathsToCollect.ToArray());
-                duplicates.PrepareCompareValues += (object sender, bool e) =>
-                {
-                    /*if (e)
-                        Console.WriteLine("Prepare compare value complete");
-                    else
-                        Console.WriteLine("Prepare compare value starting");*/
-                };
-                duplicates.PrepareCompareValuesProgress += (object sender, decimal e) =>
-                {
-                    //Console.WriteLine("Prepare compare value Progress:" + e);
-                };
                 duplicates.PrepareCompareValuesProgressWithItems += (object sender, Compare.Duplicates.PrepareComareProgressItem e) =>
                 {
-                    if (e.Progress == 100)
-                    {
-                        OnSaveCompareFiles(e.CompareFiles);
-                    } else
+                    if (!isInSaveCompareFiles)
                     {
                         if (e.CompareFiles.Count > (lastCompareFiles + 20))
                         {
                             OnSaveCompareFiles(e.CompareFiles);
                         }
                     }
+                    if (e.Progress == 100)
+                    {
+                        try
+                        {
+                            if (!isInSaveCompareFiles)
+                            {
+                                OnSaveCompareFiles(e.CompareFiles);
+                            } else
+                            {
+                                Task.Run(async () =>
+                                {
+                                    do
+                                    {
+                                        if (isInSaveCompareFiles)
+                                            await Task.Delay(100);
+                                        if (!isInSaveCompareFiles)
+                                            OnSaveCompareFiles(e.CompareFiles);
+                                    } while (!isInSaveCompareFiles);
+                                });
+                            }
+                        } catch (Exception ex)
+                        {
+                            _logger.Error(ex);
+                        }
+                        
+                    }
+                    lastCompareFiles = e.CompareFiles.Count;
                 };
-                duplicates.ProcessFile += (object sender, string e) =>
-                {
-                    //Console.WriteLine("Process file: " + e);
-                };
+
                 var result = duplicates.Find();
             });
             return true;
@@ -71,9 +85,21 @@ namespace Client.Features.JobService
             return true;
         }
 
+        private bool isInSaveCompareFiles = false;
+
         private void OnSaveCompareFiles(Dictionary<string, Compare.CompareValue> compareFiles)
         {
+            isInSaveCompareFiles = true;
+            try
+            {
 
+            } catch (Exception ex)
+            {
+                _logger.Error(ex);
+            } finally
+            {
+                isInSaveCompareFiles = false;
+            }
         }
     }
 }

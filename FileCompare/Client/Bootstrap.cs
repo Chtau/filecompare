@@ -52,6 +52,7 @@ namespace Client
             service.AddSingleton<Features.Folders.IFolderRepository, Features.Folders.FolderRepository>();
             service.AddSingleton<Features.Jobs.IJobRepository, Features.Jobs.JobRepository>();
             service.AddSingleton<Features.JobService.IJobService, Features.JobService.JobService>();
+            service.AddSingleton<Features.JobService.IJobServiceRepository, Features.JobService.JobServiceRepository>();
             service.AddSingleton<Features.JobService.ICompare, Features.JobService.CompareInAppHosting>();
 
             Services = service.BuildServiceProvider();
