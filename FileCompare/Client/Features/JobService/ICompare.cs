@@ -10,8 +10,8 @@ namespace Client.Features.JobService
     public interface ICompare
     {
         event EventHandler<CompareProgressEventArgs> ReportProgress;
-        void StartJob(Job job, JobConfiguration config);
-        void StopJob(Job job, JobConfiguration config);
+        bool StartJob(Job job, JobConfiguration config);
+        bool StopJob(Job job, JobConfiguration config);
     }
 
     public class CompareProgressEventArgs : EventArgs

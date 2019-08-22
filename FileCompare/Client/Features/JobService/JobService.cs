@@ -11,11 +11,19 @@ namespace Client.Features.JobService
     {
         private readonly Internal.ILogger _logger;
         private readonly Jobs.IJobRepository _repository;
+        private readonly ICompare _compare;
 
         public JobService()
         {
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _repository = (Jobs.IJobRepository)Bootstrap.Instance.Services.GetService(typeof(Jobs.IJobRepository));
+            _compare = (ICompare)Bootstrap.Instance.Services.GetService(typeof(ICompare));
+            _compare.ReportProgress += _compare_ReportProgress;
+        }
+
+        private void _compare_ReportProgress(object sender, CompareProgressEventArgs e)
+        {
+            
         }
 
         public void Run()
@@ -156,12 +164,21 @@ namespace Client.Features.JobService
 
         private void OnStartJob(Job job, JobConfiguration config)
         {
-
+            if (_compare.StartJob(job, config))
+            {
+                job.JobState = Jobs.JobState.Running;
+                job.LastExecuted = DateTime.Now;
+                _repository.Update(job).GetAwaiter().GetResult();
+            }
         }
 
         private void OnStopJob(Job job, JobConfiguration config)
         {
-
+            if (_compare.StopJob(job, config))
+            {
+                job.JobState = Jobs.JobState.Idle;
+                _repository.Update(job).GetAwaiter().GetResult();
+            }
         }
 
         public void StartJob(Job job)

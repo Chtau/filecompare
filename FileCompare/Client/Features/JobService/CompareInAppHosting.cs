@@ -11,12 +11,12 @@ namespace Client.Features.JobService
     {
         public event EventHandler<CompareProgressEventArgs> ReportProgress;
 
-        public void StartJob(Job job, JobConfiguration config)
+        public bool StartJob(Job job, JobConfiguration config)
         {
             throw new NotImplementedException();
         }
 
-        public void StopJob(Job job, JobConfiguration config)
+        public bool StopJob(Job job, JobConfiguration config)
         {
             throw new NotImplementedException();
         }
