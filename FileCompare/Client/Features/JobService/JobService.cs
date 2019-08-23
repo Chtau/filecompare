@@ -18,12 +18,6 @@ namespace Client.Features.JobService
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _repository = (Jobs.IJobRepository)Bootstrap.Instance.Services.GetService(typeof(Jobs.IJobRepository));
             _compare = (ICompare)Bootstrap.Instance.Services.GetService(typeof(ICompare));
-            _compare.ReportProgress += _compare_ReportProgress;
-        }
-
-        private void _compare_ReportProgress(object sender, CompareProgressEventArgs e)
-        {
-            
         }
 
         public void Run()

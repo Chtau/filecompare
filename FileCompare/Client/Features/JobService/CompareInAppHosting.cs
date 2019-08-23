@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Client.Features.Jobs;
 using Client.Features.Jobs.Models;
 
 namespace Client.Features.JobService
 {
     public class CompareInAppHosting : ICompare
     {
-        public event EventHandler<CompareProgressEventArgs> ReportProgress;
+        public event EventHandler<JobState> JobStateChanged;
 
         private readonly Compare.Duplicates duplicates;
         private readonly Internal.ILogger _logger;
@@ -163,6 +164,7 @@ namespace Client.Features.JobService
 
                 job.JobState = Jobs.JobState.Idle;
                 await _repository.Update(job);
+                JobStateChanged?.Invoke(this, job.JobState);
             }
             catch (Exception ex)
             {

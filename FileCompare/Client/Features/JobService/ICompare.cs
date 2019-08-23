@@ -9,24 +9,8 @@ namespace Client.Features.JobService
 {
     public interface ICompare
     {
-        event EventHandler<CompareProgressEventArgs> ReportProgress;
+        event EventHandler<Jobs.JobState> JobStateChanged;
         bool StartJob(Job job, JobConfiguration config);
         bool StopJob(Job job, JobConfiguration config);
-    }
-
-    public class CompareProgressEventArgs : EventArgs
-    {
-        public Job Job { get; set; }
-        public JobConfiguration JobConfiguration { get; set; }
-        public List<object> ProgressData { get; set; }
-        public List<string> ProgressInfoText { get; set; }
-
-        public CompareProgressEventArgs(Job job, JobConfiguration jobConfiguration, List<object> progressData = null, List<string> progressInfoText = null)
-        {
-            Job = job;
-            JobConfiguration = jobConfiguration;
-            ProgressData = progressData ?? new List<object>();
-            ProgressInfoText = progressInfoText ?? new List<string>();
-        }
     }
 }

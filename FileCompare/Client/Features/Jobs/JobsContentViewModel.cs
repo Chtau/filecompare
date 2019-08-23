@@ -12,13 +12,21 @@ namespace Client.Features.Jobs
     {
         private readonly Internal.ILogger _logger;
         private readonly IJobRepository _repository;
-        private readonly Features.JobService.IJobService _jobService;
+        private readonly JobService.IJobService _jobService;
+        private readonly JobService.ICompare _compare;
 
         public JobsContentViewModel()
         {
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _repository = (IJobRepository)Bootstrap.Instance.Services.GetService(typeof(IJobRepository));
             _jobService = (JobService.IJobService)Bootstrap.Instance.Services.GetService(typeof(JobService.IJobService));
+            _compare = (JobService.ICompare)Bootstrap.Instance.Services.GetService(typeof(JobService.ICompare));
+            _compare.JobStateChanged += _compare_JobStateChanged;
+        }
+
+        private void _compare_JobStateChanged(object sender, JobState e)
+        {
+            RefreshCommand.Execute(null);
         }
 
         private ObservableCollection<Models.Job> jobItems;
