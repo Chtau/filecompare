@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Client.Features.JobService.Models;
 
 namespace Client.Features.JobService
 {
@@ -87,6 +88,50 @@ namespace Client.Features.JobService
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to update new PathCompareValue item");
+            }
+            return false;
+        }
+
+        public async Task<DuplicateValue> CreateDuplicateValue(int compareValue)
+        {
+            try
+            {
+                var duplicate = new DuplicateValue
+                {
+                    CompareValue = compareValue,
+                    Id = Guid.NewGuid(),
+                };
+                await _dBContext.Instance.InsertAsync(duplicate);
+                return duplicate;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to create new DuplicateValue item");
+            }
+            return null;
+        }
+
+        public async Task<bool> CreatePathDuplicate(Guid duplicateValueId, string pathFullFileName)
+        {
+            try
+            {
+                var path = await Find(pathFullFileName.ToUpper());
+                if (path != null)
+                {
+                    var pathDuplicate = new PathDuplicate
+                    {
+                        Id = Guid.NewGuid(),
+                        DuplicateValueId = duplicateValueId,
+                        PathCompareValueId = path.Id
+                    };
+                    await _dBContext.Instance.InsertAsync(pathDuplicate);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to create new PathDuplicate item");
             }
             return false;
         }

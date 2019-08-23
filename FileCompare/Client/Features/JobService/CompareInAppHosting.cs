@@ -132,6 +132,20 @@ namespace Client.Features.JobService
         {
             try
             {
+                foreach (var item in duplicatesResults)
+                {
+                    Models.DuplicateValue duplicateValue = null;
+
+                    foreach (var result in item.FileResults)
+                    {
+                        if (duplicateValue == null)
+                        {
+                            duplicateValue = await _jobServiceRepository.CreateDuplicateValue((int)result.CompareValue);
+                        }
+                        await _jobServiceRepository.CreatePathDuplicate(duplicateValue.Id, result.FilePath);
+                    }
+                }
+
                 job.JobState = Jobs.JobState.Idle;
                 await _repository.Update(job);
             }

@@ -14,6 +14,6 @@ namespace Client.Features.JobService.Models
 
         public Guid DuplicateValueId { get; set; }
 
-        public Guid PathCompareValue { get; set; }
+        public Guid PathCompareValueId { get; set; }
     }
 }

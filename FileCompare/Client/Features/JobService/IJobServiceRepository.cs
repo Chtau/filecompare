@@ -15,5 +15,7 @@ namespace Client.Features.JobService
         Task<List<Models.PathCompareValue>> GetsByDirectory(string directory);
         Task<List<Models.PathCompareValue>> GetsByDirectoryWithSubFolders(string directory);
         Task<Models.PathCompareValue> Find(string fullFileName);
+        Task<Models.DuplicateValue> CreateDuplicateValue(int compareValue);
+        Task<bool> CreatePathDuplicate(Guid duplicateValueId, string pathFullFileName);
     }
 }
