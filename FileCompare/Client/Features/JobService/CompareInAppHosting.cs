@@ -38,6 +38,20 @@ namespace Client.Features.JobService
                 {
                     pathsToCollect.Add(item.Path);
                 }
+                var cache = new Dictionary<string, Compare.CompareValue>();
+                var pathCompare = await _jobServiceRepository.Gets();
+                foreach (var item in pathCompare)
+                {
+                    cache.Add(item.FullFile, new Compare.CompareValue
+                    {
+                        Directory = item.Directory,
+                        Extension = item.Extension,
+                        FileName = item.FileName,
+                        Hash = item.Hash
+                    });
+                }
+                duplicates.SetCache(cache);
+
                 await duplicates.Collect(pathsToCollect.ToArray());
                 duplicates.PrepareCompareValuesProgressWithItems += (object sender, Compare.Duplicates.PrepareComareProgressItem e) =>
                 {
@@ -100,9 +114,10 @@ namespace Client.Features.JobService
                     if (comp != null)
                     {
                         // update
-                        comp.Hash = item.Value.Hash;
+                        // we don't execute updates
+                        /*comp.Hash = item.Value.Hash;
                         comp.LastChange = DateTime.Now;
-                        await _jobServiceRepository.Update(comp);
+                        await _jobServiceRepository.Update(comp);*/
                     } else
                     {
                         // insert
