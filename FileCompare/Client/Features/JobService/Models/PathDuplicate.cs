@@ -12,6 +12,8 @@ namespace Client.Features.JobService.Models
         [PrimaryKey]
         public Guid Id { get; set; }
 
+        public Guid JobId { get; set; }
+
         public Guid DuplicateValueId { get; set; }
 
         public Guid PathCompareValueId { get; set; }

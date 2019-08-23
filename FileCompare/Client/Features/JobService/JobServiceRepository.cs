@@ -111,7 +111,7 @@ namespace Client.Features.JobService
             return null;
         }
 
-        public async Task<bool> CreatePathDuplicate(Guid duplicateValueId, string pathFullFileName)
+        public async Task<bool> CreatePathDuplicate(Guid jobId, Guid duplicateValueId, string pathFullFileName)
         {
             try
             {
@@ -121,6 +121,7 @@ namespace Client.Features.JobService
                     var pathDuplicate = new PathDuplicate
                     {
                         Id = Guid.NewGuid(),
+                        JobId = jobId,
                         DuplicateValueId = duplicateValueId,
                         PathCompareValueId = path.Id
                     };
@@ -132,6 +133,28 @@ namespace Client.Features.JobService
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to create new PathDuplicate item");
+            }
+            return false;
+        }
+
+        public async Task<bool> ClearPathDuplicate(Guid jobId)
+        {
+            try
+            {
+                var pathDuplicates = await _dBContext.Instance.Table<Models.PathDuplicate>().Where(x => x.JobId == jobId).ToListAsync();
+                foreach (var item in pathDuplicates)
+                {
+                    var duplicateValues = await _dBContext.Instance.Table<Models.DuplicateValue>().FirstOrDefaultAsync(x => x.Id == item.DuplicateValueId);
+                    if (duplicateValues != null)
+                        await _dBContext.Instance.DeleteAsync(duplicateValues);
+                    await _dBContext.Instance.DeleteAsync(item);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to clear Duplicate items");
             }
             return false;
         }

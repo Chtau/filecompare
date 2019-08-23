@@ -32,6 +32,7 @@ namespace Client.Features.JobService
         {
             Task.Run(async () =>
             {
+                await _jobServiceRepository.ClearPathDuplicate(job.Id);
                 int lastCompareFiles = 0;
                 var paths = await _repository.GetJobCollectPath(job.Id);
                 List<string> pathsToCollect = new List<string>();
@@ -158,7 +159,7 @@ namespace Client.Features.JobService
                         {
                             duplicateValue = await _jobServiceRepository.CreateDuplicateValue((int)result.CompareValue);
                         }
-                        await _jobServiceRepository.CreatePathDuplicate(duplicateValue.Id, result.FilePath);
+                        await _jobServiceRepository.CreatePathDuplicate(job.Id, duplicateValue.Id, result.FilePath);
                     }
                 }
 
