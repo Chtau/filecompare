@@ -102,6 +102,7 @@
     </ApplicationDefinition>
     <Compile Include="DAL\DBContext.cs" />
     <Compile Include="DAL\IDBContext.cs" />
+    <Compile Include="Features\Duplicates\ViewModels\DuplicatesResult.cs" />
     <Compile Include="Features\Folders\FolderRepository.cs" />
     <Compile Include="Features\Folders\FoldersContent.xaml.cs">
       <DependentUpon>FoldersContent.xaml</DependentUpon>
