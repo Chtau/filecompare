@@ -9,7 +9,11 @@ namespace Client.Features.Duplicates.ViewModels
     public class DuplicatesResult
     {
         public Guid DuplicateId { get; set; }
+
         public int DuplicateValue { get; set; }
-        public List<Folders.Models.CollectPath> Paths { get; set; }
+
+        public int DuplicatesCount { get; set; }
+
+        public string DuplicateTitle { get; set; }
     }
 }
