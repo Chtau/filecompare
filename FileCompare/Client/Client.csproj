@@ -102,6 +102,11 @@
     </ApplicationDefinition>
     <Compile Include="DAL\DBContext.cs" />
     <Compile Include="DAL\IDBContext.cs" />
+    <Compile Include="Features\Duplicates\DuplicatesContent.xaml.cs">
+      <DependentUpon>DuplicatesContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Duplicates\DuplicatesRepository.cs" />
+    <Compile Include="Features\Duplicates\IDuplicatesRepository.cs" />
     <Compile Include="Features\Duplicates\ViewModels\DuplicatesResult.cs" />
     <Compile Include="Features\Folders\FolderRepository.cs" />
     <Compile Include="Features\Folders\FoldersContent.xaml.cs">
@@ -150,6 +155,10 @@
     <Compile Include="Internal\Settings.cs" />
     <Compile Include="Internal\StaticFolders.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Page Include="Features\Duplicates\DuplicatesContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Features\Folders\FoldersContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
