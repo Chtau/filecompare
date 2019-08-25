@@ -15,5 +15,6 @@ namespace Client.Features.Duplicates.ViewModels
         public string Directory { get; set; }
 
         public string Extension { get; set; }
+        public bool Checked { get; set; }
     }
 }

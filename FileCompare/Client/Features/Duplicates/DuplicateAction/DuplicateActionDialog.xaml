@@ -9,6 +9,72 @@
         mc:Ignorable="d"
         Title="{Binding Source='Resolve duplicates',Converter={ StaticResource LocalizeConverter}}" Height="350" MinHeight="350" MinWidth="600" Width="800">
     <Grid Margin="5">
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0">
+            <DataGrid
+                  ItemsSource="{Binding Path=ResultsItems, Mode=TwoWay}"
+                  RowHeaderWidth="0"
+                    SelectionUnit="FullRow"
+                    AutoGenerateColumns="false"
+                    Margin="5,5,5,4.667"
+                    HeadersVisibility="All" RowHeight="1" HorizontalGridLinesBrush="#FF555555" VerticalGridLinesBrush="#FF505050" IsTextSearchEnabled="True" GridLinesVisibility="Horizontal"
+                    IsReadOnly="False"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                CanUserResizeRows="False"
+                    FrozenColumnCount="2"
+                    x:Name="duplicatesPathsGrid">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn MaxWidth="35">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="OpenDirectory" Click="OpenDirectory_Click" Height="10" MaxHeight="1" Margin="0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconModern Width="16" Height="10" Kind="FolderOpen" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridCheckBoxColumn IsReadOnly="False" Binding="{Binding Checked}" Width="Auto" Header=" "/>
+                    <DataGridTextColumn Binding="{Binding Directory}" Width="Auto" Header="{Binding Source='Directory',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding FileName}" Width="*" Header="{Binding Source='File',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding Extension}" Width="Auto" Header="{Binding Source='Extension',Converter={ StaticResource LocalizeConverter}}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button Margin="10, 0, 10, 0" Width="150" Height="24" Padding="5,0" x:Name="selectAll" Style="{StaticResource AccentedSquareButtonStyle}"
+                    Click="SelectAll_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconModern VerticalAlignment="Center" Kind="ListSelect" />
+                        <Label VerticalAlignment="Center" Content="{Binding Source='Select_All',Converter={ StaticResource LocalizeConverter}}"/>
+                    </StackPanel>
+                </Button>
+                <Button Margin="10, 0, 10, 0" Width="150" Height="24" Padding="5,0" x:Name="deleteSelected" Style="{StaticResource AccentedSquareButtonStyle}"
+                    Click="DeleteSelected_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconModern VerticalAlignment="Center" Kind="ListDelete" />
+                        <Label VerticalAlignment="Center" Content="{Binding Source='Delete_selected',Converter={ StaticResource LocalizeConverter}}"/>
+                    </StackPanel>
+                </Button>
+                <Button Margin="10, 0, 10, 0" Width="150" Height="24" Padding="5,0" x:Name="close" Style="{StaticResource AccentedSquareButtonStyle}"
+                    Click="Close_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconModern VerticalAlignment="Center" Kind="Close" />
+                        <Label VerticalAlignment="Center" Content="{Binding Source='Close',Converter={ StaticResource LocalizeConverter}}"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Controls:MetroWindow>

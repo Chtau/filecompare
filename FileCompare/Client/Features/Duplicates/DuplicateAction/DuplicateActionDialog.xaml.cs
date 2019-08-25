@@ -31,7 +31,28 @@ namespace Client.Features.Duplicates.DuplicateAction
             InitializeComponent();
 
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
-            //_viewModel.RefreshCommand.Execute(null);
+            _viewModel.RefreshCommand.Execute(null);
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            this.Close();
+        }
+
+        private void OpenDirectory_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.SelectAllCommand.Execute(null);
+        }
+
+        private void DeleteSelected_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }
