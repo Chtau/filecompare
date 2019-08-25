@@ -43,7 +43,8 @@ namespace Client.Features.Duplicates
                     var result = new DuplicateAction.DuplicateActionDialog(dupResult.DuplicateId).ShowDialog();
                     if (result == true)
                     {
-
+                        // we should check if this id has only 1 remaining duplicate path
+                        // if so delete this result
                     }
                     _viewModel.RefreshCommand.Execute(null);
                 }

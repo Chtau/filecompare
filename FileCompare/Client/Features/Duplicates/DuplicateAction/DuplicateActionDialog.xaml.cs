@@ -36,7 +36,7 @@ namespace Client.Features.Duplicates.DuplicateAction
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
+            DialogResult = true;
             this.Close();
         }
 
