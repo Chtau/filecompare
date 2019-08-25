@@ -30,6 +30,20 @@ namespace Client.Features.Duplicates
                    }).ToList();
         }
 
+        public async Task<List<DuplicatesResultPath>> DuplicatesPaths(Guid duplicateValueId)
+        {
+            return (from x in await _dBContext.Instance.Table<JobService.Models.PathCompareValue>().ToListAsync()
+                    join y in await _dBContext.Instance.Table<JobService.Models.PathDuplicate>().ToListAsync() on x.Id equals y.PathCompareValueId
+                    where y.DuplicateValueId == duplicateValueId
+                    select new DuplicatesResultPath
+                    {
+                        PathCompareValueId = x.Id,
+                        Directory = x.Directory,
+                        Extension = x.Extension,
+                        FileName = x.FileName
+                    }).ToList();
+        }
+
         private string OnGetTitle(Guid duplicateValueId)
         {
             string title = "";

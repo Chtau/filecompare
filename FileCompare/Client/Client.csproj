@@ -113,6 +113,7 @@
     <Compile Include="Features\Duplicates\DuplicatesRepository.cs" />
     <Compile Include="Features\Duplicates\IDuplicatesRepository.cs" />
     <Compile Include="Features\Duplicates\ViewModels\DuplicatesResult.cs" />
+    <Compile Include="Features\Duplicates\ViewModels\DuplicatesResultPath.cs" />
     <Compile Include="Features\Folders\FolderRepository.cs" />
     <Compile Include="Features\Folders\FoldersContent.xaml.cs">
       <DependentUpon>FoldersContent.xaml</DependentUpon>

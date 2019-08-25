@@ -9,5 +9,6 @@ namespace Client.Features.Duplicates
     public interface IDuplicatesRepository
     {
         Task<List<ViewModels.DuplicatesResult>> Duplicates();
+        Task<List<ViewModels.DuplicatesResultPath>> DuplicatesPaths(Guid duplicateValueId);
     }
 }
