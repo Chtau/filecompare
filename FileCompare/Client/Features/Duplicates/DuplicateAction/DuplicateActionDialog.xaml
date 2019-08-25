@@ -1,0 +1,14 @@
+﻿<Controls:MetroWindow x:Class="Client.Features.Duplicates.DuplicateAction.DuplicateActionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Features.Duplicates.DuplicateAction"
+        mc:Ignorable="d"
+        Title="{Binding Source='Resolve duplicates',Converter={ StaticResource LocalizeConverter}}" Height="350" MinHeight="350" MinWidth="600" Width="800">
+    <Grid Margin="5">
+        
+    </Grid>
+</Controls:MetroWindow>

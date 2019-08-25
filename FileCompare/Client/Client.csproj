@@ -102,6 +102,10 @@
     </ApplicationDefinition>
     <Compile Include="DAL\DBContext.cs" />
     <Compile Include="DAL\IDBContext.cs" />
+    <Compile Include="Features\Duplicates\DuplicateAction\DuplicateActionDialog.xaml.cs">
+      <DependentUpon>DuplicateActionDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Duplicates\DuplicateAction\DuplicateActionDialogViewModel.cs" />
     <Compile Include="Features\Duplicates\DuplicatesContent.xaml.cs">
       <DependentUpon>DuplicatesContent.xaml</DependentUpon>
     </Compile>
@@ -156,6 +160,10 @@
     <Compile Include="Internal\Settings.cs" />
     <Compile Include="Internal\StaticFolders.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Page Include="Features\Duplicates\DuplicateAction\DuplicateActionDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Features\Duplicates\DuplicatesContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

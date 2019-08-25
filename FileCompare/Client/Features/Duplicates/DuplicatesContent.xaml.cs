@@ -38,13 +38,13 @@ namespace Client.Features.Duplicates
         {
             if (e.Source is Button button && button.DataContext != null)
             {
-                if (button.DataContext is ViewModels.DuplicatesResult result)
+                if (button.DataContext is ViewModels.DuplicatesResult dupResult)
                 {
-                    /*var result = new Configuration.JobConfiguration(job.Id).ShowDialog();
+                    var result = new DuplicateAction.DuplicateActionDialog(dupResult.DuplicateId).ShowDialog();
                     if (result == true)
                     {
 
-                    }*/
+                    }
                     _viewModel.RefreshCommand.Execute(null);
                 }
             }
