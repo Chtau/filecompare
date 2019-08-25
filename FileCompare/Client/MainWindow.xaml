@@ -8,6 +8,7 @@
         xmlns:local="clr-namespace:Client"
         xmlns:featuresFolders="clr-namespace:Client.Features.Folders"
         xmlns:featuresJobs="clr-namespace:Client.Features.Jobs"
+        xmlns:featuresDuplicates="clr-namespace:Client.Features.Duplicates"
         mc:Ignorable="d"
         Title="{Binding Source='FileCompare',Converter={ StaticResource LocalizeConverter}}" Height="450" Width="800">
     <Grid>
@@ -45,6 +46,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    <featuresDuplicates:DuplicatesContent Grid.Row="1" Grid.Column="1"></featuresDuplicates:DuplicatesContent>
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding Source='Jobs',Converter={ StaticResource LocalizeConverter}}" x:Name="TabJobs">

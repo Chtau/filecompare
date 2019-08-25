@@ -33,8 +33,18 @@ namespace Client.Features.Duplicates
         private string OnGetTitle(Guid duplicateValueId)
         {
             string title = "";
+            Jobs.Models.Job job;
             var pathDup = _dBContext.Instance.Table<JobService.Models.PathDuplicate>().FirstAsync(y => y.DuplicateValueId == duplicateValueId).GetAwaiter().GetResult();
-            var job = _dBContext.Instance.Table<Jobs.Models.Job>().FirstAsync(x => x.Id == pathDup.JobId).GetAwaiter().GetResult();
+            if (pathDup.JobId != Guid.Empty)
+            {
+                job = _dBContext.Instance.Table<Jobs.Models.Job>().FirstAsync(x => x.Id == pathDup.JobId).GetAwaiter().GetResult();
+            } else
+            {
+                job = new Jobs.Models.Job()
+                {
+                    Name = "No JOB"
+                };
+            }
             var pathDetail = _dBContext.Instance.Table<JobService.Models.PathCompareValue>().FirstAsync(x => x.Id == pathDup.PathCompareValueId).GetAwaiter().GetResult();
             title += $"Job:{job.Name} File:{pathDetail.FileName}";
 

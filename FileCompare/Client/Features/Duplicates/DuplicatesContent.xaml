@@ -9,6 +9,42 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="10, 0, 10, 0">
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="1">
+            <DataGrid
+                  ItemsSource="{Binding Path=ResultsItems, Mode=TwoWay}"
+                  RowHeaderWidth="0"
+                    SelectionUnit="FullRow"
+                    AutoGenerateColumns="false"
+                    Margin="5,5,5,4.667"
+                    HeadersVisibility="All" IsReadOnly="True" RowHeight="1" HorizontalGridLinesBrush="#FF555555" VerticalGridLinesBrush="#FF505050" IsTextSearchEnabled="True" GridLinesVisibility="Horizontal"
+                    FrozenColumnCount="1"
+                    x:Name="jobsGrid">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn MaxWidth="35">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button x:Name="DuplicateActionItem" Click="DuplicateActionItem_Click" Height="10" MaxHeight="1" Margin="0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <iconPacks:PackIconModern Width="16" Height="10" Kind="PageDuplicate" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding DuplicateTitle}" Width="*" Header="{Binding Source='Title',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding DuplicatesCount}" Width="Auto" Header="{Binding Source='Duplicates',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding DuplicateValue}" Width="Auto" Header="{Binding Source='Value',Converter={ StaticResource LocalizeConverter}}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </UserControl>

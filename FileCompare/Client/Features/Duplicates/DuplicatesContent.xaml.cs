@@ -20,9 +20,34 @@ namespace Client.Features.Duplicates
     /// </summary>
     public partial class DuplicatesContent : UserControl
     {
+        private readonly DuplicatesContentViewModel _viewModel;
+        private readonly Internal.ILogger _logger;
+
         public DuplicatesContent()
         {
+            _viewModel = new DuplicatesContentViewModel();
+            DataContext = _viewModel;
+
             InitializeComponent();
+
+            _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
+            _viewModel.RefreshCommand.Execute(null);
+        }
+
+        private void DuplicateActionItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (e.Source is Button button && button.DataContext != null)
+            {
+                if (button.DataContext is ViewModels.DuplicatesResult result)
+                {
+                    /*var result = new Configuration.JobConfiguration(job.Id).ShowDialog();
+                    if (result == true)
+                    {
+
+                    }*/
+                    _viewModel.RefreshCommand.Execute(null);
+                }
+            }
         }
     }
 }
