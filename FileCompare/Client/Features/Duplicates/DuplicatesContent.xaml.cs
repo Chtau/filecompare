@@ -45,8 +45,12 @@ namespace Client.Features.Duplicates
                     {
                         // we should check if this id has only 1 remaining duplicate path
                         // if so delete this result
+                        _viewModel.DialogDuplicateId = dupResult.DuplicateId;
+                        _viewModel.CheckDuplicateRemoveCommand.Execute(null);
+                    } else
+                    {
+                        _viewModel.RefreshCommand.Execute(null);
                     }
-                    _viewModel.RefreshCommand.Execute(null);
                 }
             }
         }

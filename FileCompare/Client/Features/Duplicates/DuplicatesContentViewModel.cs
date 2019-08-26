@@ -49,11 +49,44 @@ namespace Client.Features.Duplicates
         {
             try
             {
+                DialogDuplicateId = Guid.Empty;
                 ResultsItems = new ObservableCollection<ViewModels.DuplicatesResult>(await _repository.Duplicates());
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "OnRefresh failed to load data");
+            }
+        }
+
+        public Guid DialogDuplicateId { get; set; }
+        private ICommand _checkDuplicateRemoveCommand;
+        public ICommand CheckDuplicateRemoveCommand
+        {
+            get
+            {
+                if (_checkDuplicateRemoveCommand == null)
+                {
+                    _checkDuplicateRemoveCommand = new RelayCommand(
+                        p => true,
+                        async p => await OnCheckDuplicateRemove());
+                }
+                return _checkDuplicateRemoveCommand;
+            }
+        }
+
+        private async Task OnCheckDuplicateRemove()
+        {
+            try
+            {
+                if (DialogDuplicateId != Guid.Empty)
+                {
+                    await _repository.CheckDuplicateRemove(DialogDuplicateId);
+                }
+                await OnRefresh();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnCheckDuplicateRemove failed");
             }
         }
     }
