@@ -95,5 +95,58 @@ namespace Client.Features.Duplicates.DuplicateAction
                 _logger.Error(ex, "OnSelectAll failed to set data");
             }
         }
+
+        private ICommand _deleteSelectCommand;
+        public ICommand DeleteSelectCommand
+        {
+            get
+            {
+                if (_deleteSelectCommand == null)
+                {
+                    _deleteSelectCommand = new RelayCommand(
+                        p => true,
+                        async p => await OnDeleteSelect());
+                }
+                return _deleteSelectCommand;
+            }
+        }
+
+        private async Task OnDeleteSelect()
+        {
+            try
+            {
+                if (ResultsItems != null && ResultsItems.Count > 0)
+                {
+                    var list = ResultsItems.Where(x => x.Checked == true).ToList();
+                    foreach (var item in list)
+                    {
+                        string extension = item.Extension;
+                        if (!extension.StartsWith("."))
+                            extension = "." + extension;
+                        if (OnDeleteFile(System.IO.Path.Combine(item.Directory, item.FileName + extension)))
+                            await _repository.DeletePathDuplicate(_duplicateValueId, item.PathCompareValueId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnDeleteSelect failed to set data");
+            }
+        }
+
+        private bool OnDeleteFile(string file)
+        {
+            try
+            {
+                if (System.IO.File.Exists(file))
+                    System.IO.File.Delete(file);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnDeleteFile failed");
+            }
+            return false;
+        }
     }
 }

@@ -52,7 +52,7 @@ namespace Client.Features.Duplicates.DuplicateAction
 
         private void DeleteSelected_Click(object sender, RoutedEventArgs e)
         {
-            
+            _viewModel.DeleteSelectCommand.Execute(null);
         }
     }
 }

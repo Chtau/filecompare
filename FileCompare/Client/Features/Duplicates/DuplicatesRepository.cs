@@ -18,6 +18,26 @@ namespace Client.Features.Duplicates
             _dBContext = (DAL.IDBContext)Bootstrap.Instance.Services.GetService(typeof(DAL.IDBContext));
         }
 
+        public async Task<bool> DeletePathDuplicate(Guid duplicateValueId, Guid pathCompareValueId)
+        {
+            try
+            {
+                if (pathCompareValueId != Guid.Empty)
+                {
+                    var item = await _dBContext.Instance.Table<JobService.Models.PathDuplicate>().FirstOrDefaultAsync(x => x.DuplicateValueId == duplicateValueId && x.PathCompareValueId == pathCompareValueId);
+                    if (item != null)
+                        await _dBContext.Instance.DeleteAsync(item);
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to delete DeletePath item");
+            }
+            return false;
+        }
+
         public async Task<List<DuplicatesResult>> Duplicates()
         {
             return (from x in await _dBContext.Instance.Table<JobService.Models.DuplicateValue>().ToListAsync()
