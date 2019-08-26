@@ -126,6 +126,7 @@ namespace Client.Features.Duplicates.DuplicateAction
                         if (OnDeleteFile(System.IO.Path.Combine(item.Directory, item.FileName + extension)))
                             await _repository.DeletePathDuplicate(_duplicateValueId, item.PathCompareValueId);
                     }
+                    await OnRefresh();
                 }
             }
             catch (Exception ex)

@@ -42,7 +42,31 @@ namespace Client.Features.Duplicates.DuplicateAction
 
         private void OpenDirectory_Click(object sender, RoutedEventArgs e)
         {
+            if (e.Source is Button button && button.DataContext != null)
+            {
+                if (button.DataContext is ViewModels.DuplicatesResultPath dupResultPath)
+                {
+                    this.OnOpenDirectory(dupResultPath);
+                }
+            }
+        }
 
+        private void OnOpenDirectory(ViewModels.DuplicatesResultPath dupResultPath)
+        {
+            try
+            {
+                string extension = dupResultPath.Extension;
+                if (!extension.StartsWith("."))
+                    extension = "." + extension;
+                string filePath = System.IO.Path.Combine(dupResultPath.Directory, dupResultPath.FileName + extension);
+                string argument = "/select, \"" + filePath + "\"";
+
+                System.Diagnostics.Process.Start("explorer.exe", argument);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnOpenDirectory failed");
+            }
         }
 
         private void SelectAll_Click(object sender, RoutedEventArgs e)
