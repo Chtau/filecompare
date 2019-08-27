@@ -9,7 +9,9 @@ namespace Client
     public interface IMainManager
     {
         event EventHandler TabGridItemsChanged;
+        event EventHandler<string> StatusBarInfoTextChanged;
         void SetTabGridItem(int items, MainWindowViewModel.Tabs tab);
         int GetTabGridItemCount(MainWindowViewModel.Tabs tab);
+        void SetStatusBarInfoText(string text);
     }
 }

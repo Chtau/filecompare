@@ -11,12 +11,20 @@ namespace Client
     public class MainWindowViewModel : BaseViewModel, IDisposable
     {
         private readonly Internal.ILogger _logger;
+        private readonly IMainManager _mainManager;
 
         public MainWindowViewModel()
         {
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
+            _mainManager = (IMainManager)Bootstrap.Instance.Services.GetService(typeof(IMainManager));
+            _mainManager.StatusBarInfoTextChanged += _mainManager_StatusBarInfoTextChanged;
 
             Task.Run(OnRefresh).Wait();
+        }
+
+        private void _mainManager_StatusBarInfoTextChanged(object sender, string e)
+        {
+            StatusBarInfoText = e;
         }
 
         public enum Tabs
@@ -45,6 +53,17 @@ namespace Client
             {
                 activeTabRows = value;
                 RaisePropertyChanged("ActiveTabRows");
+            }
+        }
+
+        private string statusBarInfoText = null;
+        public string StatusBarInfoText
+        {
+            get { return statusBarInfoText; }
+            set
+            {
+                statusBarInfoText = value;
+                RaisePropertyChanged("StatusBarInfoText");
             }
         }
 

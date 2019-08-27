@@ -12,6 +12,7 @@ namespace Client
         private Dictionary<MainWindowViewModel.Tabs, int> tabGridItems;
 
         public event EventHandler TabGridItemsChanged;
+        public event EventHandler<string> StatusBarInfoTextChanged;
 
         public void SetTabGridItem(int items, MainWindowViewModel.Tabs tab)
         {
@@ -33,6 +34,11 @@ namespace Client
                 return tabGridItems[tab];
             }
             return 0;
+        }
+
+        public void SetStatusBarInfoText(string text)
+        {
+            StatusBarInfoTextChanged?.Invoke(this, text);
         }
     }
 }

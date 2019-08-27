@@ -18,6 +18,7 @@ namespace Client.Features.JobService
         private readonly Folders.IFolderRepository _folderRepository;
         private readonly IJobServiceRepository _jobServiceRepository;
         private readonly Duplicates.IDuplicatesManager _duplicatesManager;
+        private readonly IMainManager _mainManager;
 
 
         public CompareInAppHosting()
@@ -28,12 +29,14 @@ namespace Client.Features.JobService
             _folderRepository = (Folders.IFolderRepository)Bootstrap.Instance.Services.GetService(typeof(Folders.IFolderRepository));
             _jobServiceRepository = (IJobServiceRepository)Bootstrap.Instance.Services.GetService(typeof(IJobServiceRepository));
             _duplicatesManager = (Duplicates.IDuplicatesManager)Bootstrap.Instance.Services.GetService(typeof(Duplicates.IDuplicatesManager));
+            _mainManager = (IMainManager)Bootstrap.Instance.Services.GetService(typeof(IMainManager));
         }
 
         public bool StartJob(Job job, JobConfiguration config)
         {
             Task.Run(async () =>
             {
+                _mainManager.SetStatusBarInfoText("Job running");
                 await _jobServiceRepository.ClearPathDuplicate(job.Id);
                 int lastCompareFiles = 0;
                 var paths = await _repository.GetJobCollectPath(job.Id);
@@ -64,12 +67,14 @@ namespace Client.Features.JobService
                         if (e.CompareFiles.Count > (lastCompareFiles + 20))
                         {
                             OnSaveCompareFiles(e.CompareFiles).GetAwaiter().GetResult();
+                            _mainManager.SetStatusBarInfoText($"Job collect files ({e.Progress}%)");
                         }
                     }
                     if (e.Progress == 100)
                     {
                         try
                         {
+                            _mainManager.SetStatusBarInfoText($"Job collect files ({e.Progress}%)");
                             if (!isInSaveCompareFiles)
                             {
                                 OnSaveCompareFiles(e.CompareFiles).GetAwaiter().GetResult();
@@ -94,8 +99,11 @@ namespace Client.Features.JobService
                     lastCompareFiles = e.CompareFiles.Count;
                 };
 
+                _mainManager.SetStatusBarInfoText($"Job find duplicates");
                 var result = await duplicates.Find();
+                _mainManager.SetStatusBarInfoText($"Finish job");
                 await OnComplete(result, job, config);
+                _mainManager.SetStatusBarInfoText(null);
             });
             return true;
         }
