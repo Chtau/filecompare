@@ -155,6 +155,7 @@
     <Compile Include="Globalize\ILocalize.cs" />
     <Compile Include="Globalize\Localize.cs" />
     <Compile Include="Globalize\LocalizeConverter.cs" />
+    <Compile Include="IMainManager.cs" />
     <Compile Include="Internal\ComboBoxBindingModelBuilder.cs" />
     <Compile Include="Internal\GlobalValues.cs" />
     <Compile Include="Internal\ILogger.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Internal\Logger.cs" />
     <Compile Include="Internal\Settings.cs" />
     <Compile Include="Internal\StaticFolders.cs" />
+    <Compile Include="MainManager.cs" />
     <Compile Include="RelayCommand.cs" />
     <Page Include="Features\Duplicates\DuplicateAction\DuplicateActionDialog.xaml">
       <SubType>Designer</SubType>

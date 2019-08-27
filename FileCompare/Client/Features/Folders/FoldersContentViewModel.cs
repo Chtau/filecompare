@@ -12,11 +12,13 @@ namespace Client.Features.Folders
     {
         private readonly Internal.ILogger _logger;
         private readonly IFolderRepository _repository;
+        private readonly IMainManager _mainManager;
 
         public FoldersContentViewModel()
         {
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _repository = (IFolderRepository)Bootstrap.Instance.Services.GetService(typeof(IFolderRepository));
+            _mainManager = (IMainManager)Bootstrap.Instance.Services.GetService(typeof(IMainManager));
         }
 
         private ObservableCollection<Models.CollectPath> collectPathItems;
@@ -50,6 +52,7 @@ namespace Client.Features.Folders
             try
             {
                 CollectPathItems = new ObservableCollection<Models.CollectPath>(await _repository.GetPaths());
+                _mainManager.SetTabGridItem(CollectPathItems.Count, MainWindowViewModel.Tabs.Folders);
             }
             catch (Exception ex)
             {

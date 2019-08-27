@@ -57,6 +57,8 @@ namespace Client
             service.AddSingleton<Features.Duplicates.IDuplicatesRepository, Features.Duplicates.DuplicatesRepository>();
             service.AddSingleton<Features.Duplicates.IDuplicatesManager, Features.Duplicates.DuplicatesManager>();
 
+            service.AddSingleton<IMainManager, MainManager>();
+
             Services = service.BuildServiceProvider();
         }
     }

@@ -22,15 +22,35 @@ namespace Client
     public partial class MainWindow : MetroWindow
     {
         private readonly MainWindowViewModel _viewModel;
+        private readonly IMainManager _mainManager;
 
         public MainWindow()
         {
+            _mainManager = (IMainManager)Bootstrap.Instance.Services.GetService(typeof(IMainManager));
+
             _viewModel = new MainWindowViewModel();
             DataContext = _viewModel;
 
             InitializeComponent();
 
             MainTabControl.SelectionChanged += MainTabControl_SelectionChanged;
+            _mainManager.TabGridItemsChanged += _mainManager_TabGridItemsChanged;
+        }
+
+        private void _mainManager_TabGridItemsChanged(object sender, EventArgs e)
+        {
+            switch (_viewModel.ActiveTab)
+            {
+                case MainWindowViewModel.Tabs.Folders:
+                    _viewModel.ActiveTabRows = _mainManager.GetTabGridItemCount(MainWindowViewModel.Tabs.Folders);
+                    break;
+                case MainWindowViewModel.Tabs.Duplicates:
+                    _viewModel.ActiveTabRows = _mainManager.GetTabGridItemCount(MainWindowViewModel.Tabs.Duplicates);
+                    break;
+                case MainWindowViewModel.Tabs.Jobs:
+                    _viewModel.ActiveTabRows = _mainManager.GetTabGridItemCount(MainWindowViewModel.Tabs.Jobs);
+                    break;
+            }
         }
 
         protected override void OnClosed(EventArgs e)
@@ -50,14 +70,17 @@ namespace Client
                 if (tab.Name == "TabFolders")
                 {
                     _viewModel.ActiveTab = MainWindowViewModel.Tabs.Folders;
+                    _viewModel.ActiveTabRows = _mainManager.GetTabGridItemCount(MainWindowViewModel.Tabs.Folders);
                 }
                 else if (tab.Name == "TabDuplicates")
                 {
                     _viewModel.ActiveTab = MainWindowViewModel.Tabs.Duplicates;
+                    _viewModel.ActiveTabRows = _mainManager.GetTabGridItemCount(MainWindowViewModel.Tabs.Duplicates);
                 }
                 else if (tab.Name == "TabJobs")
                 {
                     _viewModel.ActiveTab = MainWindowViewModel.Tabs.Jobs;
+                    _viewModel.ActiveTabRows = _mainManager.GetTabGridItemCount(MainWindowViewModel.Tabs.Jobs);
                 }
             }
         }

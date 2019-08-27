@@ -13,6 +13,7 @@ namespace Client.Features.Duplicates
         private readonly Internal.ILogger _logger;
         private readonly IDuplicatesRepository _repository;
         private readonly IDuplicatesManager _duplicatesManager;
+        private readonly IMainManager _mainManager;
 
         public DuplicatesContentViewModel()
         {
@@ -20,6 +21,7 @@ namespace Client.Features.Duplicates
             _repository = (IDuplicatesRepository)Bootstrap.Instance.Services.GetService(typeof(IDuplicatesRepository));
             _duplicatesManager = (IDuplicatesManager)Bootstrap.Instance.Services.GetService(typeof(IDuplicatesManager));
             _duplicatesManager.RefreshData += _duplicatesManager_RefreshData;
+            _mainManager = (IMainManager)Bootstrap.Instance.Services.GetService(typeof(IMainManager));
         }
 
         private void _duplicatesManager_RefreshData(object sender, EventArgs e)
@@ -59,6 +61,7 @@ namespace Client.Features.Duplicates
             {
                 DialogDuplicateId = Guid.Empty;
                 ResultsItems = new ObservableCollection<ViewModels.DuplicatesResult>(await _repository.Duplicates());
+                _mainManager.SetTabGridItem(ResultsItems.Count, MainWindowViewModel.Tabs.Duplicates);
             }
             catch (Exception ex)
             {

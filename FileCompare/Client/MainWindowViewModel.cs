@@ -11,12 +11,18 @@ namespace Client
     public class MainWindowViewModel : BaseViewModel, IDisposable
     {
         private readonly Internal.ILogger _logger;
+        private readonly IMainManager _mainManager;
 
         public MainWindowViewModel()
         {
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
 
             Task.Run(OnRefresh).Wait();
+        }
+
+        private void _mainManager_GridItemsCountChanged(object sender, int e)
+        {
+            
         }
 
         public enum Tabs

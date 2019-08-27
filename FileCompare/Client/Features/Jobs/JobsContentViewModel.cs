@@ -14,6 +14,7 @@ namespace Client.Features.Jobs
         private readonly IJobRepository _repository;
         private readonly JobService.IJobService _jobService;
         private readonly JobService.ICompare _compare;
+        private readonly IMainManager _mainManager;
 
         public JobsContentViewModel()
         {
@@ -22,6 +23,7 @@ namespace Client.Features.Jobs
             _jobService = (JobService.IJobService)Bootstrap.Instance.Services.GetService(typeof(JobService.IJobService));
             _compare = (JobService.ICompare)Bootstrap.Instance.Services.GetService(typeof(JobService.ICompare));
             _compare.JobStateChanged += _compare_JobStateChanged;
+            _mainManager = (IMainManager)Bootstrap.Instance.Services.GetService(typeof(IMainManager));
         }
 
         private void _compare_JobStateChanged(object sender, JobState e)
@@ -60,6 +62,7 @@ namespace Client.Features.Jobs
             try
             {
                 JobItems = new ObservableCollection<Models.Job>(await _repository.GetJobs());
+                _mainManager.SetTabGridItem(JobItems.Count, MainWindowViewModel.Tabs.Jobs);
             }
             catch (Exception ex)
             {
