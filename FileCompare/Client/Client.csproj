@@ -110,7 +110,9 @@
       <DependentUpon>DuplicatesContent.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\Duplicates\DuplicatesContentViewModel.cs" />
+    <Compile Include="Features\Duplicates\DuplicatesManager.cs" />
     <Compile Include="Features\Duplicates\DuplicatesRepository.cs" />
+    <Compile Include="Features\Duplicates\IDuplicatesManager.cs" />
     <Compile Include="Features\Duplicates\IDuplicatesRepository.cs" />
     <Compile Include="Features\Duplicates\ViewModels\DuplicatesResult.cs" />
     <Compile Include="Features\Duplicates\ViewModels\DuplicatesResultPath.cs" />

@@ -17,6 +17,7 @@ namespace Client.Features.JobService
         private readonly Jobs.IJobRepository _repository;
         private readonly Folders.IFolderRepository _folderRepository;
         private readonly IJobServiceRepository _jobServiceRepository;
+        private readonly Duplicates.IDuplicatesManager _duplicatesManager;
 
 
         public CompareInAppHosting()
@@ -26,6 +27,7 @@ namespace Client.Features.JobService
             _repository = (Jobs.IJobRepository)Bootstrap.Instance.Services.GetService(typeof(Jobs.IJobRepository));
             _folderRepository = (Folders.IFolderRepository)Bootstrap.Instance.Services.GetService(typeof(Folders.IFolderRepository));
             _jobServiceRepository = (IJobServiceRepository)Bootstrap.Instance.Services.GetService(typeof(IJobServiceRepository));
+            _duplicatesManager = (Duplicates.IDuplicatesManager)Bootstrap.Instance.Services.GetService(typeof(Duplicates.IDuplicatesManager));
         }
 
         public bool StartJob(Job job, JobConfiguration config)
@@ -166,6 +168,7 @@ namespace Client.Features.JobService
                 job.JobState = Jobs.JobState.Idle;
                 await _repository.Update(job);
                 JobStateChanged?.Invoke(this, job.JobState);
+                _duplicatesManager.RaiseRefreshData();
             }
             catch (Exception ex)
             {

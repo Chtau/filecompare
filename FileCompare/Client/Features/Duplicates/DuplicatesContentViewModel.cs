@@ -12,11 +12,19 @@ namespace Client.Features.Duplicates
     {
         private readonly Internal.ILogger _logger;
         private readonly IDuplicatesRepository _repository;
+        private readonly IDuplicatesManager _duplicatesManager;
 
         public DuplicatesContentViewModel()
         {
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _repository = (IDuplicatesRepository)Bootstrap.Instance.Services.GetService(typeof(IDuplicatesRepository));
+            _duplicatesManager = (IDuplicatesManager)Bootstrap.Instance.Services.GetService(typeof(IDuplicatesManager));
+            _duplicatesManager.RefreshData += _duplicatesManager_RefreshData;
+        }
+
+        private void _duplicatesManager_RefreshData(object sender, EventArgs e)
+        {
+            OnRefresh().GetAwaiter().GetResult();
         }
 
         private ObservableCollection<ViewModels.DuplicatesResult> resultsItems;
