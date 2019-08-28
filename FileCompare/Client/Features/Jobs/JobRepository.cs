@@ -72,6 +72,7 @@ namespace Client.Features.Jobs
         {
             return (from x in await _dBContext.Instance.Table<Models.JobCollectPath>().ToListAsync()
                    join y in await _dBContext.Instance.Table<Features.Folders.Models.CollectPath>().ToListAsync() on x.CollectPathId equals y.Id
+                   where x.JobId == jobId
                    select new ViewModels.JobPathView
                    {
                        JobId = x.JobId,
