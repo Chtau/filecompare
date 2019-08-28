@@ -41,9 +41,17 @@ namespace Client.Features.JobService
             return await _dBContext.Instance.Table<Models.PathCompareValue>().FirstOrDefaultAsync(x => x.FullFile == fullFileName.ToUpper());
         }
 
-        public async Task<List<Models.PathCompareValue>> Gets()
+        public async Task<List<Models.PathCompareValue>> Gets(params string[] directorys)
         {
-            return await _dBContext.Instance.Table<Models.PathCompareValue>().ToListAsync();
+            var retVal = new List<Models.PathCompareValue>();
+            foreach (var item in directorys)
+            {
+                var paths = await _dBContext.Instance.Table<Models.PathCompareValue>().Where(x => x.Directory == item.ToUpper()).ToListAsync();
+                if (paths?.Count > 0)
+                    retVal.AddRange(paths);
+            }
+
+            return retVal;
         }
 
         public async Task<List<Models.PathCompareValue>> GetsByDirectoryWithSubFolders(string directory)

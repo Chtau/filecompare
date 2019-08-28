@@ -9,7 +9,7 @@ namespace Client.Features.JobService
     public interface IJobServiceRepository
     {
         Task<bool> Delete(Models.PathCompareValue pathCompareValue);
-        Task<List<Models.PathCompareValue>> Gets();
+        Task<List<Models.PathCompareValue>> Gets(params string[] directorys);
         Task<bool> Insert(Models.PathCompareValue pathCompareValue);
         Task<bool> Update(Models.PathCompareValue pathCompareValue);
         Task<List<Models.PathCompareValue>> GetsByDirectory(string directory);

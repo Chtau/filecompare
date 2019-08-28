@@ -46,7 +46,7 @@ namespace Client.Features.JobService
                     pathsToCollect.Add(item.Path);
                 }
                 var cache = new Dictionary<string, Compare.CompareValue>();
-                var pathCompare = await _jobServiceRepository.Gets();
+                var pathCompare = await _jobServiceRepository.Gets(pathsToCollect.ToArray());
                 foreach (var item in pathCompare)
                 {
                     cache.Add(item.FullFile, new Compare.CompareValue
@@ -59,7 +59,6 @@ namespace Client.Features.JobService
                 }
                 duplicates.SetCache(cache);
 
-                await duplicates.Collect(pathsToCollect.ToArray());
                 duplicates.PrepareCompareValuesProgressWithItems += (object sender, Compare.Duplicates.PrepareComareProgressItem e) =>
                 {
                     if (!isInSaveCompareFiles)
@@ -87,7 +86,9 @@ namespace Client.Features.JobService
                                         if (isInSaveCompareFiles)
                                             await Task.Delay(100);
                                         if (!isInSaveCompareFiles)
+                                        {
                                             await OnSaveCompareFiles(e.CompareFiles);
+                                        }
                                     } while (!isInSaveCompareFiles);
                                 });
                             }
@@ -98,14 +99,19 @@ namespace Client.Features.JobService
                     }
                     lastCompareFiles = e.CompareFiles.Count;
                 };
-
-                _mainManager.SetStatusBarInfoText($"Job find duplicates");
-                var result = await duplicates.Find();
-                _mainManager.SetStatusBarInfoText($"Finish job");
-                await OnComplete(result, job, config);
-                _mainManager.SetStatusBarInfoText(null);
+                await duplicates.Collect(pathsToCollect.ToArray());
+                await OnAfterCollect(job, config);
             });
             return true;
+        }
+
+        private async Task OnAfterCollect(Job job, JobConfiguration config)
+        {
+            _mainManager.SetStatusBarInfoText($"Job find duplicates");
+            var result = await duplicates.Find();
+            _mainManager.SetStatusBarInfoText($"Finish job");
+            await OnComplete(result, job, config);
+            _mainManager.SetStatusBarInfoText(null);
         }
 
         public bool StopJob(Job job, JobConfiguration config)
