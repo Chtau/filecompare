@@ -32,6 +32,9 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <Button x:Name="DuplicateActionItem" Click="DuplicateActionItem_Click" Height="10" MaxHeight="1" Margin="0">
+                                        <Button.Background>
+                                            <SolidColorBrush Color="#FFDDDDDD" Opacity="0.0"/>
+                                        </Button.Background>
                                         <StackPanel Orientation="Horizontal">
                                             <iconPacks:PackIconModern Width="16" Height="10" Kind="PageDuplicate" />
                                         </StackPanel>

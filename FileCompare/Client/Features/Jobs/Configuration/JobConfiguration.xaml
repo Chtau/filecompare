@@ -106,7 +106,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Button x:Name="DeletePathItem" Click="DeletePathItem_Click" Height="10" MaxHeight="1" Margin="0">
+                                        <Button x:Name="DeletePathItem" Click="DeletePathItem_Click" Height="10" MaxHeight="1" Margin="0" Foreground="#FFBF0404">
                                             <StackPanel Orientation="Horizontal">
                                                 <iconPacks:PackIconModern Width="16" Height="10" Kind="Delete" />
                                             </StackPanel>
