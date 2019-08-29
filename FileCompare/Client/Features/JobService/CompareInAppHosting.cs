@@ -90,19 +90,19 @@ namespace Client.Features.JobService
 
                 duplicates.PrepareCompareValuesProgressWithItems += (object sender, Compare.Duplicates.PrepareComareProgressItem e) =>
                 {
+                    _mainManager.SetStatusBarInfoText($"Job compare files ({e.Progress}%)");
                     if (!isInSaveCompareFiles)
                     {
                         if (e.CompareFiles.Count > (lastCompareFiles + 20))
                         {
                             OnSaveCompareFiles(e.CompareFiles).GetAwaiter().GetResult();
-                            _mainManager.SetStatusBarInfoText($"Job collect files ({e.Progress}%)");
                         }
                     }
                     if (e.Progress == 100)
                     {
                         try
                         {
-                            _mainManager.SetStatusBarInfoText($"Job collect files ({e.Progress}%)");
+                            _mainManager.SetStatusBarInfoText($"Job compare files ({e.Progress}%)");
                             if (!isInSaveCompareFiles)
                             {
                                 OnSaveCompareFiles(e.CompareFiles).GetAwaiter().GetResult();
@@ -194,6 +194,7 @@ namespace Client.Features.JobService
         {
             try
             {
+                _mainManager.SetStatusBarInfoText($"Save compare result ({duplicatesResults.Count} Duplicates)");
                 foreach (var item in duplicatesResults)
                 {
                     Models.DuplicateValue duplicateValue = null;
