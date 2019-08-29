@@ -35,39 +35,43 @@ namespace Client
         }
 
         private ObservableCollection<object> duplicates;
+
         public ObservableCollection<object> Duplicates
         {
             get { return duplicates; }
             set
             {
                 duplicates = value;
-                RaisePropertyChanged("Duplicates");
+                RaisePropertyChanged(nameof(Duplicates));
             }
         }
 
-        private int activeTabRows = 0;
+        private int activeTabRows = (int)Tabs.Duplicates;
+
         public int ActiveTabRows
         {
             get { return activeTabRows; }
             set
             {
                 activeTabRows = value;
-                RaisePropertyChanged("ActiveTabRows");
+                RaisePropertyChanged(nameof(ActiveTabRows));
             }
         }
 
         private string statusBarInfoText = null;
+
         public string StatusBarInfoText
         {
             get { return statusBarInfoText; }
             set
             {
                 statusBarInfoText = value;
-                RaisePropertyChanged("StatusBarInfoText");
+                RaisePropertyChanged(nameof(StatusBarInfoText));
             }
         }
 
         private Tabs activeTab = Tabs.Folders;
+
         public Tabs ActiveTab
         {
             get { return activeTab; }
@@ -75,11 +79,12 @@ namespace Client
             {
                 activeTab = value;
                 OnChangeTabRows();
-                RaisePropertyChanged("ActiveTab");
+                RaisePropertyChanged(nameof(ActiveTab));
             }
         }
 
         private ICommand _refreshCommand;
+
         public ICommand RefreshCommand
         {
             get

@@ -28,6 +28,15 @@
                       Command="{Binding BlacklistCommand}"/>-->
         </Menu>
         <Controls:MetroAnimatedSingleRowTabControl x:Name="MainTabControl" Grid.Row="1">
+            <TabItem Header="{Binding Source='Duplicates',Converter={ StaticResource LocalizeConverter}}" x:Name="TabDuplicates">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <featuresDuplicates:DuplicatesContent Grid.Row="1" Grid.Column="1"></featuresDuplicates:DuplicatesContent>
+                </Grid>
+            </TabItem>
             <TabItem Header="{Binding Source='Folders',Converter={ StaticResource LocalizeConverter}}" x:Name="TabFolders">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -38,15 +47,6 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <featuresFolders:FoldersContent Grid.Row="1" Grid.Column="1"></featuresFolders:FoldersContent>
-                </Grid>
-            </TabItem>
-            <TabItem Header="{Binding Source='Duplicates',Converter={ StaticResource LocalizeConverter}}" x:Name="TabDuplicates">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <featuresDuplicates:DuplicatesContent Grid.Row="1" Grid.Column="1"></featuresDuplicates:DuplicatesContent>
                 </Grid>
             </TabItem>
             <TabItem Header="{Binding Source='Jobs',Converter={ StaticResource LocalizeConverter}}" x:Name="TabJobs">
