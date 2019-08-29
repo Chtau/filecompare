@@ -10,8 +10,10 @@ namespace Client
     {
         event EventHandler TabGridItemsChanged;
         event EventHandler<string> StatusBarInfoTextChanged;
+        event EventHandler ApplicationClosing;
         void SetTabGridItem(int items, MainWindowViewModel.Tabs tab);
         int GetTabGridItemCount(MainWindowViewModel.Tabs tab);
         void SetStatusBarInfoText(string text);
+        void ClosingApplication();
     }
 }

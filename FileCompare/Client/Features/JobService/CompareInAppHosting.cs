@@ -30,6 +30,35 @@ namespace Client.Features.JobService
             _jobServiceRepository = (IJobServiceRepository)Bootstrap.Instance.Services.GetService(typeof(IJobServiceRepository));
             _duplicatesManager = (Duplicates.IDuplicatesManager)Bootstrap.Instance.Services.GetService(typeof(Duplicates.IDuplicatesManager));
             _mainManager = (IMainManager)Bootstrap.Instance.Services.GetService(typeof(IMainManager));
+            _mainManager.ApplicationClosing += _mainManager_ApplicationClosing;
+        }
+
+        private void _mainManager_ApplicationClosing(object sender, EventArgs e)
+        {
+            try
+            {
+                var task = Task.Run(async () =>
+                {
+                    var jobs = await _repository.GetJobsByState(JobState.Running);
+                    if (jobs?.Count > 0)
+                    {
+                        for (int i = 0; i < jobs.Count; i++)
+                        {
+                            jobs[i].JobState = JobState.Idle;
+                            await _repository.Update(jobs[i]);
+                        }
+                    }
+                });
+                task.Wait();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+            finally
+            {
+                
+            }
         }
 
         public bool StartJob(Job job, JobConfiguration config)

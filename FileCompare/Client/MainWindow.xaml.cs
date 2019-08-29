@@ -1,6 +1,7 @@
 ﻿using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,6 +52,12 @@ namespace Client
                     _viewModel.ActiveTabRows = _mainManager.GetTabGridItemCount(MainWindowViewModel.Tabs.Jobs);
                     break;
             }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            _mainManager.ClosingApplication();
+            base.OnClosing(e);
         }
 
         protected override void OnClosed(EventArgs e)

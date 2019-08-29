@@ -13,6 +13,7 @@ namespace Client
 
         public event EventHandler TabGridItemsChanged;
         public event EventHandler<string> StatusBarInfoTextChanged;
+        public event EventHandler ApplicationClosing;
 
         public void SetTabGridItem(int items, MainWindowViewModel.Tabs tab)
         {
@@ -22,7 +23,7 @@ namespace Client
                 tabGridItems.Add(tab, items);
             else
                 tabGridItems[tab] = items;
-            TabGridItemsChanged?.Invoke(this, new EventArgs());
+            TabGridItemsChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public int GetTabGridItemCount(MainWindowViewModel.Tabs tab)
@@ -39,6 +40,11 @@ namespace Client
         public void SetStatusBarInfoText(string text)
         {
             StatusBarInfoTextChanged?.Invoke(this, text);
+        }
+
+        public void ClosingApplication()
+        {
+            ApplicationClosing?.Invoke(this, EventArgs.Empty);
         }
     }
 }
