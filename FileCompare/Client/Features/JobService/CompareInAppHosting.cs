@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Client.Features.Jobs;
 using Client.Features.Jobs.Models;
@@ -10,6 +11,8 @@ namespace Client.Features.JobService
 {
     public class CompareInAppHosting : ICompare
     {
+        private Dictionary<Job, CancellationTokenSource> jobTasks;
+
         public event EventHandler<JobState> JobStateChanged;
 
         private readonly Compare.Duplicates duplicates;
@@ -23,6 +26,7 @@ namespace Client.Features.JobService
 
         public CompareInAppHosting()
         {
+            jobTasks = new Dictionary<Job, CancellationTokenSource>();
             duplicates = new Compare.Duplicates();
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _repository = (Jobs.IJobRepository)Bootstrap.Instance.Services.GetService(typeof(Jobs.IJobRepository));
@@ -63,7 +67,9 @@ namespace Client.Features.JobService
 
         public bool StartJob(Job job, JobConfiguration config)
         {
-            Task.Run(async () =>
+            var ts = new CancellationTokenSource();
+            CancellationToken ct = ts.Token;
+            var task = Task.Run(async () =>
             {
                 _mainManager.SetStatusBarInfoText("Job running");
                 await _jobServiceRepository.ClearPathDuplicate(job.Id);
@@ -130,7 +136,9 @@ namespace Client.Features.JobService
                 };
                 await duplicates.Collect(pathsToCollect.ToArray());
                 await OnAfterCollect(job, config);
-            });
+            }, ct);
+            jobTasks.Add(job, ts);
+
             return true;
         }
 
@@ -145,7 +153,21 @@ namespace Client.Features.JobService
 
         public bool StopJob(Job job, JobConfiguration config)
         {
-            return true;
+            try
+            {
+                if (jobTasks.Any(x => x.Key.Id == job.Id))
+                {
+                    var key = jobTasks.First(x => x.Key.Id == job.Id).Key;
+                    jobTasks[key]?.Cancel();
+                    jobTasks.Remove(key);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+            return false;
         }
 
         private bool isInSaveCompareFiles = false;
@@ -217,6 +239,20 @@ namespace Client.Features.JobService
             catch (Exception ex)
             {
                 _logger.Error(ex);
+            } finally
+            {
+                try
+                {
+                    if (jobTasks.Any(x => x.Key.Id == job.Id))
+                    {
+                        var key = jobTasks.First(x => x.Key.Id == job.Id).Key;
+                        jobTasks.Remove(key);
+                    }
+                }
+                catch (Exception ex1)
+                {
+                    _logger.Error(ex1);
+                }
             }
         }
     }
