@@ -43,6 +43,7 @@ namespace Client.Features.JobService
             {
                 var task = Task.Run(async () =>
                 {
+                    duplicates.Cancel();
                     var jobs = await _repository.GetJobsByState(JobState.Running);
                     if (jobs?.Count > 0)
                     {
@@ -67,6 +68,7 @@ namespace Client.Features.JobService
 
         public bool StartJob(Job job, JobConfiguration config)
         {
+            // TODO: need to stop/cancel duplicate library
             var ts = new CancellationTokenSource();
             CancellationToken ct = ts.Token;
             var task = Task.Run(async () =>
@@ -93,7 +95,10 @@ namespace Client.Features.JobService
                     });
                 }
                 duplicates.SetCache(cache);
-
+                duplicates.Aborted += (object sender, EventArgs e) =>
+                {
+                    _mainManager.SetStatusBarInfoText(null);
+                };
                 duplicates.PrepareCompareValuesProgressWithItems += (object sender, Compare.Duplicates.PrepareComareProgressItem e) =>
                 {
                     _mainManager.SetStatusBarInfoText($"Job compare files ({e.Progress}%)");
@@ -145,7 +150,12 @@ namespace Client.Features.JobService
         private async Task OnAfterCollect(Job job, JobConfiguration config)
         {
             _mainManager.SetStatusBarInfoText($"Job find duplicates");
-            var result = await duplicates.Find();
+#if DEBUG
+            var result = await duplicates.Find(2);
+#else
+            var result = await duplicates.Find(Environment.ProcessorCount);
+#endif
+
             _mainManager.SetStatusBarInfoText($"Finish job");
             await OnComplete(result, job, config);
             _mainManager.SetStatusBarInfoText(null);
@@ -155,12 +165,15 @@ namespace Client.Features.JobService
         {
             try
             {
+                _mainManager.SetStatusBarInfoText($"Wait while stopping Job");
                 if (jobTasks.Any(x => x.Key.Id == job.Id))
                 {
+                    duplicates.Cancel();
                     var key = jobTasks.First(x => x.Key.Id == job.Id).Key;
                     jobTasks[key]?.Cancel();
                     jobTasks.Remove(key);
                 }
+                _mainManager.SetStatusBarInfoText($"Wait while stopping Job");
                 return true;
             }
             catch (Exception ex)

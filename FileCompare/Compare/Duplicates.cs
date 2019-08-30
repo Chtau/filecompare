@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Compare
@@ -26,6 +27,7 @@ namespace Compare
 
         private readonly CollectFiles _collectFiles;
 
+        public event EventHandler Aborted;
         public event EventHandler<string> ProcessFile;
         public event EventHandler<bool> PrepareCompareValues;
         public event EventHandler<decimal> PrepareCompareValuesProgress;
@@ -61,47 +63,114 @@ namespace Compare
             }
         }
 
-        public async Task<List<DuplicatesResult>> Find()
+        private List<CancellationTokenSource> cancellationTokens = new List<CancellationTokenSource>();
+
+        public void Cancel()
         {
-            return await Task.Run(() =>
+            foreach (var item in cancellationTokens)
             {
-                PrepareCompareValues?.Invoke(this, false);
-                OnPrepareCompareValue();
-                PrepareCompareValues?.Invoke(this, true);
-                var result = new List<DuplicatesResult>();
-                Parallel.For(0, Files.Count, (int index) =>
+                try
                 {
-                    ProcessFile?.Invoke(this, Files[index]);
-                    var dup = OnCompareDuplicates(Files[index], index);
-                    if (dup != null)
-                        result.Add(dup);
-                });
-                return result;
-            });
+                    item.Cancel();
+                }
+                catch (ObjectDisposedException) { }
+                catch (AggregateException) { }
+            }
+            cancellationTokens.Clear();
         }
 
-        private void OnPrepareCompareValue()
+        public async Task<List<DuplicatesResult>> Find(int maxParallelism = 4)
+        {
+            var ts = new CancellationTokenSource();
+            cancellationTokens.Add(ts);
+            CancellationToken ct = ts.Token;
+            try
+            {
+                return await Task.Run(() =>
+                {
+                    PrepareCompareValues?.Invoke(this, false);
+                    OnPrepareCompareValue(ct, maxParallelism);
+                    PrepareCompareValues?.Invoke(this, true);
+                    var result = new List<DuplicatesResult>();
+                    ParallelOptions po = new ParallelOptions
+                    {
+                        CancellationToken = ct,
+                        MaxDegreeOfParallelism = maxParallelism
+                    };
+                    try
+                    {
+                        Parallel.For(0, Files.Count, po, (int index) =>
+                        {
+                            ProcessFile?.Invoke(this, Files[index]);
+                            var dup = OnCompareDuplicates(Files[index], index);
+                            if (dup != null)
+                                result.Add(dup);
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ex is AggregateException || ex is ObjectDisposedException || ex is OperationCanceledException)
+                        {
+                            Aborted?.Invoke(this, EventArgs.Empty);
+                            return null;
+                        }
+                        throw;
+                    }
+                    cancellationTokens.Remove(ts);
+                    return result;
+                }, ct);
+            }
+            catch (Exception ex)
+            {
+                if (ex is AggregateException || ex is ObjectDisposedException || ex is OperationCanceledException) 
+                {
+                    Aborted?.Invoke(this, EventArgs.Empty);
+                    return null;
+                }
+                throw;
+            }
+        }
+
+        private void OnPrepareCompareValue(CancellationToken ct, int maxParallelism)
         {
             var comp = new FileComparison();
             ConcurrentDictionary<string, CompareValue> compare = new ConcurrentDictionary<string, CompareValue>(CacheCompareValue);
             int itemCounter = 0;
             PrepareCompareValuesProgress?.Invoke(this, 0);
-            Parallel.For(0, Files.Count, (int index) =>
+
+            ParallelOptions po = new ParallelOptions
             {
-                itemCounter += 1;
-                var progressValue = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
-                PrepareCompareValuesProgress?.Invoke(this, progressValue);
-                if (!compare.ContainsKey(Files[index]))
+                CancellationToken = ct,
+                MaxDegreeOfParallelism = maxParallelism
+            };
+            try
+            {
+                Parallel.For(0, Files.Count, po, (int index) =>
                 {
-                    var compareValue = comp.CreateCompareValue(Files[index]);
-                    if (compareValue != null)
-                        compare.GetOrAdd(Files[index], compareValue);
+                    itemCounter += 1;
+                    var progressValue = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
+                    PrepareCompareValuesProgress?.Invoke(this, progressValue);
+                    if (!compare.ContainsKey(Files[index]))
+                    {
+                        var compareValue = comp.CreateCompareValue(Files[index]);
+                        if (compareValue != null)
+                            compare.GetOrAdd(Files[index], compareValue);
+                    }
+                    PrepareCompareValuesProgressWithItems?.Invoke(this, new PrepareComareProgressItem(progressValue, new Dictionary<string, CompareValue>(compare)));
+                });
+                PrepareCompareValuesProgress?.Invoke(this, 100);
+                PrepareCompareValuesProgressWithItems?.Invoke(this, new PrepareComareProgressItem(100, new Dictionary<string, CompareValue>(compare)));
+                CacheCompareValue = new Dictionary<string, CompareValue>(compare);
+            }
+            catch (Exception ex)
+            {
+                if (ex is AggregateException || ex is ObjectDisposedException || ex is OperationCanceledException)
+                {
+                    Aborted?.Invoke(this, EventArgs.Empty);
+                    return;
                 }
-                PrepareCompareValuesProgressWithItems?.Invoke(this, new PrepareComareProgressItem(progressValue, new Dictionary<string, CompareValue>(compare)));
-            });
-            PrepareCompareValuesProgress?.Invoke(this, 100);
-            PrepareCompareValuesProgressWithItems?.Invoke(this, new PrepareComareProgressItem(100, new Dictionary<string, CompareValue>(compare)));
-            CacheCompareValue = new Dictionary<string, CompareValue>(compare);
+                throw;
+            }
         }
 
         private DuplicatesResult OnCompareDuplicates(string sourceFile, int fileStartIndex)
