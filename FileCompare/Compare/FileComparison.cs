@@ -6,13 +6,8 @@ using System.Text;
 
 namespace Compare
 {
-    class FileComparison : IFileCompare
+    internal class FileComparison : IFileCompare
     {
-
-        public FileComparison()
-        {
-           
-        }
 
         public CompareValue.Types Similar(CompareValue srcCompareValue, CompareValue tarCompareValue)
         {
@@ -52,14 +47,27 @@ namespace Compare
             return null;
         }
 
+        private FileInfo OnGetFileInfo(string path)
+        {
+            if (AccessControl.File(path))
+            {
+                return new System.IO.FileInfo(path);
+            }
+            return null;
+        }
+
         public CompareValue CreateCompareValue(string path)
         {
+            var fileInfo = OnGetFileInfo(path);
             return new CompareValue
             {
                 Hash = OnGetMD5(path),
                 FileName = Path.GetFileNameWithoutExtension(path),
                 Directory = Path.GetDirectoryName(path),
-                Extension = Path.GetExtension(path)
+                Extension = Path.GetExtension(path),
+                FileCreated = fileInfo != null ? fileInfo.CreationTime : DateTime.Now,
+                FileModified = fileInfo?.LastWriteTime,
+                FileSize = fileInfo != null ? fileInfo.Length : 0,
             };
         }
     }

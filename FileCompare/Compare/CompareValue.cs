@@ -20,5 +20,8 @@ namespace Compare
         public string FileName { get; set; }
         public string Directory { get; set; }
         public string Extension { get; set; }
+        public DateTime FileCreated { get; set; }
+        public DateTime? FileModified { get; set; }
+        public long FileSize { get; set; }
     }
 }

@@ -23,5 +23,11 @@ namespace Client.Features.JobService.Models
         public string Extension { get; set; }
 
         public DateTime LastChange { get; set; }
+
+        public DateTime FileCreated { get; set; }
+
+        public DateTime? FileModified { get; set; }
+
+        public long FileSize { get; set; }
     }
 }

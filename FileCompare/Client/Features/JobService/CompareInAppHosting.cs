@@ -68,7 +68,6 @@ namespace Client.Features.JobService
 
         public bool StartJob(Job job, JobConfiguration config)
         {
-            // TODO: need to stop/cancel duplicate library
             var ts = new CancellationTokenSource();
             CancellationToken ct = ts.Token;
             var task = Task.Run(async () =>
@@ -196,9 +195,6 @@ namespace Client.Features.JobService
                     {
                         // update
                         // we don't execute updates
-                        /*comp.Hash = item.Value.Hash;
-                        comp.LastChange = DateTime.Now;
-                        await _jobServiceRepository.Update(comp);*/
                     } else
                     {
                         // insert
@@ -210,7 +206,10 @@ namespace Client.Features.JobService
                             FileName = item.Value.FileName.ToUpper(),
                             FullFile = item.Key.ToUpper(),
                             Hash = item.Value.Hash,
-                            LastChange = DateTime.Now
+                            LastChange = DateTime.Now,
+                            FileCreated = item.Value.FileCreated,
+                            FileModified = item.Value.FileModified,
+                            FileSize = item.Value.FileSize
                         });
                     }
                     await _folderRepository.UpdateFolders(item.Value.Directory.ToUpper());
