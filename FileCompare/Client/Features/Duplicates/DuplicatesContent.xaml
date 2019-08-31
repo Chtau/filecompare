@@ -54,7 +54,7 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn Binding="{Binding DuplicateTitle}" Width="*" Header="{Binding Source='Title',Converter={ StaticResource LocalizeConverter}}" />
                     <DataGridTextColumn Binding="{Binding DuplicatesCount}" Width="Auto" Header="{Binding Source='Duplicates',Converter={ StaticResource LocalizeConverter}}" />
-                    <DataGridTextColumn Binding="{Binding DuplicateValue}" Width="Auto" Header="{Binding Source='Value',Converter={ StaticResource LocalizeConverter}}" />
+                    <DataGridTextColumn Binding="{Binding DuplicateValue,Converter={ StaticResource CompareResultValueConverter}}" Width="Auto" Header="{Binding Source='Value',Converter={ StaticResource LocalizeConverter}}" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
