@@ -175,7 +175,7 @@ namespace Client.Features.JobService
                     jobTasks[key]?.Cancel();
                     jobTasks.Remove(key);
                 }
-                _mainManager.SetStatusBarInfoText($"Wait while stopping Job");
+                _mainManager.SetStatusBarInfoText(null);
                 return true;
             }
             catch (Exception ex)
@@ -192,8 +192,12 @@ namespace Client.Features.JobService
             isInSaveCompareFiles = true;
             try
             {
+                _mainManager.SetStatusBarInfoText($"Job save prepared files");
+                int itemCount = 0;
                 foreach (var item in compareFiles)
                 {
+                    itemCount++;
+                    _mainManager.SetStatusBarInfoText($"Job save prepared files ({itemCount}/{compareFiles.Count})");
                     var comp = await _jobServiceRepository.Find(item.Key.ToUpper());
                     if (comp != null)
                     {
@@ -218,6 +222,7 @@ namespace Client.Features.JobService
                     }
                     await _folderRepository.UpdateFolders(item.Value.Directory.ToUpper());
                 }
+                _mainManager.SetStatusBarInfoText($"Job save prepared files complete");
             } catch (Exception ex)
             {
                 _logger.Error(ex);
