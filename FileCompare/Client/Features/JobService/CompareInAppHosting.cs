@@ -152,7 +152,7 @@ namespace Client.Features.JobService
             _mainManager.SetStatusBarInfoText($"Job find duplicates");
             int maxPara = config.MaxParallelism;
             if (maxPara < 1)
-                maxPara = 1;
+                maxPara = Environment.ProcessorCount;
             var result = await duplicates.Find(maxPara);
 
             _mainManager.SetStatusBarInfoText($"Finish job");
