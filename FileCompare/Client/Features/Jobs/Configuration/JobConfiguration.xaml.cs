@@ -30,6 +30,8 @@ namespace Client.Features.Jobs.Configuration
 
             InitializeComponent();
 
+            ctrlMaxParallelism.Maximum = Environment.ProcessorCount;
+
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _viewModel.RefreshCommand.Execute(null);
         }

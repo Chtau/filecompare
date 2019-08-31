@@ -27,6 +27,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
@@ -64,6 +65,8 @@
             <Controls:NumericUpDown Grid.Row="6" Grid.Column="1" Minimum="0" Maximum="59" Value="{Binding Path=JobConfigurationMinutes, Mode=TwoWay}"></Controls:NumericUpDown>
             <Label Grid.Row="7" Grid.Column="0" Content="{Binding Source='MaxRuntimeMinutes',Converter={ StaticResource LocalizeConverter}}"/>
             <Controls:NumericUpDown Grid.Row="7" Grid.Column="1" Minimum="0" Maximum="120" Value="{Binding Path=JobConfigurationMaxRuntimeMinutes, Mode=TwoWay}"></Controls:NumericUpDown>
+            <Label Grid.Row="8" Grid.Column="0" Content="{Binding Source='MaxParallelism',Converter={ StaticResource LocalizeConverter}}"/>
+            <Controls:NumericUpDown x:Name="ctrlMaxParallelism" Grid.Row="8" Grid.Column="1" Minimum="0" Maximum="32" Value="{Binding Path=JobConfigurationMaxParallelism, Mode=TwoWay}"></Controls:NumericUpDown>
         </Grid>
         <Grid Grid.Column="1" Grid.Row="0">
             <Grid Margin="5,0,0,0">

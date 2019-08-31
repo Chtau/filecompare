@@ -150,11 +150,10 @@ namespace Client.Features.JobService
         private async Task OnAfterCollect(Job job, JobConfiguration config)
         {
             _mainManager.SetStatusBarInfoText($"Job find duplicates");
-#if DEBUG
-            var result = await duplicates.Find(2);
-#else
-            var result = await duplicates.Find(Environment.ProcessorCount);
-#endif
+            int maxPara = config.MaxParallelism;
+            if (maxPara < 1)
+                maxPara = 1;
+            var result = await duplicates.Find(maxPara);
 
             _mainManager.SetStatusBarInfoText($"Finish job");
             await OnComplete(result, job, config);

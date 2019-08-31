@@ -282,6 +282,18 @@ namespace Client.Features.Jobs.Configuration
             }
         }
 
+        private int jobConfigurationMaxParallelism;
+
+        public int JobConfigurationMaxParallelism
+        {
+            get { return jobConfigurationMaxParallelism; }
+            set
+            {
+                jobConfigurationMaxParallelism = value;
+                RaisePropertyChanged(nameof(JobConfigurationMaxParallelism));
+            }
+        }
+
         private string jobConfigurationFileExtensions;
 
         public string JobConfigurationFileExtensions
@@ -385,6 +397,7 @@ namespace Client.Features.Jobs.Configuration
                         JobConfigurationId = jobConfigModel.Id;
                         JobConfigurationMaxRuntimeMinutes = jobConfigModel.MaxRuntimeMinutes;
                         JobConfigurationMinutes = jobConfigModel.Minutes;
+                        JobConfigurationMaxParallelism = jobConfigModel.MaxParallelism;
                     }
                     await OnRefreshCollectPaths();
                 }
@@ -453,7 +466,8 @@ namespace Client.Features.Jobs.Configuration
                         Hours = JobConfigurationHours,
                         JobId = job.Id,
                         MaxRuntimeMinutes = JobConfigurationMaxRuntimeMinutes,
-                        Minutes = JobConfigurationMinutes
+                        Minutes = JobConfigurationMinutes,
+                        MaxParallelism = JobConfigurationMaxParallelism
                     };
                     if (!await _repository.Insert(jobConfiguration))
                         throw new Exception("Could not insert JobConfiguration");
@@ -465,6 +479,7 @@ namespace Client.Features.Jobs.Configuration
                     jobConfiguration.Hours = JobConfigurationHours;
                     jobConfiguration.MaxRuntimeMinutes = JobConfigurationMaxRuntimeMinutes;
                     jobConfiguration.Minutes = JobConfigurationMinutes;
+                    jobConfiguration.MaxParallelism = JobConfigurationMaxParallelism;
                     if (!await _repository.Update(jobConfiguration))
                         throw new Exception("Could not update JobConfiguration");
                 }
