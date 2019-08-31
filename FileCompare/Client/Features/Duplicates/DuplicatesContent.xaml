@@ -26,6 +26,15 @@
                     HeadersVisibility="All" IsReadOnly="True" RowHeight="1" HorizontalGridLinesBrush="#FF555555" VerticalGridLinesBrush="#FF505050" IsTextSearchEnabled="True" GridLinesVisibility="Horizontal"
                     FrozenColumnCount="1"
                     x:Name="duplicatesGrid">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding RefreshCommand}" Header="{Binding Source='Refresh',Converter={ StaticResource LocalizeConverter}}" >
+                            <MenuItem.Icon>
+                                <iconPacks:PackIconModern Width="16" Height="10" Kind="Refresh" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn MaxWidth="35">
                         <DataGridTemplateColumn.CellTemplate>

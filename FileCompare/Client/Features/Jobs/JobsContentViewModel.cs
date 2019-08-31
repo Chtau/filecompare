@@ -124,5 +124,34 @@ namespace Client.Features.Jobs
                 return false;
             }
         }
+
+        private ICommand _addJobCommand;
+
+        public ICommand AddJobCommand
+        {
+            get
+            {
+                if (_addJobCommand == null)
+                {
+                    _addJobCommand = new RelayCommand(
+                        p => true,
+                        async p => await OnAddJob());
+                }
+                return _addJobCommand;
+            }
+        }
+
+        private async Task OnAddJob()
+        {
+            try
+            {
+                var result = new Configuration.JobConfiguration(Guid.Empty).ShowDialog();
+                await OnRefresh();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnAddJob failed to execute");
+            }
+        }
     }
 }

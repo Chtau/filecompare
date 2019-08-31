@@ -62,16 +62,6 @@ namespace Client.Features.Jobs
             }
         }
 
-        private void AddJob_Click(object sender, RoutedEventArgs e)
-        {
-            var result = new Configuration.JobConfiguration(Guid.Empty).ShowDialog();
-            if (result == true)
-            {
-
-            }
-            _viewModel.RefreshCommand.Execute(null);
-        }
-
         private void StartJobItem_Click(object sender, RoutedEventArgs e)
         {
             if (e.Source is Button button && button.DataContext != null)
