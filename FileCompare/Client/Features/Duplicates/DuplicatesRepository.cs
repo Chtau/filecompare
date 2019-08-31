@@ -97,19 +97,26 @@ namespace Client.Features.Duplicates
         {
             string title = "";
             Jobs.Models.Job job;
-            var pathDup = _dBContext.Instance.Table<JobService.Models.PathDuplicate>().FirstAsync(y => y.DuplicateValueId == duplicateValueId).GetAwaiter().GetResult();
-            if (pathDup.JobId != Guid.Empty)
+            var pathDup = _dBContext.Instance.Table<JobService.Models.PathDuplicate>().FirstOrDefaultAsync(y => y.DuplicateValueId == duplicateValueId).GetAwaiter().GetResult();
+            if (pathDup != null)
             {
-                job = _dBContext.Instance.Table<Jobs.Models.Job>().FirstAsync(x => x.Id == pathDup.JobId).GetAwaiter().GetResult();
+                if (pathDup.JobId != Guid.Empty)
+                {
+                    job = _dBContext.Instance.Table<Jobs.Models.Job>().FirstAsync(x => x.Id == pathDup.JobId).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    job = new Jobs.Models.Job()
+                    {
+                        Name = "No JOB"
+                    };
+                }
+                var pathDetail = _dBContext.Instance.Table<JobService.Models.PathCompareValue>().FirstAsync(x => x.Id == pathDup.PathCompareValueId).GetAwaiter().GetResult();
+                title += $"Job:{job.Name} File:{pathDetail.FileName}";
             } else
             {
-                job = new Jobs.Models.Job()
-                {
-                    Name = "No JOB"
-                };
+                title = duplicateValueId.ToString();
             }
-            var pathDetail = _dBContext.Instance.Table<JobService.Models.PathCompareValue>().FirstAsync(x => x.Id == pathDup.PathCompareValueId).GetAwaiter().GetResult();
-            title += $"Job:{job.Name} File:{pathDetail.FileName}";
 
             return title;
         }
