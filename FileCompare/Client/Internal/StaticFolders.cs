@@ -56,5 +56,28 @@ namespace Client.Internal
                 return false;
             }
         }
+
+        public static void OpenDirectory(string directory, string filename = null, string extension = null)
+        {
+            if (!string.IsNullOrWhiteSpace(extension))
+            {
+                if (!extension.StartsWith("."))
+                    extension = "." + extension;
+            }
+            string filePath;
+            if (!string.IsNullOrWhiteSpace(filename))
+            {
+                if (!string.IsNullOrWhiteSpace(extension))
+                    filePath = System.IO.Path.Combine(directory, filename + extension);
+                else
+                    filePath = System.IO.Path.Combine(directory, filename);
+            } else
+            {
+                filePath = directory;
+            }
+            string argument = "/select, \"" + filePath + "\"";
+
+            System.Diagnostics.Process.Start("explorer.exe", argument);
+        }
     }
 }

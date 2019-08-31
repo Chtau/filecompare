@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Client.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -75,6 +76,23 @@ namespace Client.Features.Folders
                 {
                     Task.Run(async () => await _viewModel.DeleteCollectPath(collectPath)).Wait();
                     _viewModel.RefreshCommand.Execute(null);
+                }
+            }
+        }
+
+        private void OpenDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            if (e.Source is Button button && button.DataContext != null)
+            {
+                if (button.DataContext is Models.CollectPath collectPath)
+                {
+                    try
+                    {
+                        StaticFolders.OpenDirectory(collectPath.Path);
+                    } catch (Exception ex)
+                    {
+                        _logger.Error(ex);
+                    }
                 }
             }
         }

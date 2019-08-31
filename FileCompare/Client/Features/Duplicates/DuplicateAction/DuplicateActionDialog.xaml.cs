@@ -1,4 +1,5 @@
-﻿using MahApps.Metro.Controls;
+﻿using Client.Internal;
+using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,26 +47,14 @@ namespace Client.Features.Duplicates.DuplicateAction
             {
                 if (button.DataContext is ViewModels.DuplicatesResultPath dupResultPath)
                 {
-                    this.OnOpenDirectory(dupResultPath);
+                    try
+                    {
+                        StaticFolders.OpenDirectory(dupResultPath.Directory, dupResultPath.FileName, dupResultPath.Extension);
+                    } catch (Exception ex)
+                    {
+                        _logger.Error(ex);
+                    }
                 }
-            }
-        }
-
-        private void OnOpenDirectory(ViewModels.DuplicatesResultPath dupResultPath)
-        {
-            try
-            {
-                string extension = dupResultPath.Extension;
-                if (!extension.StartsWith("."))
-                    extension = "." + extension;
-                string filePath = System.IO.Path.Combine(dupResultPath.Directory, dupResultPath.FileName + extension);
-                string argument = "/select, \"" + filePath + "\"";
-
-                System.Diagnostics.Process.Start("explorer.exe", argument);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "OnOpenDirectory failed");
             }
         }
 
