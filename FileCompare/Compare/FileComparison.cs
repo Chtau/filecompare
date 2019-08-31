@@ -38,7 +38,8 @@ namespace Compare
 
         private bool OnComparePartialFileName(string fileName1, string fileName2, int maxDif)
         {
-            if (!string.IsNullOrWhiteSpace(fileName1) && !string.IsNullOrWhiteSpace(fileName2))
+            if (!string.IsNullOrWhiteSpace(fileName1) && !string.IsNullOrWhiteSpace(fileName2)
+                && fileName1.Length >= 3 && fileName2.Length >= 3)
             {
                 string lName = fileName1;
                 string sName = fileName2;
@@ -51,22 +52,19 @@ namespace Compare
                 var arShot = OnCreateCompareStringArray(sName);
                 
                 var dif = arLong.Except(arShot);
-                var difLong = lName.Length - dif.Count();
-                if (difLong <= maxDif)
+                if (dif.Count() <= maxDif)
                     return true;
 
                 // use different starting point for the [sName]
                 sName = sName.Substring(1);
                 arShot = OnCreateCompareStringArray(sName);
                 dif = arLong.Except(arShot);
-                difLong = lName.Length - dif.Count();
-                if (difLong <= maxDif)
+                if (dif.Count() <= maxDif)
                     return true;
                 sName = sName.Substring(1);
                 arShot = OnCreateCompareStringArray(sName);
                 dif = arLong.Except(arShot);
-                difLong = lName.Length - dif.Count();
-                if (difLong <= maxDif)
+                if (dif.Count() <= maxDif)
                     return true;
             }
             return false;
