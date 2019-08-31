@@ -100,7 +100,7 @@ namespace Client.Features.JobService
                 };
                 duplicates.PrepareCompareValuesProgressWithItems += (object sender, Compare.Duplicates.PrepareComareProgressItem e) =>
                 {
-                    _mainManager.SetStatusBarInfoText($"Job compare files ({e.Progress}%)");
+                    _mainManager.SetStatusBarInfoText($"Job prepare files ({e.Progress}%)");
                     if (!isInSaveCompareFiles)
                     {
                         if (e.CompareFiles.Count > (lastCompareFiles + 20))
@@ -112,7 +112,7 @@ namespace Client.Features.JobService
                     {
                         try
                         {
-                            _mainManager.SetStatusBarInfoText($"Job compare files ({e.Progress}%)");
+                            _mainManager.SetStatusBarInfoText($"Job prepare files ({e.Progress}%)");
                             if (!isInSaveCompareFiles)
                             {
                                 OnSaveCompareFiles(e.CompareFiles).GetAwaiter().GetResult();
@@ -152,6 +152,10 @@ namespace Client.Features.JobService
             int maxPara = config.MaxParallelism;
             if (maxPara < 1)
                 maxPara = Environment.ProcessorCount;
+            duplicates.ProcessFileProgress += (object sender, decimal progress) =>
+            {
+                _mainManager.SetStatusBarInfoText($"Job compare files ({progress}%)");
+            };
             var result = await duplicates.Find(maxPara);
 
             _mainManager.SetStatusBarInfoText($"Finish job");

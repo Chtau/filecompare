@@ -29,6 +29,7 @@ namespace Compare
 
         public event EventHandler Aborted;
         public event EventHandler<string> ProcessFile;
+        public event EventHandler<decimal> ProcessFileProgress;
         public event EventHandler<bool> PrepareCompareValues;
         public event EventHandler<decimal> PrepareCompareValuesProgress;
         public event EventHandler<PrepareComareProgressItem> PrepareCompareValuesProgressWithItems;
@@ -99,13 +100,18 @@ namespace Compare
                     };
                     try
                     {
+                        int itemCounter = 0;
                         Parallel.For(0, Files.Count, po, (int index) =>
                         {
+                            itemCounter += 1;
                             ProcessFile?.Invoke(this, Files[index]);
                             var dup = OnCompareDuplicates(Files[index], index);
                             if (dup != null)
                                 result.Add(dup);
+                            var progressValue = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
+                            ProcessFileProgress?.Invoke(this, progressValue);
                         });
+                        ProcessFileProgress?.Invoke(this, 100);
                     }
                     catch (Exception ex)
                     {
