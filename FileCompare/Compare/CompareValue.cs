@@ -14,6 +14,7 @@ namespace Compare
             FileName = 2,
             Directory = 4,
             Extension = 8,
+            FileNamePartial = 16
         }
 
         public string Hash { get; set; }

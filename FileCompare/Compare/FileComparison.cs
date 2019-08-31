@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Linq;
 
 namespace Compare
 {
@@ -28,7 +29,65 @@ namespace Compare
             {
                 similarValue |= CompareValue.Types.FileName;
             }
+            if (OnComparePartialFileName(srcCompareValue.FileName?.ToLower(), tarCompareValue.FileName?.ToLower(), 5))
+            {
+                similarValue |= CompareValue.Types.FileNamePartial;
+            }
             return similarValue;
+        }
+
+        private bool OnComparePartialFileName(string fileName1, string fileName2, int maxDif)
+        {
+            if (!string.IsNullOrWhiteSpace(fileName1) && !string.IsNullOrWhiteSpace(fileName2))
+            {
+                string lName = fileName1;
+                string sName = fileName2;
+                if (fileName2.Length > fileName1.Length)
+                {
+                    lName = fileName2;
+                    sName = fileName1;
+                }
+                var arLong = OnCreateCompareStringArray(lName);
+                var arShot = OnCreateCompareStringArray(sName);
+                
+                var dif = arLong.Except(arShot);
+                var difLong = lName.Length - dif.Count();
+                if (difLong <= maxDif)
+                    return true;
+
+                // use different starting point for the [sName]
+                sName = sName.Substring(1);
+                arShot = OnCreateCompareStringArray(sName);
+                dif = arLong.Except(arShot);
+                difLong = lName.Length - dif.Count();
+                if (difLong <= maxDif)
+                    return true;
+                sName = sName.Substring(1);
+                arShot = OnCreateCompareStringArray(sName);
+                dif = arLong.Except(arShot);
+                difLong = lName.Length - dif.Count();
+                if (difLong <= maxDif)
+                    return true;
+            }
+            return false;
+        }
+
+        private List<string> OnCreateCompareStringArray(string value)
+        {
+            var retVal = new List<string>();
+            for (int i = 0; i < value.Length;)
+            {
+                string val;
+                if (value.Length > i + 3)
+                    val = value.Substring(i, 3);
+                else
+                    val = value.Substring(i);
+                retVal.Add(val);
+                i += 3;
+                if (i >= value.Length)
+                    break;
+            }
+            return retVal;
         }
 
         private string OnGetMD5(string path)
