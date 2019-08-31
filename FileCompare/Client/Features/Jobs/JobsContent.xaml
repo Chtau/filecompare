@@ -78,7 +78,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button x:Name="StartJobItem" Click="StartJobItem_Click" Height="10" MaxHeight="1" Margin="0" Foreground="#FF019513">
+                                    <Button IsEnabled="{Binding JobState,Converter={ StaticResource JobStateIdleConverter}}" x:Name="StartJobItem" Click="StartJobItem_Click" Height="10" MaxHeight="1" Margin="0" Foreground="#FF019513">
                                         <StackPanel Orientation="Horizontal">
                                             <iconPacks:PackIconModern Width="16" Height="10" Kind="ControlPlay" />
                                         </StackPanel>
@@ -91,7 +91,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button x:Name="StopJobItem" Click="StopJobItem_Click" Height="10" MaxHeight="1" Margin="0" Foreground="#FFBF0404">
+                                    <Button IsEnabled="{Binding JobState,Converter={ StaticResource JobStateRunningConverter}}" x:Name="StopJobItem" Click="StopJobItem_Click" Height="10" MaxHeight="1" Margin="0" Foreground="#FFBF0404">
                                         <StackPanel Orientation="Horizontal">
                                             <iconPacks:PackIconModern Width="16" Height="10" Kind="Stop" />
                                         </StackPanel>

@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace Client.Internal
 {
-    public class CompareResultValueConverter : IValueConverter
+    public class JobStateIdleConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -16,10 +16,14 @@ namespace Client.Internal
             {
                 if (int.TryParse(value.ToString(), out int eValue))
                 {
-                    return (Compare.CompareValue.Types)eValue;
+                    return ((Features.Jobs.JobState)eValue) == Features.Jobs.JobState.Idle;
+                }
+                else if (Enum.TryParse(value.ToString(), out Features.Jobs.JobState jobState))
+                {
+                    return jobState == Features.Jobs.JobState.Idle;
                 }
             }
-            return value?.ToString();
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

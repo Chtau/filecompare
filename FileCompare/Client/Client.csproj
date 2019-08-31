@@ -161,6 +161,8 @@
     <Compile Include="Internal\GlobalValues.cs" />
     <Compile Include="Internal\ILogger.cs" />
     <Compile Include="Internal\ISettings.cs" />
+    <Compile Include="Internal\JobStateRunningConverter.cs" />
+    <Compile Include="Internal\JobStateIdleConverter.cs" />
     <Compile Include="Internal\Logger.cs" />
     <Compile Include="Internal\Settings.cs" />
     <Compile Include="Internal\StaticFolders.cs" />

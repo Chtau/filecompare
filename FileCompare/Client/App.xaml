@@ -9,6 +9,8 @@
         <ResourceDictionary>
             <globalize:LocalizeConverter x:Key="LocalizeConverter" />
             <internal:CompareResultValueConverter x:Key="CompareResultValueConverter" />
+            <internal:JobStateIdleConverter x:Key="JobStateIdleConverter" />
+            <internal:JobStateRunningConverter x:Key="JobStateRunningConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
