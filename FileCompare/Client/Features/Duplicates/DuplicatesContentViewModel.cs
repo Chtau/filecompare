@@ -121,10 +121,39 @@ namespace Client.Features.Duplicates
             try
             {
                 await _repository.ClearDuplicates();
+                await OnRefresh();
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "OnClear failed to load data");
+            }
+        }
+
+        private ICommand _autoResolveAllCommand;
+        public ICommand AutoResolveAllCommand
+        {
+            get
+            {
+                if (_autoResolveAllCommand == null)
+                {
+                    _autoResolveAllCommand = new RelayCommand(
+                        p => true,
+                        async p => await OnAutoResolveAll());
+                }
+                return _autoResolveAllCommand;
+            }
+        }
+
+        private async Task OnAutoResolveAll()
+        {
+            try
+            {
+                await _repository.AutoResolveAllDuplicates();
+                await OnRefresh();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnAutoResolveAll failed to load data");
             }
         }
     }

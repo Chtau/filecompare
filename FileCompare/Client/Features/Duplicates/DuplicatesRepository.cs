@@ -52,7 +52,7 @@ namespace Client.Features.Duplicates
             try
             {
                 var count = await _dBContext.Instance.Table<JobService.Models.PathDuplicate>().CountAsync();
-                if (count <= 1)
+                if (count > 0)
                 {
                     var items = await _dBContext.Instance.Table<JobService.Models.PathDuplicate>().ToListAsync();
                     foreach (var item in items)
@@ -71,6 +71,54 @@ namespace Client.Features.Duplicates
             catch (Exception ex)
             {
                 _logger.Error(ex, "Failed to perform ClearDuplicates");
+            }
+            return false;
+        }
+
+        public async Task<bool> AutoResolveAllDuplicates()
+        {
+            try
+            {
+                var dups = await _dBContext.Instance.Table<JobService.Models.DuplicateValue>().ToListAsync();
+                foreach (var item in dups)
+                {
+                    var dupPaths = await DuplicatesPaths(item.Id);
+                    if (dupPaths != null && dupPaths.Count > 1)
+                    {
+                        // remove all but on
+                        dupPaths = dupPaths.OrderBy(x => x.FileName).ToList();
+                        for (int i = 1; i < dupPaths.Count; i++)
+                        {
+                            string extension = dupPaths[i].Extension;
+                            if (!extension.StartsWith("."))
+                                extension = "." + extension;
+                            if (OnDeleteFile(System.IO.Path.Combine(dupPaths[i].Directory, dupPaths[i].FileName + extension)))
+                                await DeletePathDuplicate(item.Id, dupPaths[i].PathCompareValueId);
+                        }
+                    }
+                }
+                await ClearDuplicates();
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to perform AutoResolveAllDuplicates");
+            }
+            return false;
+        }
+
+        private bool OnDeleteFile(string file)
+        {
+            try
+            {
+                if (System.IO.File.Exists(file))
+                    System.IO.File.Delete(file);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnDeleteFile failed");
             }
             return false;
         }

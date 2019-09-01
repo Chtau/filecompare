@@ -13,5 +13,6 @@ namespace Client.Features.Duplicates
         Task<bool> DeletePathDuplicate(Guid duplicateValueId, Guid pathCompareValueId);
         Task<bool> CheckDuplicateRemove(Guid duplicateId);
         Task<bool> ClearDuplicates();
+        Task<bool> AutoResolveAllDuplicates();
     }
 }
