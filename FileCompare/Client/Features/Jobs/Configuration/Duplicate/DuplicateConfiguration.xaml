@@ -1,0 +1,34 @@
+﻿<Controls:MetroWindow x:Class="Client.Features.Jobs.Configuration.Duplicate.DuplicateConfiguration"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client.Features.Jobs.Configuration.Duplicate"
+        mc:Ignorable="d"
+        Title="{Binding Source='DuplicateConfigration',Converter={ StaticResource LocalizeConverter}}" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.ColumnSpan="2" Content="{Binding Source='Interval',Converter={ StaticResource LocalizeConverter}}"/>
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="2" Height="Auto">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox IsChecked="{Binding Path=CompareValueTypesDirectory, Mode=TwoWay}" Content="{Binding Source='Directory',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                <CheckBox IsChecked="{Binding Path=CompareValueTypesExtension, Mode=TwoWay}" Content="{Binding Source='Extension',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                <CheckBox IsChecked="{Binding Path=CompareValueTypesFileName, Mode=TwoWay}" Content="{Binding Source='Filename',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0, 5">
+                <CheckBox IsChecked="{Binding Path=CompareValueTypesFileNamePartial, Mode=TwoWay}" Content="{Binding Source='FilenamePartial',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+                <CheckBox IsChecked="{Binding Path=CompareValueTypesHash, Mode=TwoWay}" Content="{Binding Source='Hash',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Controls:MetroWindow>

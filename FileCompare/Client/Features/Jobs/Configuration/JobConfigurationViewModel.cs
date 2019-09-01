@@ -550,5 +550,33 @@ namespace Client.Features.Jobs.Configuration
             }
         }
 
+        private ICommand _jobTypeSettingsCommand;
+
+        public ICommand JobTypeSettingsCommand
+        {
+            get
+            {
+                if (_jobTypeSettingsCommand == null)
+                {
+                    _jobTypeSettingsCommand = new RelayCommand(
+                        p => true,
+                        async p => await OnJobTypeSettings());
+                }
+                return _jobTypeSettingsCommand;
+            }
+        }
+
+        private async Task OnJobTypeSettings()
+        {
+            try
+            {
+                
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnJobTypeSettings failed");
+            }
+        }
+
     }
 }

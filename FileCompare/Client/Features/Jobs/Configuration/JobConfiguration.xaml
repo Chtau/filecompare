@@ -38,11 +38,19 @@
             <Label Grid.Row="1" Grid.Column="0" Content="{Binding Source='FileExtensions',Converter={ StaticResource LocalizeConverter}}"/>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=JobConfigurationFileExtensions, Mode=TwoWay}"></TextBox>
             <Label Grid.Row="2" Grid.Column="0" Content="{Binding Source='JobType',Converter={ StaticResource LocalizeConverter}}"/>
-            <ComboBox Grid.Row="2" Grid.Column="1" 
+            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                <ComboBox
                       ItemsSource="{Binding Path=JobTypeEnum}"
                       DisplayMemberPath="Value" 
                       SelectedValuePath="Key"
                       SelectedValue="{Binding Path=JobTypeEnumSelected, Mode=TwoWay}"></ComboBox>
+                <Button Margin="10, 0, 10, 0" Height="24" Width="24" Padding="5,0" x:Name="jobTypeSettings" Style="{StaticResource AccentedSquareButtonStyle}"
+                    Command="{Binding JobTypeSettingsCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconModern VerticalAlignment="Center" Kind="Settings" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
             <Label Grid.Row="3" Grid.ColumnSpan="2" Content="{Binding Source='Interval',Converter={ StaticResource LocalizeConverter}}"/>
             <StackPanel Orientation="Vertical" Grid.Row="4" Grid.ColumnSpan="2" Height="Auto">
                 <StackPanel Orientation="Horizontal">

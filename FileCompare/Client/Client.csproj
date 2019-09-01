@@ -132,6 +132,10 @@
     <Compile Include="Features\JobService\Models\DuplicateValue.cs" />
     <Compile Include="Features\JobService\Models\PathCompareValue.cs" />
     <Compile Include="Features\JobService\Models\PathDuplicate.cs" />
+    <Compile Include="Features\Jobs\Configuration\Duplicate\DuplicateConfiguration.xaml.cs">
+      <DependentUpon>DuplicateConfiguration.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Jobs\Configuration\Duplicate\DuplicateConfigurationViewModel.cs" />
     <Compile Include="Features\Jobs\Configuration\JobConfiguration.xaml.cs">
       <DependentUpon>JobConfiguration.xaml</DependentUpon>
     </Compile>
@@ -177,6 +181,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Features\Folders\FoldersContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Features\Jobs\Configuration\Duplicate\DuplicateConfiguration.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
