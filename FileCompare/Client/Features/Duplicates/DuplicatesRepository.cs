@@ -47,6 +47,34 @@ namespace Client.Features.Duplicates
             return false;
         }
 
+        public async Task<bool> ClearDuplicates()
+        {
+            try
+            {
+                var count = await _dBContext.Instance.Table<JobService.Models.PathDuplicate>().CountAsync();
+                if (count <= 1)
+                {
+                    var items = await _dBContext.Instance.Table<JobService.Models.PathDuplicate>().ToListAsync();
+                    foreach (var item in items)
+                    {
+                        await DeletePathDuplicate(item.DuplicateValueId, item.PathCompareValueId);
+                    }
+                    var dups = await _dBContext.Instance.Table<JobService.Models.DuplicateValue>().ToListAsync();
+                    foreach (var item in dups)
+                    {
+                        await _dBContext.Instance.DeleteAsync(item);
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to perform ClearDuplicates");
+            }
+            return false;
+        }
+
         public async Task<bool> DeletePathDuplicate(Guid duplicateValueId, Guid pathCompareValueId)
         {
             try

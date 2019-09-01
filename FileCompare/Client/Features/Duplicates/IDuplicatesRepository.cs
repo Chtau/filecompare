@@ -12,5 +12,6 @@ namespace Client.Features.Duplicates
         Task<List<ViewModels.DuplicatesResultPath>> DuplicatesPaths(Guid duplicateValueId);
         Task<bool> DeletePathDuplicate(Guid duplicateValueId, Guid pathCompareValueId);
         Task<bool> CheckDuplicateRemove(Guid duplicateId);
+        Task<bool> ClearDuplicates();
     }
 }

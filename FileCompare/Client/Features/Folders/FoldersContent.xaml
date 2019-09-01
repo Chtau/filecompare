@@ -27,6 +27,7 @@
                     Click="AddFolder_Click">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconModern VerticalAlignment="Center" Kind="Add" />
+                    <Label Content="{Binding Source='Add',Converter={ StaticResource LocalizeConverter}}"/>
                 </StackPanel>
             </Button>
             <Button Grid.Column="2" x:Name="userFolder" Style="{StaticResource AccentedSquareButtonStyle}"

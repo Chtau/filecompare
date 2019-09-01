@@ -16,10 +16,11 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
-            <Button Margin="10, 0, 10, 0" Height="24" Width="32" Padding="5,0" x:Name="addJob" Style="{StaticResource AccentedSquareButtonStyle}"
+            <Button Margin="10, 0, 10, 0" Height="24" Padding="5,0" x:Name="addJob" Style="{StaticResource AccentedSquareButtonStyle}"
                     Command="{Binding AddJobCommand}">
                 <StackPanel Orientation="Horizontal">
                     <iconPacks:PackIconModern VerticalAlignment="Center" Kind="Add" />
+                    <Label Content="{Binding Source='Add',Converter={ StaticResource LocalizeConverter}}"/>
                 </StackPanel>
             </Button>
         </StackPanel>

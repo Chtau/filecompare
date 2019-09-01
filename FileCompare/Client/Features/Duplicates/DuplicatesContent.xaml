@@ -16,6 +16,22 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Orientation="Horizontal">
+            <Button Margin="10, 0, 10, 0" Height="24" Padding="5,0" x:Name="clearDuplicates" Style="{StaticResource AccentedSquareButtonStyle}"
+                    Command="{Binding ClearCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconModern VerticalAlignment="Center" Kind="Clear" />
+                    <Label Content="{Binding Source='Clear_All_Duplicates',Converter={ StaticResource LocalizeConverter}}"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10, 0, 10, 0" Height="24" Padding="5,0" x:Name="autoResolveAll" Style="{StaticResource AccentedSquareButtonStyle}"
+                    Command="{Binding ClearCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconModern VerticalAlignment="Center" Kind="PageDuplicate" />
+                    <Label Content="{Binding Source='Automatic_Resolve_All',Converter={ StaticResource LocalizeConverter}}"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
         <Grid Grid.Row="1">
             <DataGrid
                   ItemsSource="{Binding Path=ResultsItems, Mode=TwoWay}"

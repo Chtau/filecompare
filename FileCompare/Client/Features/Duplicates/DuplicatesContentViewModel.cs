@@ -100,5 +100,32 @@ namespace Client.Features.Duplicates
                 _logger.Error(ex, "OnCheckDuplicateRemove failed");
             }
         }
+
+        private ICommand _clearCommand;
+        public ICommand ClearCommand
+        {
+            get
+            {
+                if (_clearCommand == null)
+                {
+                    _clearCommand = new RelayCommand(
+                        p => true,
+                        async p => await OnClear());
+                }
+                return _clearCommand;
+            }
+        }
+
+        private async Task OnClear()
+        {
+            try
+            {
+                await _repository.ClearDuplicates();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnClear failed to load data");
+            }
+        }
     }
 }
