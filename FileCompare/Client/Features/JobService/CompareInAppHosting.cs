@@ -98,9 +98,12 @@ namespace Client.Features.JobService
                 {
                     _mainManager.SetStatusBarInfoText(null);
                 };
+                decimal currentMaxPercent = 0;
                 duplicates.PrepareCompareValuesProgressWithItems += (object sender, Compare.Duplicates.PrepareComareProgressItem e) =>
                 {
-                    _mainManager.SetStatusBarInfoText($"Job prepare files ({e.Progress}%)");
+                    if (e.Progress > currentMaxPercent)
+                        currentMaxPercent = e.Progress;
+                    _mainManager.SetStatusBarInfoText($"Job prepare files ({currentMaxPercent}%)");
                     if (!isInSaveCompareFiles)
                     {
                         if (e.CompareFiles.Count > (lastCompareFiles + 20))
@@ -112,10 +115,10 @@ namespace Client.Features.JobService
                     {
                         try
                         {
-                            _mainManager.SetStatusBarInfoText($"Job prepare files ({e.Progress}%)");
+                            _mainManager.SetStatusBarInfoText($"Job prepare files (100%)");
                             if (!isInSaveCompareFiles)
                             {
-                                OnSaveCompareFiles(e.CompareFiles).GetAwaiter().GetResult();
+                                OnSaveCompareFiles(e.CompareFiles, true).GetAwaiter().GetResult();
                             } else
                             {
                                 Task.Run(async () =>
@@ -126,7 +129,7 @@ namespace Client.Features.JobService
                                             await Task.Delay(100);
                                         if (!isInSaveCompareFiles)
                                         {
-                                            await OnSaveCompareFiles(e.CompareFiles);
+                                            await OnSaveCompareFiles(e.CompareFiles, true);
                                         }
                                     } while (!isInSaveCompareFiles);
                                 });
@@ -187,17 +190,19 @@ namespace Client.Features.JobService
 
         private bool isInSaveCompareFiles = false;
 
-        private async Task OnSaveCompareFiles(Dictionary<string, Compare.CompareValue> compareFiles)
+        private async Task OnSaveCompareFiles(Dictionary<string, Compare.CompareValue> compareFiles, bool showStateInfo = false)
         {
             isInSaveCompareFiles = true;
             try
             {
-                _mainManager.SetStatusBarInfoText($"Job save prepared files");
+                if (showStateInfo)
+                    _mainManager.SetStatusBarInfoText($"Job save prepared files");
                 int itemCount = 0;
                 foreach (var item in compareFiles)
                 {
                     itemCount++;
-                    _mainManager.SetStatusBarInfoText($"Job save prepared files ({itemCount}/{compareFiles.Count})");
+                    if (showStateInfo)
+                        _mainManager.SetStatusBarInfoText($"Job save prepared files ({itemCount}/{compareFiles.Count})");
                     var comp = await _jobServiceRepository.Find(item.Key.ToUpper());
                     if (comp != null)
                     {
@@ -222,7 +227,8 @@ namespace Client.Features.JobService
                     }
                     await _folderRepository.UpdateFolders(item.Value.Directory.ToUpper());
                 }
-                _mainManager.SetStatusBarInfoText($"Job save prepared files complete");
+                if (showStateInfo)
+                    _mainManager.SetStatusBarInfoText($"Job save prepared files complete");
             } catch (Exception ex)
             {
                 _logger.Error(ex);
