@@ -11,11 +11,13 @@ namespace Client.Features.Duplicates
     {
         private readonly Internal.ILogger _logger;
         private readonly DAL.IDBContext _dBContext;
+        private readonly IMainManager _mainManager;
 
         public DuplicatesRepository()
         {
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _dBContext = (DAL.IDBContext)Bootstrap.Instance.Services.GetService(typeof(DAL.IDBContext));
+            _mainManager = (IMainManager)Bootstrap.Instance.Services.GetService(typeof(IMainManager));
         }
 
         public async Task<bool> CheckDuplicateRemove(Guid duplicateId)
@@ -80,8 +82,11 @@ namespace Client.Features.Duplicates
             try
             {
                 var dups = await _dBContext.Instance.Table<JobService.Models.DuplicateValue>().ToListAsync();
+                _mainManager.SetStatusBarInfoText($"Auto resolve Duplicates (0/{dups.Count})");
+                int itemCount = 0;
                 foreach (var item in dups)
                 {
+                    itemCount++;
                     var dupPaths = await DuplicatesPaths(item.Id);
                     if (dupPaths != null && dupPaths.Count > 1)
                     {
@@ -96,9 +101,10 @@ namespace Client.Features.Duplicates
                                 await DeletePathDuplicate(item.Id, dupPaths[i].PathCompareValueId);
                         }
                     }
+                    _mainManager.SetStatusBarInfoText($"Auto resolve Duplicates ({itemCount}/{dups.Count})");
                 }
                 await ClearDuplicates();
-                
+                _mainManager.SetStatusBarInfoText(null);
                 return true;
             }
             catch (Exception ex)
