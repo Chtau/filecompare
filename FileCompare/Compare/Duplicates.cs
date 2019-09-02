@@ -156,11 +156,12 @@ namespace Compare
                     itemCounter += 1;
                     var progressValue = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
                     PrepareCompareValuesProgress?.Invoke(this, progressValue);
-                    if (!compare.ContainsKey(Files[index]))
+                    string currentFile = Files[index]?.ToUpper();
+                    if (!compare.ContainsKey(currentFile))
                     {
-                        var compareValue = comp.CreateCompareValue(Files[index]);
+                        var compareValue = comp.CreateCompareValue(currentFile);
                         if (compareValue != null)
-                            compare.GetOrAdd(Files[index], compareValue);
+                            compare.GetOrAdd(currentFile, compareValue);
                     }
                     PrepareCompareValuesProgressWithItems?.Invoke(this, new PrepareComareProgressItem(progressValue, new Dictionary<string, CompareValue>(compare)));
                 });
@@ -186,12 +187,12 @@ namespace Compare
             var comp = new FileComparison();
             for (int i = fileStartIndex + 1; i < Files.Count; i++)
             {
-                var similar = comp.Similar(compareCache.FirstOrDefault(x => x.Key == sourceFile).Value, compareCache.FirstOrDefault(x => x.Key == Files[i]).Value);
+                var similar = comp.Similar(compareCache.FirstOrDefault(x => x.Key == sourceFile.ToUpper()).Value, compareCache.FirstOrDefault(x => x.Key == Files[i].ToUpper()).Value);
                 if (similar.HasFlag(similarMinValue))
                     result.FileResults.Add(new DuplicatesResult.FileResult
                     {
                         CompareValue = similar,
-                        FilePath = Files[i]
+                        FilePath = Files[i].ToUpper()
                     });
             }
             CacheCompareValue = new Dictionary<string, CompareValue>(compareCache);
