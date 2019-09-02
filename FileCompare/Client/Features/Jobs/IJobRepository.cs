@@ -24,5 +24,7 @@ namespace Client.Features.Jobs
         Task<bool> Delete(Models.JobCollectPath jobCollectPath);
         Task<bool> Update(Models.JobCollectPath jobCollectPath);
         Task<List<Models.Job>> GetJobsByState(JobState jobState);
+        Task<Models.JobConfigurationDuplicates> JobConfigurationDuplicates(Guid jobId);
+        Task<bool> JobConfigurationDuplicatesChange(Models.JobConfigurationDuplicates jobConfigurationDuplicates);
     }
 }

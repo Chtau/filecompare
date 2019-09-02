@@ -215,5 +215,35 @@ namespace Client.Features.Jobs
             }
             return false;
         }
+
+        public async Task<JobConfigurationDuplicates> JobConfigurationDuplicates(Guid jobId)
+        {
+            return await _dBContext.Instance.Table<Models.JobConfigurationDuplicates>().FirstAsync(x => x.JobId == jobId);
+        }
+
+        public async Task<bool> JobConfigurationDuplicatesChange(JobConfigurationDuplicates jobConfigurationDuplicates)
+        {
+            try
+            {
+                var item = await _dBContext.Instance.Table<Models.JobConfigurationDuplicates>().FirstOrDefaultAsync(x => x.JobId == jobConfigurationDuplicates.JobId);
+                if (item == null)
+                {
+                    // insert new
+                    jobConfigurationDuplicates.Id = Guid.NewGuid();
+                    await _dBContext.Instance.InsertAsync(jobConfigurationDuplicates);
+                } else
+                {
+                    // update
+                    item.CompareValueTypes = jobConfigurationDuplicates.CompareValueTypes;
+                    await _dBContext.Instance.UpdateAsync(item);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to change JobConfigurationDuplicates item");
+            }
+            return false;
+        }
     }
 }

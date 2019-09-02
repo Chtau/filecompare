@@ -18,7 +18,7 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.ColumnSpan="2" Content="{Binding Source='Interval',Converter={ StaticResource LocalizeConverter}}"/>
+        <Label Grid.Row="0" Grid.ColumnSpan="2" Content="{Binding Source='Minimal_Match',Converter={ StaticResource LocalizeConverter}}"/>
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="2" Height="Auto">
             <StackPanel Orientation="Horizontal">
                 <CheckBox IsChecked="{Binding Path=CompareValueTypesDirectory, Mode=TwoWay}" Content="{Binding Source='Directory',Converter={ StaticResource LocalizeConverter}}"></CheckBox>
