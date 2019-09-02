@@ -72,17 +72,22 @@ namespace Client.Features.JobService
             CancellationToken ct = ts.Token;
             var task = Task.Run(async () =>
             {
+                var duplicateConfig = await _repository.JobConfigurationDuplicates(job.Id);
+                if (duplicateConfig != null)
+                    duplicates.SetSimilarMinValue((Compare.CompareValue.Types)duplicateConfig.CompareValueTypes);
                 _mainManager.SetStatusBarInfoText("Job running");
                 await _jobServiceRepository.ClearPathDuplicate(job.Id);
                 int lastCompareFiles = 0;
                 var paths = await _repository.GetJobCollectPath(job.Id);
-                List<string> pathsToCollect = new List<string>();
+                Dictionary<string, bool> pathsToCollect = new Dictionary<string, bool>();
+                List<string> onlyPathsToCollect = new List<string>();
                 foreach (var item in paths)
                 {
-                    pathsToCollect.Add(item.Path);
+                    pathsToCollect.Add(item.Path, item.IncludeSubFolders);
+                    onlyPathsToCollect.Add(item.Path);
                 }
                 var cache = new Dictionary<string, Compare.CompareValue>();
-                var pathCompare = await _jobServiceRepository.Gets(pathsToCollect.ToArray());
+                var pathCompare = await _jobServiceRepository.Gets(onlyPathsToCollect.ToArray());
                 foreach (var item in pathCompare)
                 {
                     cache.Add(item.FullFile, new Compare.CompareValue
@@ -141,7 +146,10 @@ namespace Client.Features.JobService
                     }
                     lastCompareFiles = e.CompareFiles.Count;
                 };
-                await duplicates.Collect(pathsToCollect.ToArray());
+                foreach (var item in pathsToCollect)
+                {
+                    await duplicates.Collect(item.Value, item.Key);
+                }
                 await OnAfterCollect(job, config);
             }, ct);
             jobTasks.Add(job, ts);

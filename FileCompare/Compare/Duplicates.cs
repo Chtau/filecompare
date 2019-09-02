@@ -53,12 +53,12 @@ namespace Compare
             CacheCompareValue = cache;
         }
 
-        public async Task Collect(params string[] path)
+        public async Task Collect(bool collectSubfolders, params string[] path)
         {
             Files = new List<string>();
             foreach (var item in path)
             {
-                var colFiles = await _collectFiles.Collect(item);
+                var colFiles = await _collectFiles.Collect(item, collectSubfolders);
                 if (colFiles.Any())
                     Files.AddRange(colFiles);
             }

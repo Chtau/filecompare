@@ -9,15 +9,15 @@ namespace Compare
 {
     class CollectFiles
     {
-        public async Task<IEnumerable<string>> Collect(string path)
+        public async Task<IEnumerable<string>> Collect(string path, bool collectSubFolders)
         {
             return await Task.Run(() =>
             {
-                return OnCollect(path);
+                return OnCollect(path, collectSubFolders);
             });
         }
 
-        private IEnumerable<string> OnCollect(string path)
+        private IEnumerable<string> OnCollect(string path, bool collectSubFolders)
         {
             var result = new List<string>();
             if (AccessControl.Directory(path))
@@ -25,14 +25,17 @@ namespace Compare
                 var files = Directory.EnumerateFiles(path);
                 if (files.Any())
                     result.AddRange(files);
-                var dir = Directory.EnumerateDirectories(path);
-                if (dir.Any())
+                if (collectSubFolders)
                 {
-                    foreach (var item in dir)
+                    var dir = Directory.EnumerateDirectories(path);
+                    if (dir.Any())
                     {
-                        var dirFiles = OnCollect(item);
-                        if (dirFiles.Any())
-                            result.AddRange(dirFiles);
+                        foreach (var item in dir)
+                        {
+                            var dirFiles = OnCollect(item, collectSubFolders);
+                            if (dirFiles.Any())
+                                result.AddRange(dirFiles);
+                        }
                     }
                 }
             }
