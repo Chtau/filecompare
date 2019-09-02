@@ -11,13 +11,11 @@ namespace Client.Features.Jobs.Configuration.Duplicate
     {
         private readonly Internal.ILogger _logger;
         private readonly IJobRepository _repository;
-        private readonly Folders.IFolderRepository _repositoryFolders;
 
         public DuplicateConfigurationViewModel(Guid jobId)
         {
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _repository = (IJobRepository)Bootstrap.Instance.Services.GetService(typeof(IJobRepository));
-            _repositoryFolders = (Folders.IFolderRepository)Bootstrap.Instance.Services.GetService(typeof(Folders.IFolderRepository));
 
             JobId = jobId;
         }
@@ -172,7 +170,10 @@ namespace Client.Features.Jobs.Configuration.Duplicate
             {
                 var model =  await _repository.JobConfigurationDuplicates(JobId);
                 if (model == null)
+                {
                     model = new Models.JobConfigurationDuplicates();
+                    model.CompareValueTypes = (int)Compare.CompareValue.Types.Hash;
+                }
                 CompareValueTypes = (Compare.CompareValue.Types)model.CompareValueTypes;
             }
             catch (Exception ex)

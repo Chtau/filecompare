@@ -1,6 +1,7 @@
 ﻿using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +32,13 @@ namespace Client.Features.Jobs.Configuration.Duplicate
             InitializeComponent();
 
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
-            //_viewModel.RefreshCommand.Execute(null);
+            _viewModel.RefreshCommand.Execute(null);
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            _viewModel.SaveCommand.Execute(null);
+            base.OnClosing(e);
         }
     }
 }

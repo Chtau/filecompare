@@ -38,19 +38,23 @@
             <Label Grid.Row="1" Grid.Column="0" Content="{Binding Source='FileExtensions',Converter={ StaticResource LocalizeConverter}}"/>
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=JobConfigurationFileExtensions, Mode=TwoWay}"></TextBox>
             <Label Grid.Row="2" Grid.Column="0" Content="{Binding Source='JobType',Converter={ StaticResource LocalizeConverter}}"/>
-            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
-                <ComboBox
+            <Grid Grid.Row="2" Grid.Column="1" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="0"
                       ItemsSource="{Binding Path=JobTypeEnum}"
                       DisplayMemberPath="Value" 
                       SelectedValuePath="Key"
                       SelectedValue="{Binding Path=JobTypeEnumSelected, Mode=TwoWay}"></ComboBox>
-                <Button Margin="10, 0, 10, 0" Height="24" Width="24" Padding="5,0" x:Name="jobTypeSettings" Style="{StaticResource AccentedSquareButtonStyle}"
+                <Button IsEnabled="{Binding Path=IsNotNew}" Grid.Column="1" Height="24" Width="28" Padding="5,0" x:Name="jobTypeSettings" Style="{StaticResource AccentedSquareButtonStyle}"
                     Command="{Binding JobTypeSettingsCommand}">
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconModern VerticalAlignment="Center" Kind="Settings" />
                     </StackPanel>
                 </Button>
-            </StackPanel>
+            </Grid>
             <Label Grid.Row="3" Grid.ColumnSpan="2" Content="{Binding Source='Interval',Converter={ StaticResource LocalizeConverter}}"/>
             <StackPanel Orientation="Vertical" Grid.Row="4" Grid.ColumnSpan="2" Height="Auto">
                 <StackPanel Orientation="Horizontal">

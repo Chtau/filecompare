@@ -570,7 +570,7 @@ namespace Client.Features.Jobs.Configuration
         {
             try
             {
-                
+                new Duplicate.DuplicateConfiguration(JobId).ShowDialog();
             }
             catch (Exception ex)
             {

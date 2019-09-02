@@ -7,7 +7,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client.Features.Jobs.Configuration.Duplicate"
         mc:Ignorable="d"
-        Title="{Binding Source='DuplicateConfigration',Converter={ StaticResource LocalizeConverter}}" Height="450" Width="800">
+        Title="{Binding Source='DuplicateConfigration',Converter={ StaticResource LocalizeConverter}}" Height="120" Width="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
