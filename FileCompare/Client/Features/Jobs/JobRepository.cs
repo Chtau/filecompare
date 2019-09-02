@@ -30,6 +30,9 @@ namespace Client.Features.Jobs
                         {
                             await _dBContext.Instance.DeleteAsync(item);
                         });
+                    var result3 = await JobConfigurationDuplicates(job.Id);
+                    if (result3 != null)
+                        await _dBContext.Instance.DeleteAsync(result3);
                     var result2 = await GetJobConfiguration(job.Id);
                     if (result2 != null)
                         await _dBContext.Instance.DeleteAsync(result2);
