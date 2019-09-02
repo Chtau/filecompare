@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Client.Features.Jobs.Configuration.Duplicate
 {
@@ -18,9 +19,19 @@ namespace Client.Features.Jobs.Configuration.Duplicate
             _repository = (IJobRepository)Bootstrap.Instance.Services.GetService(typeof(IJobRepository));
             _repositoryFolders = (Folders.IFolderRepository)Bootstrap.Instance.Services.GetService(typeof(Folders.IFolderRepository));
 
-            /*JobId = jobId;
-            JobTypeEnum = Internal.ComboBoxBindingModelBuilder.FromEnum(typeof(JobType), false);
-            Paths = new ObservableCollection<KeyValuePair<Guid, string>>();*/
+            JobId = jobId;
+        }
+
+        private Guid jobId = Guid.Empty;
+
+        public Guid JobId
+        {
+            get { return jobId; }
+            set
+            {
+                jobId = value;
+                RaisePropertyChanged(nameof(JobId));
+            }
         }
 
         private Compare.CompareValue.Types compareValueTypes;
@@ -137,6 +148,71 @@ namespace Client.Features.Jobs.Configuration.Duplicate
             if ((compareValueTypes & Compare.CompareValue.Types.Hash) == Compare.CompareValue.Types.Hash)
                 CompareValueTypesHash = true;
             internCompareValueTypesChange = false;
+        }
+
+        private ICommand _refreshCommand;
+
+        public ICommand RefreshCommand
+        {
+            get
+            {
+                if (_refreshCommand == null)
+                {
+                    _refreshCommand = new RelayCommand(
+                        p => true,
+                        async p => await OnRefresh());
+                }
+                return _refreshCommand;
+            }
+        }
+
+        private async Task OnRefresh()
+        {
+            try
+            {
+                var model =  await _repository.JobConfigurationDuplicates(JobId);
+                if (model == null)
+                    model = new Models.JobConfigurationDuplicates();
+                CompareValueTypes = (Compare.CompareValue.Types)model.CompareValueTypes;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnRefresh failed to load data");
+            }
+        }
+
+        private ICommand _saveCommand;
+
+        public ICommand SaveCommand
+        {
+            get
+            {
+                if (_saveCommand == null)
+                {
+                    _saveCommand = new RelayCommand(
+                        p => true,
+                        async p => await OnSave());
+                }
+                return _saveCommand;
+            }
+        }
+
+        private async Task OnSave()
+        {
+            try
+            {
+                await _repository.JobConfigurationDuplicatesChange(new Models.JobConfigurationDuplicates
+                {
+                    CompareValueTypes = (int)compareValueTypes,
+                    Id = Guid.NewGuid(),
+                    JobId = jobId
+                });
+                await OnRefresh();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnSave failed to load data");
+            }
         }
     }
 }

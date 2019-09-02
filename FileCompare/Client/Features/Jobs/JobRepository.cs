@@ -218,7 +218,7 @@ namespace Client.Features.Jobs
 
         public async Task<JobConfigurationDuplicates> JobConfigurationDuplicates(Guid jobId)
         {
-            return await _dBContext.Instance.Table<Models.JobConfigurationDuplicates>().FirstAsync(x => x.JobId == jobId);
+            return await _dBContext.Instance.Table<Models.JobConfigurationDuplicates>().FirstOrDefaultAsync(x => x.JobId == jobId);
         }
 
         public async Task<bool> JobConfigurationDuplicatesChange(JobConfigurationDuplicates jobConfigurationDuplicates)
