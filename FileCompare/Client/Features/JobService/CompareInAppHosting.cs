@@ -88,15 +88,30 @@ namespace Client.Features.JobService
                 }
                 var cache = new Dictionary<string, Compare.CompareValue>();
                 var pathCompare = await _jobServiceRepository.Gets(onlyPathsToCollect.ToArray());
+                List<Models.PathCompareValue> invalidPathCompareItems = new List<Models.PathCompareValue>();
                 foreach (var item in pathCompare)
                 {
-                    cache.Add(item.FullFile, new Compare.CompareValue
+                    var cacheCompare = new Compare.CompareValue
                     {
                         Directory = item.Directory,
                         Extension = item.Extension,
                         FileName = item.FileName,
-                        Hash = item.Hash
-                    });
+                        Hash = item.Hash,
+                        FileCreated = item.FileCreated,
+                        FileModified = item.FileModified,
+                        FileSize = item.FileSize
+                    };
+                    if (OnIsValidCacheItem(cacheCompare))
+                        cache.Add(item.FullFile, cacheCompare);
+                    else
+                        invalidPathCompareItems.Add(item);
+                }
+                if (invalidPathCompareItems.Count > 0)
+                {
+                    foreach (var item in invalidPathCompareItems)
+                    {
+                        await _jobServiceRepository.Delete(item);
+                    }
                 }
                 duplicates.SetCache(cache);
                 duplicates.Aborted += (object sender, EventArgs e) =>
@@ -155,6 +170,18 @@ namespace Client.Features.JobService
             jobTasks.Add(job, ts);
 
             return true;
+        }
+
+        private bool OnIsValidCacheItem(Compare.CompareValue compareValue)
+        {
+            if (compareValue.FileSize != 0
+                && !string.IsNullOrWhiteSpace(compareValue.Hash)
+                && !string.IsNullOrWhiteSpace(compareValue.FileName)
+                && compareValue.FileCreated != DateTime.MinValue
+                && !string.IsNullOrWhiteSpace(compareValue.Extension)
+                && !string.IsNullOrWhiteSpace(compareValue.Directory))
+                return true;
+            return false;
         }
 
         private async Task OnAfterCollect(Job job, JobConfiguration config)
