@@ -81,15 +81,22 @@ namespace Client.Features.JobService
                 var paths = await _repository.GetJobCollectPath(job.Id);
                 Dictionary<string, bool> pathsToCollect = new Dictionary<string, bool>();
                 List<string> onlyPathsToCollect = new List<string>();
+                List<Models.PathCompareValue> pathCompares = new List<Models.PathCompareValue>();
                 foreach (var item in paths)
                 {
                     pathsToCollect.Add(item.Path, item.IncludeSubFolders);
                     onlyPathsToCollect.Add(item.Path);
+                    List<Models.PathCompareValue> items;
+                    if (item.IncludeSubFolders)
+                        items = await _jobServiceRepository.GetsByDirectoryWithSubFolders(item.Path);
+                    else
+                        items = await _jobServiceRepository.Gets(onlyPathsToCollect.ToArray());
+                    if (items != null && items.Count > 0)
+                        pathCompares.AddRange(items);
                 }
                 var cache = new Dictionary<string, Compare.CompareValue>();
-                var pathCompare = await _jobServiceRepository.Gets(onlyPathsToCollect.ToArray());
                 List<Models.PathCompareValue> invalidPathCompareItems = new List<Models.PathCompareValue>();
-                foreach (var item in pathCompare)
+                foreach (var item in pathCompares)
                 {
                     var cacheCompare = new Compare.CompareValue
                     {
@@ -121,6 +128,7 @@ namespace Client.Features.JobService
                 decimal currentMaxPercent = 0;
                 duplicates.PrepareCompareValuesProgressWithItems += (object sender, Compare.Duplicates.PrepareComareProgressItem e) =>
                 {
+                    // TODO: we need to handle cache (we should not get cache files here)
                     if (e.Progress > currentMaxPercent)
                         currentMaxPercent = e.Progress;
                     _mainManager.SetStatusBarInfoText($"Job prepare files ({currentMaxPercent}%)");

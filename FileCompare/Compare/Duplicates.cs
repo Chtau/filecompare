@@ -141,6 +141,7 @@ namespace Compare
         {
             var comp = new FileComparison();
             ConcurrentDictionary<string, CompareValue> compare = new ConcurrentDictionary<string, CompareValue>(CacheCompareValue);
+            ConcurrentDictionary<string, CompareValue> newCompare = new ConcurrentDictionary<string, CompareValue>();
             int itemCounter = 0;
             PrepareCompareValuesProgress?.Invoke(this, 0);
 
@@ -161,12 +162,15 @@ namespace Compare
                     {
                         var compareValue = comp.CreateCompareValue(currentFile);
                         if (compareValue != null)
+                        {
                             compare.GetOrAdd(currentFile, compareValue);
+                            newCompare.GetOrAdd(currentFile, compareValue);
+                        }
                     }
-                    PrepareCompareValuesProgressWithItems?.Invoke(this, new PrepareComareProgressItem(progressValue, new Dictionary<string, CompareValue>(compare)));
+                    PrepareCompareValuesProgressWithItems?.Invoke(this, new PrepareComareProgressItem(progressValue, new Dictionary<string, CompareValue>(newCompare)));
                 });
                 PrepareCompareValuesProgress?.Invoke(this, 100);
-                PrepareCompareValuesProgressWithItems?.Invoke(this, new PrepareComareProgressItem(100, new Dictionary<string, CompareValue>(compare)));
+                PrepareCompareValuesProgressWithItems?.Invoke(this, new PrepareComareProgressItem(100, new Dictionary<string, CompareValue>(newCompare)));
                 CacheCompareValue = new Dictionary<string, CompareValue>(compare);
             }
             catch (Exception ex)

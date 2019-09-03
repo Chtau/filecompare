@@ -56,7 +56,7 @@ namespace Client.Features.JobService
 
         public async Task<List<Models.PathCompareValue>> GetsByDirectoryWithSubFolders(string directory)
         {
-            return await _dBContext.Instance.Table<Models.PathCompareValue>().Where(x => x.Directory.StartsWith(directory.ToUpper())).ToListAsync();
+            return await _dBContext.Instance.Table<Models.PathCompareValue>().Where(x => x.Directory.StartsWith(directory)).ToListAsync();
         }
 
         public async Task<List<Models.PathCompareValue>> GetsByDirectory(string directory)
