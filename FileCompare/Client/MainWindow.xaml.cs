@@ -51,6 +51,9 @@ namespace Client
                 case MainWindowViewModel.Tabs.Jobs:
                     _viewModel.ActiveTabRows = _mainManager.GetTabGridItemCount(MainWindowViewModel.Tabs.Jobs);
                     break;
+                case MainWindowViewModel.Tabs.Cache:
+                    _viewModel.ActiveTabRows = _mainManager.GetTabGridItemCount(MainWindowViewModel.Tabs.Cache);
+                    break;
             }
         }
 
@@ -88,6 +91,11 @@ namespace Client
                 {
                     _viewModel.ActiveTab = MainWindowViewModel.Tabs.Jobs;
                     _viewModel.ActiveTabRows = _mainManager.GetTabGridItemCount(MainWindowViewModel.Tabs.Jobs);
+                }
+                else if (tab.Name == "TabCache")
+                {
+                    _viewModel.ActiveTab = MainWindowViewModel.Tabs.Cache;
+                    _viewModel.ActiveTabRows = _mainManager.GetTabGridItemCount(MainWindowViewModel.Tabs.Cache);
                 }
             }
         }

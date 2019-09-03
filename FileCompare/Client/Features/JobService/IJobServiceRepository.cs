@@ -18,5 +18,8 @@ namespace Client.Features.JobService
         Task<Models.DuplicateValue> CreateDuplicateValue(int compareValue);
         Task<bool> CreatePathDuplicate(Guid jobId, Guid duplicateValueId, string pathFullFileName);
         Task<bool> ClearPathDuplicate(Guid jobId);
+        Task<bool> ClearCachePathCompareValues();
+        Task<bool> ClearCachePathCompareValues(Models.PathCompareValue compareValue);
+        Task<List<Models.PathCompareValue>> GetAll();
     }
 }

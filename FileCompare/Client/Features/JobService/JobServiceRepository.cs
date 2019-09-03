@@ -166,5 +166,40 @@ namespace Client.Features.JobService
             }
             return false;
         }
+
+        public async Task<bool> ClearCachePathCompareValues()
+        {
+            try
+            {
+                await _dBContext.Instance.DeleteAllAsync<Models.PathCompareValue>();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to clear PathCompareValue items");
+            }
+            return false;
+        }
+
+        public async Task<List<PathCompareValue>> GetAll()
+        {
+            return await _dBContext.Instance.Table<Models.PathCompareValue>().ToListAsync();
+        }
+
+        public async Task<bool> ClearCachePathCompareValues(PathCompareValue compareValue)
+        {
+            try
+            {
+                await _dBContext.Instance.DeleteAsync<Models.PathCompareValue>(compareValue);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to delete PathCompareValue items");
+            }
+            return false;
+        }
     }
 }

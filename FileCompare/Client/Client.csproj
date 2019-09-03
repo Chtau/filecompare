@@ -102,6 +102,10 @@
     </ApplicationDefinition>
     <Compile Include="DAL\DBContext.cs" />
     <Compile Include="DAL\IDBContext.cs" />
+    <Compile Include="Features\Cache\CacheContent.xaml.cs">
+      <DependentUpon>CacheContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Cache\CacheContentViewModel.cs" />
     <Compile Include="Features\Duplicates\DuplicateAction\DuplicateActionDialog.xaml.cs">
       <DependentUpon>DuplicateActionDialog.xaml</DependentUpon>
     </Compile>
@@ -173,6 +177,10 @@
     <Compile Include="Internal\StaticFolders.cs" />
     <Compile Include="MainManager.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Page Include="Features\Cache\CacheContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Features\Duplicates\DuplicateAction\DuplicateActionDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

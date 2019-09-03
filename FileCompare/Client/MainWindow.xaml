@@ -9,6 +9,7 @@
         xmlns:featuresFolders="clr-namespace:Client.Features.Folders"
         xmlns:featuresJobs="clr-namespace:Client.Features.Jobs"
         xmlns:featuresDuplicates="clr-namespace:Client.Features.Duplicates"
+        xmlns:featuresCache="clr-namespace:Client.Features.Cache"
         mc:Ignorable="d"
         Title="{Binding Source='FileCompare',Converter={ StaticResource LocalizeConverter}}" Height="450" Width="800">
     <Grid>
@@ -56,6 +57,15 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <featuresJobs:JobsContent Grid.Row="1" Grid.Column="1"></featuresJobs:JobsContent>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{Binding Source='Cache',Converter={ StaticResource LocalizeConverter}}" x:Name="TabCache">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <featuresCache:CacheContent Grid.Row="1" Grid.Column="1"></featuresCache:CacheContent>
                 </Grid>
             </TabItem>
         </Controls:MetroAnimatedSingleRowTabControl>

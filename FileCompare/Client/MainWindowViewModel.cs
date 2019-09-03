@@ -31,7 +31,8 @@ namespace Client
         {
             Folders,
             Duplicates,
-            Jobs
+            Jobs,
+            Cache
         }
 
         private ObservableCollection<object> duplicates;
