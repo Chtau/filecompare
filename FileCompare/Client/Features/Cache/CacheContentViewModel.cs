@@ -101,5 +101,34 @@ namespace Client.Features.Cache
                 _logger.Error(ex, "DeleteItem failed for PathCompareValue");
             }
         }
+
+        private ICommand _fileExistCheckCommand;
+
+        public ICommand FileExistCheckCommand
+        {
+            get
+            {
+                if (_fileExistCheckCommand == null)
+                {
+                    _fileExistCheckCommand = new RelayCommand(
+                        p => true,
+                        async p => await OnFileExistCheck());
+                }
+                return _fileExistCheckCommand;
+            }
+        }
+
+        private async Task OnFileExistCheck()
+        {
+            try
+            {
+                await _repository.CheckCacheFileExists();
+                await OnRefresh();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "OnFileExistCheck failed");
+            }
+        }
     }
 }

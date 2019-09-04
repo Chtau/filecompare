@@ -201,5 +201,27 @@ namespace Client.Features.JobService
             }
             return false;
         }
+
+        public async Task<bool> CheckCacheFileExists()
+        {
+            try
+            {
+                var cache = await GetAll();
+                foreach (var item in cache)
+                {
+                    if (!Compare.AccessControl.File(item.FullFile))
+                    {
+                        await ClearCachePathCompareValues(item);
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to execute CheckCacheFileExists");
+            }
+            return false;
+        }
     }
 }

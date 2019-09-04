@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compare
 {
-    static class AccessControl
+    public static class AccessControl
     {
         public static bool Directory(string path)
         {

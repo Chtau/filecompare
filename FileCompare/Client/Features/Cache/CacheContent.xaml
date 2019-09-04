@@ -24,6 +24,13 @@
                     <Label Content="{Binding Source='Clear_Cache',Converter={ StaticResource LocalizeConverter}}"/>
                 </StackPanel>
             </Button>
+            <Button Margin="10, 0, 10, 0" Height="24" Padding="5,0" x:Name="fileExistCheck" Style="{StaticResource AccentedSquareButtonStyle}"
+                    Command="{Binding FileExistCheckCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconModern VerticalAlignment="Center" Kind="CabinetFiles" />
+                    <Label Content="{Binding Source='File_exists_check',Converter={ StaticResource LocalizeConverter}}"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
         <Grid Grid.Row="1">
             <DataGrid
