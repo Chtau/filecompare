@@ -22,6 +22,20 @@ namespace Compare
             }
         }
 
+        public class ProcessFileProgressItem
+        {
+            public decimal Progress { get; set; }
+            public List<DuplicatesResult> DuplicatesResults { get; set; }
+            public int ProgressIndex { get; set; }
+
+            public ProcessFileProgressItem(decimal progress, List<DuplicatesResult> duplicatesResults, int progressIndex)
+            {
+                Progress = progress;
+                DuplicatesResults = duplicatesResults;
+                ProgressIndex = progressIndex;
+            }
+        }
+
         public List<string> Files { get; private set; }
         public Dictionary<string, CompareValue> CacheCompareValue { get; private set; }
 
@@ -30,6 +44,7 @@ namespace Compare
         public event EventHandler Aborted;
         public event EventHandler<string> ProcessFile;
         public event EventHandler<decimal> ProcessFileProgress;
+        public event EventHandler<ProcessFileProgressItem> ProcessFileProgressWithItems;
         public event EventHandler<bool> PrepareCompareValues;
         public event EventHandler<decimal> PrepareCompareValuesProgress;
         public event EventHandler<PrepareComareProgressItem> PrepareCompareValuesProgressWithItems;
@@ -110,8 +125,10 @@ namespace Compare
                                 result.Add(dup);
                             var progressValue = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
                             ProcessFileProgress?.Invoke(this, progressValue);
+                            ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(progressValue, result, index));
                         });
                         ProcessFileProgress?.Invoke(this, 100);
+                        ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(100, result, -1));
                     }
                     catch (Exception ex)
                     {

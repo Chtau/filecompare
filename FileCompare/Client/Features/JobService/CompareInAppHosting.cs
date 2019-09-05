@@ -198,9 +198,9 @@ namespace Client.Features.JobService
             int maxPara = config.MaxParallelism;
             if (maxPara < 1)
                 maxPara = Environment.ProcessorCount;
-            duplicates.ProcessFileProgress += (object sender, decimal progress) =>
+            duplicates.PrepareCompareValuesProgressWithItems += (object sender, Compare.Duplicates.PrepareComareProgressItem e) =>
             {
-                _mainManager.SetStatusBarInfoText($"Job compare files ({progress}%)");
+                _mainManager.SetStatusBarInfoText($"Job compare files ({e.Progress}%)");
             };
             var result = await duplicates.Find(maxPara);
 
