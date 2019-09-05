@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Client.Features.Jobs;
 using Client.Features.Jobs.Models;
+using Newtonsoft.Json;
 
 namespace Client.Features.JobService
 {
@@ -128,7 +132,6 @@ namespace Client.Features.JobService
                 decimal currentMaxPercent = 0;
                 duplicates.PrepareCompareValuesProgressWithItems += (object sender, Compare.Duplicates.PrepareComareProgressItem e) =>
                 {
-                    // TODO: we need to handle cache (we should not get cache files here)
                     if (e.Progress > currentMaxPercent)
                         currentMaxPercent = e.Progress;
                     _mainManager.SetStatusBarInfoText($"Job prepare files ({currentMaxPercent}%)");
@@ -198,10 +201,12 @@ namespace Client.Features.JobService
             int maxPara = config.MaxParallelism;
             if (maxPara < 1)
                 maxPara = Environment.ProcessorCount;
-            duplicates.PrepareCompareValuesProgressWithItems += (object sender, Compare.Duplicates.PrepareComareProgressItem e) =>
+            duplicates.ProcessFileProgressWithItems += (object sender, Compare.Duplicates.ProcessFileProgressItem e) =>
             {
                 _mainManager.SetStatusBarInfoText($"Job compare files ({e.Progress}%)");
+                OnSaveDuplicateResultProgress(job, e).GetAwaiter().GetResult();
             };
+            duplicates.SetCache(await OnGetDuplicateResultProgress(job));
             var result = await duplicates.Find(maxPara);
 
             _mainManager.SetStatusBarInfoText($"Finish job");
@@ -229,6 +234,54 @@ namespace Client.Features.JobService
                 _logger.Error(ex);
             }
             return false;
+        }
+
+        private DateTime lastSaveDuplicateProgress = DateTime.Now;
+        private async Task OnSaveDuplicateResultProgress(Job job, Compare.Duplicates.ProcessFileProgressItem e)
+        {
+            try
+            {
+                if (e.Progress == 100)
+                {
+                    await _jobServiceRepository.RemoveDuplicateResultCache(job.Id);
+                }
+                else
+                {
+                    if ((DateTime.Now - lastSaveDuplicateProgress).TotalMinutes > 5)
+                    {
+                        lastSaveDuplicateProgress = DateTime.Now;
+                        var cache = new Models.DuplicateResultProgress
+                        {
+                            DateTime = DateTime.Now,
+                            JobId = job.Id,
+                            Cache = JsonConvert.SerializeObject(e)
+                        };
+                        await _jobServiceRepository.ChangeDuplicateResultCache(cache);
+                    }
+                }
+            } catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+        }
+
+        private async Task<Compare.Duplicates.ProcessFileProgressItem> OnGetDuplicateResultProgress(Job job)
+        {
+            try
+            {
+                var cache = await _jobServiceRepository.GetDuplicateResultCache(job.Id);
+                if (cache != null)
+                {
+                    var result = JsonConvert.DeserializeObject(cache.Cache, typeof(Compare.Duplicates.ProcessFileProgressItem));
+                    if (result != null)
+                        return (Compare.Duplicates.ProcessFileProgressItem)result;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+            return null;
         }
 
         private bool isInSaveCompareFiles = false;

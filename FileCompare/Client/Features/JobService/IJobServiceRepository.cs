@@ -22,5 +22,8 @@ namespace Client.Features.JobService
         Task<bool> ClearCachePathCompareValues(Models.PathCompareValue compareValue);
         Task<List<Models.PathCompareValue>> GetAll();
         Task<bool> CheckCacheFileExists();
+        Task<bool> ChangeDuplicateResultCache(Models.DuplicateResultProgress duplicateResultProgress);
+        Task<bool> RemoveDuplicateResultCache(Guid jobId);
+        Task<Models.DuplicateResultProgress> GetDuplicateResultCache(Guid jobId);
     }
 }

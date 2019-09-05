@@ -223,5 +223,58 @@ namespace Client.Features.JobService
             }
             return false;
         }
+
+        public async Task<bool> ChangeDuplicateResultCache(DuplicateResultProgress duplicateResultProgress)
+        {
+            try
+            {
+                var item = await GetDuplicateResultCache(duplicateResultProgress.JobId);
+                if (item != null)
+                {
+                    item.DateTime = duplicateResultProgress.DateTime;
+                    item.Cache = duplicateResultProgress.Cache;
+                    await _dBContext.Instance.UpdateAsync(item);
+                } else
+                {
+                    item = new DuplicateResultProgress
+                    {
+                        JobId = duplicateResultProgress.JobId,
+                        DateTime = duplicateResultProgress.DateTime,
+                        Cache = duplicateResultProgress.Cache
+                    };
+                    await _dBContext.Instance.InsertAsync(item);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to change ChangeDuplicateResultCache item");
+            }
+            return false;
+        }
+
+        public async Task<bool> RemoveDuplicateResultCache(Guid jobId)
+        {
+            try
+            {
+                var caches = await _dBContext.Instance.Table<Models.DuplicateResultProgress>().Where(x => x.JobId == jobId).ToListAsync();
+                foreach (var item in caches)
+                {
+                    await _dBContext.Instance.DeleteAsync<Models.DuplicateResultProgress>(item);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to delete RemoveDuplicateResultCache items");
+            }
+            return false;
+        }
+
+        public async Task<DuplicateResultProgress> GetDuplicateResultCache(Guid jobId)
+        {
+            return await _dBContext.Instance.Table<Models.DuplicateResultProgress>().FirstOrDefaultAsync(x => x.JobId == jobId);
+        }
     }
 }

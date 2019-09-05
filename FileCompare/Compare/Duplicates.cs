@@ -27,17 +27,20 @@ namespace Compare
             public decimal Progress { get; set; }
             public List<DuplicatesResult> DuplicatesResults { get; set; }
             public int ProgressIndex { get; set; }
+            public int ItemCounter { get; set; }
 
-            public ProcessFileProgressItem(decimal progress, List<DuplicatesResult> duplicatesResults, int progressIndex)
+            public ProcessFileProgressItem(decimal progress, List<DuplicatesResult> duplicatesResults, int progressIndex, int itemCounter)
             {
                 Progress = progress;
                 DuplicatesResults = duplicatesResults;
                 ProgressIndex = progressIndex;
+                ItemCounter = itemCounter;
             }
         }
 
         public List<string> Files { get; private set; }
         public Dictionary<string, CompareValue> CacheCompareValue { get; private set; }
+        public ProcessFileProgressItem CacheDuplicateResult { get; private set; }
 
         private readonly CollectFiles _collectFiles;
 
@@ -66,6 +69,11 @@ namespace Compare
         public void SetCache(Dictionary<string, CompareValue> cache)
         {
             CacheCompareValue = cache;
+        }
+
+        public void SetCache(ProcessFileProgressItem cache)
+        {
+            CacheDuplicateResult = cache;
         }
 
         public async Task Collect(bool collectSubfolders, params string[] path)
@@ -118,6 +126,21 @@ namespace Compare
                         int itemCounter = 0;
                         Parallel.For(0, Files.Count, po, (int index) =>
                         {
+                            if (CacheDuplicateResult != null)
+                            {
+                                itemCounter = CacheDuplicateResult.ItemCounter;
+                                result = CacheDuplicateResult.DuplicatesResults;
+                                index = CacheDuplicateResult.ProgressIndex;
+
+                                var progressValue1 = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
+                                ProcessFileProgress?.Invoke(this, progressValue1);
+                                ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(progressValue1, result, index, itemCounter));
+                            }
+                            if (itemCounter == 0)
+                            {
+                                ProcessFileProgress?.Invoke(this, 0);
+                                ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(0, result, index, itemCounter));
+                            }
                             itemCounter += 1;
                             ProcessFile?.Invoke(this, Files[index]);
                             var dup = OnCompareDuplicates(Files[index], index);
@@ -125,10 +148,10 @@ namespace Compare
                                 result.Add(dup);
                             var progressValue = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
                             ProcessFileProgress?.Invoke(this, progressValue);
-                            ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(progressValue, result, index));
+                            ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(progressValue, result, index, itemCounter));
                         });
                         ProcessFileProgress?.Invoke(this, 100);
-                        ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(100, result, -1));
+                        ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(100, result, -1, itemCounter));
                     }
                     catch (Exception ex)
                     {
