@@ -124,10 +124,12 @@ namespace Compare
                     try
                     {
                         int itemCounter = 0;
+                        bool cacheLoaded = false;
                         Parallel.For(0, Files.Count, po, (int index) =>
                         {
-                            if (CacheDuplicateResult != null)
+                            if (cacheLoaded == false && CacheDuplicateResult != null)
                             {
+                                cacheLoaded = true;
                                 itemCounter = CacheDuplicateResult.ItemCounter;
                                 result = CacheDuplicateResult.DuplicatesResults;
                                 index = CacheDuplicateResult.ProgressIndex;

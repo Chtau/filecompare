@@ -204,7 +204,10 @@ namespace Client.Features.JobService
             duplicates.ProcessFileProgressWithItems += (object sender, Compare.Duplicates.ProcessFileProgressItem e) =>
             {
                 _mainManager.SetStatusBarInfoText($"Job compare files ({e.Progress}%)");
-                OnSaveDuplicateResultProgress(job, e).GetAwaiter().GetResult();
+                Task.Run(async () =>
+                {
+                    await OnSaveDuplicateResultProgress(job, e);
+                });
             };
             duplicates.SetCache(await OnGetDuplicateResultProgress(job));
             var result = await duplicates.Find(maxPara);
