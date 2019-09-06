@@ -21,5 +21,11 @@ namespace Client.Settings
             CultureEnumSelected = (int)_settings.Culture;
             CultureEnum = ComboBoxBindingModelBuilder.FromEnum(typeof(Globalize.Localize.Language), false);
         }
+
+        public void Save()
+        {
+            _settings.Culture = (Globalize.Localize.Language)CultureEnumSelected;
+            _settings.Save();
+        }
     }
 }

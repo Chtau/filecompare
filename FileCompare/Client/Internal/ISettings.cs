@@ -10,5 +10,7 @@ namespace Client.Internal
     {
         Globalize.Localize.Language Culture { get; set; }
         string DBPath { get; set; }
+        void Save();
+        void Load();
     }
 }

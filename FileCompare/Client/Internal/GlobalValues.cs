@@ -10,6 +10,7 @@ namespace Client.Internal
     {
         public const string AppName = "FileCompare";
         public const string DBFileName = "fc.db";
+        public const string SettingsFileName = "fc.config";
         public const string LogFile = "log.txt";
     }
 }

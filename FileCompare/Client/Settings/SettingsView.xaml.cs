@@ -32,9 +32,7 @@ namespace Client.Settings
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            //_viewModel.Settings.Culture = (Globalize.Localize.Language)_viewModel.CultureEnumSelected;
-
-            //Internal.Global.Instance.SaveSettings(_viewModel.Settings);
+            _viewModel.Save();
         }
     }
 }
