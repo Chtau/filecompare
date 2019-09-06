@@ -99,5 +99,10 @@ namespace Client
                 }
             }
         }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            this.SettingsFlyout.IsOpen = !this.SettingsFlyout.IsOpen;
+        }
     }
 }

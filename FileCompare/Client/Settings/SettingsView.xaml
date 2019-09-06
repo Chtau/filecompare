@@ -1,0 +1,140 @@
+﻿<UserControl x:Class="Client.Settings.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:local="clr-namespace:Client.Settings"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="1" Margin="25,0,25,10">
+            <Grid Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
+                    <Label FontWeight="Bold" Content="{Binding Source='Application',Converter={ StaticResource LocalizeConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Separator Margin="0,2,0,10"/>
+                </StackPanel>
+                <Label Grid.Row="1" Grid.Column="0" Content="{Binding Source='Language',Converter={ StaticResource LocalizeConverter}}" Margin="0,0,0,5"/>
+                <ComboBox Grid.Row="1" Grid.Column="1"
+                  ItemsSource="{Binding Path=CultureEnum}" 
+                  DisplayMemberPath="Value" 
+                  SelectedValuePath="Key"
+                  SelectedValue="{Binding Path=CultureEnumSelected, Mode=TwoWay}" Margin="0,0,0,5"/>
+                <!--<Grid Grid.Row="2" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Content="{Binding Source='Autostart',Converter={ StaticResource LocalizeConverter}}"/>
+                    <Controls:ToggleSwitch Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" IsChecked="{Binding Settings.AutoStart }"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="{Binding Source='Accent_Color',Converter={ StaticResource LocalizeConverter}}" Margin="0,0,0,5"/>
+                    <ComboBox Grid.Row="1" Grid.Column="1"
+                  ItemsSource="{Binding Path=AccentEnum}" 
+                  DisplayMemberPath="Value" 
+                  SelectedValuePath="Key"
+                  SelectedValue="{Binding Path=AccentEnumSelected, Mode=TwoWay}" Margin="0,0,0,5"/>
+                    <Label Grid.Row="2" Grid.Column="0" Content="{Binding Source='Theme',Converter={ StaticResource LocalizeConverter}}" Margin="0,0,0,5"/>
+                    <ComboBox Grid.Row="2" Grid.Column="1"
+                  ItemsSource="{Binding Path=ThemeColorEnum}" 
+                  DisplayMemberPath="Value" 
+                  SelectedValuePath="Key"
+                  SelectedValue="{Binding Path=ThemeColorEnumSelected, Mode=TwoWay}" Margin="0,0,0,5"/>
+                </Grid>
+                <StackPanel Grid.Row="3" Grid.ColumnSpan="2">
+                    <Label FontWeight="Bold" Content="{Binding Source='Copy_Clipboard',Converter={ StaticResource LocalizeConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Separator Margin="0,2,0,10"/>
+                </StackPanel>
+                <Label Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Content="{Binding Source='Activate_Text',Converter={ StaticResource LocalizeConverter}}" Margin="0,0,0,5"/>
+                <Controls:ToggleSwitch Grid.Row="4" Grid.Column="1" IsChecked="{Binding Settings.ClipWatcherActiveText }" Margin="0,0,0,5"/>
+                <Label Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Content="{Binding Source='Activate_Image',Converter={ StaticResource LocalizeConverter}}" Margin="0,0,0,5"/>
+                <Controls:ToggleSwitch Grid.Row="5" Grid.Column="1" IsChecked="{Binding Settings.ClipWatcherActiveImage }" Margin="0,0,0,5"/>
+                <Label Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Content="{Binding Source='Activate_File',Converter={ StaticResource LocalizeConverter}}" Margin="0,0,0,5"/>
+                <Controls:ToggleSwitch Grid.Row="6" Grid.Column="1" IsChecked="{Binding Settings.ClipWatcherActiveFile }" Margin="0,0,0,5"/>
+                <Label Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" Content="{Binding Source='Use_Interceptor',Converter={ StaticResource LocalizeConverter}}" Margin="0,0,0,5"/>
+                <Controls:ToggleSwitch Grid.Row="7" Grid.Column="1" IsChecked="{Binding Settings.UseWatcher }" Margin="0,0,0,5"/>
+                <Grid Grid.Row="8" Grid.ColumnSpan="2" Visibility="{Binding Settings.UseWatcher,Converter={ StaticResource VisibilityConverter} }">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Content="{Binding Source='Refresh_Rate_Milliseconds',Converter={ StaticResource LocalizeConverter}}" Margin="0,0,0,5"/>
+                    <Controls:NumericUpDown Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="1000" Interval="50" Value="{Binding Settings.ClipWatcherRefreshRateMilliseconds }" Margin="0,0,0,5"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="{Binding Source='Refresh_Rate_Seconds',Converter={ StaticResource LocalizeConverter}}" Margin="0,0,0,5"/>
+                    <Controls:NumericUpDown Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="60" Interval="1" Value="{Binding Settings.ClipWatcherRefreshRateSeconds }" Margin="0,0,0,5"/>
+                </Grid>
+                <Grid Grid.Row="9" Grid.ColumnSpan="2" Visibility="{Binding Settings.UseWatcher,Converter={ StaticResource VisibilityConverter}, ConverterParameter=true }" Margin="0,0,0,5">
+                    <local:HotKeyConfigurationView DataContext="{Binding ClipHotKey}"/>
+                </Grid>
+                <Label Grid.Row="10" Grid.Column="0" Content="{Binding Source='Default_Image_format',Converter={ StaticResource LocalizeConverter}}"/>
+                <ComboBox Grid.Row="10" Grid.Column="1"
+                  ItemsSource="{Binding Path=ClipWatcherImageFormatTypeEnum}" 
+                  DisplayMemberPath="Value" 
+                  SelectedValuePath="Key"
+                  SelectedValue="{Binding Path=ClipWatcherImageFormatTypeEnumSelected, Mode=TwoWay}"/>
+                <StackPanel Grid.Row="11" Grid.ColumnSpan="2">
+                    <Label FontWeight="Bold" Content="{Binding Source='Paste_Clipboard',Converter={ StaticResource LocalizeConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Separator Margin="0,2,0,10"/>
+                </StackPanel>
+                <Label Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" Content="{Binding Source='Only_set_Clipboard_on_Paste',Converter={ StaticResource LocalizeConverter}}" Margin="0,0,0,5"/>
+                <Controls:ToggleSwitch Grid.Row="12" Grid.Column="1" IsChecked="{Binding Settings.OnlySetClipboardOnPaste }" Margin="0,0,0,5"/>
+                <local:HotKeyConfigurationView Grid.Row="13" Grid.ColumnSpan="2" DataContext="{Binding ClipPasteHotKey}"/>
+                <StackPanel Grid.Row="14" Grid.ColumnSpan="2">
+                    <Label FontWeight="Bold" Content="{Binding Source='Favorites',Converter={ StaticResource LocalizeConverter}}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Separator Margin="0,2,0,10"/>
+                </StackPanel>
+                <local:HotKeyConfigurationView Grid.Row="15" Grid.ColumnSpan="2" DataContext="{Binding FavoritesWindowHotKey}"/>
+                <Label Grid.Row="16" Grid.Column="0" VerticalAlignment="Center" Content="{Binding Source='Remember_Position',Converter={ StaticResource LocalizeConverter}}" Margin="0,0,0,5"/>
+                <Controls:ToggleSwitch Grid.Row="16" Grid.Column="1" IsChecked="{Binding Settings.FavoriteWindowStateRemember }" Margin="0,0,0,5"/>
+                -->
+            </Grid>
+        </ScrollViewer>
+        <StackPanel Grid.Row="2" Margin="0,0,0,10">
+            <Button x:Name="save" Style="{StaticResource AccentedSquareButtonStyle}"
+                    Click="Save_Click"
+                    Width="100">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconModern VerticalAlignment="Center" Kind="Save" />
+                    <Label Content="{Binding Source='Save',Converter={ StaticResource LocalizeConverter}}"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

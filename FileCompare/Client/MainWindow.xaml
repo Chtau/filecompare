@@ -10,8 +10,27 @@
         xmlns:featuresJobs="clr-namespace:Client.Features.Jobs"
         xmlns:featuresDuplicates="clr-namespace:Client.Features.Duplicates"
         xmlns:featuresCache="clr-namespace:Client.Features.Cache"
+        xmlns:settings="clr-namespace:Client.Settings"
         mc:Ignorable="d"
+        RightWindowCommandsOverlayBehavior="Never"
         Title="{Binding Source='FileCompare',Converter={ StaticResource LocalizeConverter}}" Height="450" Width="800">
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button x:Name="Settings" Click="Settings_Click">
+                <StackPanel Orientation="Horizontal">
+                    <iconPacks:PackIconModern Width="16" Height="16" Kind="Settings" />
+                    <TextBlock Margin="4 0 0 0" VerticalAlignment="Center" Text="{Binding Source='Settings',Converter={ StaticResource LocalizeConverter}}" />
+                </StackPanel>
+            </Button>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl>
+            <Controls:Flyout x:Name="SettingsFlyout" Header="{Binding Source='Settings',Converter={ StaticResource LocalizeConverter}}" Position="Right" Width="400">
+                <settings:SettingsView/>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
