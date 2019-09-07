@@ -25,6 +25,7 @@ namespace Client
                 _settings = (ISettings)Bootstrap.Instance.Services.GetService(typeof(ISettings));
                 _localize = (Globalize.ILocalize)Bootstrap.Instance.Services.GetService(typeof(Globalize.ILocalize));
                 _settings.Load();
+                _localize.SetLanguage();
                 MainWindow frmMain = new MainWindow();
                 frmMain.Show();
                 this.ShutdownMode = ShutdownMode.OnLastWindowClose;
