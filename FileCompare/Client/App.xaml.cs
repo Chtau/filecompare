@@ -15,6 +15,7 @@ namespace Client
     public partial class App : Application
     {
         private ISettings _settings;
+        private Globalize.ILocalize _localize;
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
@@ -22,6 +23,7 @@ namespace Client
             if (Bootstrap.Instance.InitApplication())
             {
                 _settings = (ISettings)Bootstrap.Instance.Services.GetService(typeof(ISettings));
+                _localize = (Globalize.ILocalize)Bootstrap.Instance.Services.GetService(typeof(Globalize.ILocalize));
                 _settings.Load();
                 MainWindow frmMain = new MainWindow();
                 frmMain.Show();
@@ -31,6 +33,12 @@ namespace Client
             {
 
             }
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            _localize.GetMissingLocalization();
+            base.OnExit(e);
         }
     }
 }
