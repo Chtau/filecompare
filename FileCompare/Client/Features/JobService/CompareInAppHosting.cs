@@ -39,9 +39,20 @@ namespace Client.Features.JobService
             _duplicatesManager = (Duplicates.IDuplicatesManager)Bootstrap.Instance.Services.GetService(typeof(Duplicates.IDuplicatesManager));
             _mainManager = (IMainManager)Bootstrap.Instance.Services.GetService(typeof(IMainManager));
             _mainManager.ApplicationClosing += _mainManager_ApplicationClosing;
+            _mainManager.ApplicationStarting += _mainManager_ApplicationStarting;
+        }
+
+        private void _mainManager_ApplicationStarting(object sender, EventArgs e)
+        {
+            OnResetJobStates();
         }
 
         private void _mainManager_ApplicationClosing(object sender, EventArgs e)
+        {
+            OnResetJobStates();
+        }
+
+        private void OnResetJobStates()
         {
             try
             {
@@ -66,7 +77,7 @@ namespace Client.Features.JobService
             }
             finally
             {
-                
+
             }
         }
 
@@ -341,21 +352,23 @@ namespace Client.Features.JobService
         {
             try
             {
-                _mainManager.SetStatusBarInfoText($"Save compare result ({duplicatesResults.Count} Duplicates)");
-                foreach (var item in duplicatesResults)
+                if (duplicatesResults != null)
                 {
-                    Models.DuplicateValue duplicateValue = null;
-
-                    foreach (var result in item.FileResults)
+                    _mainManager.SetStatusBarInfoText($"Save compare result ({duplicatesResults.Count} Duplicates)");
+                    foreach (var item in duplicatesResults)
                     {
-                        if (duplicateValue == null)
+                        Models.DuplicateValue duplicateValue = null;
+
+                        foreach (var result in item.FileResults)
                         {
-                            duplicateValue = await _jobServiceRepository.CreateDuplicateValue((int)result.CompareValue);
+                            if (duplicateValue == null)
+                            {
+                                duplicateValue = await _jobServiceRepository.CreateDuplicateValue((int)result.CompareValue);
+                            }
+                            await _jobServiceRepository.CreatePathDuplicate(job.Id, duplicateValue.Id, result.FilePath);
                         }
-                        await _jobServiceRepository.CreatePathDuplicate(job.Id, duplicateValue.Id, result.FilePath);
                     }
                 }
-
                 job.JobState = Jobs.JobState.Idle;
                 await _repository.Update(job);
                 JobStateChanged?.Invoke(this, job.JobState);

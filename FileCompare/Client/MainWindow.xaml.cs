@@ -104,5 +104,10 @@ namespace Client
         {
             this.SettingsFlyout.IsOpen = !this.SettingsFlyout.IsOpen;
         }
+
+        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            _mainManager.StartingApplication();
+        }
     }
 }

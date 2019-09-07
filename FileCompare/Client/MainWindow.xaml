@@ -12,6 +12,7 @@
         xmlns:featuresCache="clr-namespace:Client.Features.Cache"
         xmlns:settings="clr-namespace:Client.Settings"
         mc:Ignorable="d"
+        Loaded="MetroWindow_Loaded"
         RightWindowCommandsOverlayBehavior="Never"
         Title="{Binding Source='FileCompare',Converter={ StaticResource LocalizeConverter}}" Height="450" Width="800">
     <Controls:MetroWindow.RightWindowCommands>
