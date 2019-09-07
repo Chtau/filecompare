@@ -27,5 +27,10 @@ namespace Client.Settings
             _settings.Culture = (Globalize.Localize.Language)CultureEnumSelected;
             _settings.Save();
         }
+
+        public void OpenDataFolder()
+        {
+            StaticFolders.OpenDirectory(StaticFolders.GetUserFolder());
+        }
     }
 }

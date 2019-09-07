@@ -34,5 +34,10 @@ namespace Client.Settings
         {
             _viewModel.Save();
         }
+
+        private void OpenDataFolder_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.OpenDataFolder();
+        }
     }
 }
