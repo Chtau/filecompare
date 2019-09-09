@@ -28,13 +28,15 @@ namespace Compare
             public List<DuplicatesResult> DuplicatesResults { get; set; }
             public int ProgressIndex { get; set; }
             public int ItemCounter { get; set; }
+            public List<string> IndexCollection { get; set; }
 
-            public ProcessFileProgressItem(decimal progress, List<DuplicatesResult> duplicatesResults, int progressIndex, int itemCounter)
+            public ProcessFileProgressItem(decimal progress, List<DuplicatesResult> duplicatesResults, int progressIndex, int itemCounter, List<string> indexCollection)
             {
                 Progress = progress;
                 DuplicatesResults = duplicatesResults;
                 ProgressIndex = progressIndex;
                 ItemCounter = itemCounter;
+                IndexCollection = indexCollection;
             }
         }
 
@@ -125,35 +127,55 @@ namespace Compare
                     {
                         int itemCounter = 0;
                         bool cacheLoaded = false;
+                        decimal progressValue = 0;
+                        List<string> cacheIndexValues = new List<string>();
+                        if (CacheDuplicateResult != null)
+                        {
+                            itemCounter = CacheDuplicateResult.ItemCounter;
+                            result = CacheDuplicateResult.DuplicatesResults;
+                            cacheIndexValues = CacheDuplicateResult.IndexCollection;
+                        }
+                        
                         Parallel.For(0, Files.Count, po, (int index) =>
                         {
-                            if (cacheLoaded == false && CacheDuplicateResult != null)
+                            string file = Files[index];
+                            if (!cacheIndexValues.Contains(file.ToUpper()))
                             {
-                                cacheLoaded = true;
-                                itemCounter = CacheDuplicateResult.ItemCounter;
-                                result = CacheDuplicateResult.DuplicatesResults;
-                                index = CacheDuplicateResult.ProgressIndex;
+                                System.Diagnostics.Debug.Print($"INDEX => {index}");
+                                if (!cacheLoaded && CacheDuplicateResult != null)
+                                {
+                                    cacheLoaded = true;
+                                    //itemCounter = CacheDuplicateResult.ItemCounter;
+                                    //result = CacheDuplicateResult.DuplicatesResults;
+                                    index = CacheDuplicateResult.ProgressIndex;
 
-                                var progressValue1 = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
-                                ProcessFileProgress?.Invoke(this, progressValue1);
-                                ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(progressValue1, result, index, itemCounter));
+                                    var progressValue1 = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
+                                    if (progressValue1 > progressValue)
+                                        progressValue = progressValue1;
+                                    ProcessFileProgress?.Invoke(this, progressValue);
+                                    ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(progressValue, result, index, itemCounter, cacheIndexValues));
+                                }
+                                if (itemCounter == 0)
+                                {
+                                    ProcessFileProgress?.Invoke(this, 0);
+                                    ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(0, result, index, itemCounter, cacheIndexValues));
+                                }
+                                itemCounter++;
+
+                                cacheIndexValues.Add(file.ToUpper());
+                                ProcessFile?.Invoke(this, file);
+                                var dup = OnCompareDuplicates(file, index);
+                                if (dup != null)
+                                    result.Add(dup);
+                                var progressValue2 = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
+                                if (progressValue2 > progressValue)
+                                    progressValue = progressValue2;
+                                ProcessFileProgress?.Invoke(this, progressValue);
+                                ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(progressValue, result, index, itemCounter, cacheIndexValues));
                             }
-                            if (itemCounter == 0)
-                            {
-                                ProcessFileProgress?.Invoke(this, 0);
-                                ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(0, result, index, itemCounter));
-                            }
-                            itemCounter += 1;
-                            ProcessFile?.Invoke(this, Files[index]);
-                            var dup = OnCompareDuplicates(Files[index], index);
-                            if (dup != null)
-                                result.Add(dup);
-                            var progressValue = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
-                            ProcessFileProgress?.Invoke(this, progressValue);
-                            ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(progressValue, result, index, itemCounter));
                         });
                         ProcessFileProgress?.Invoke(this, 100);
-                        ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(100, result, -1, itemCounter));
+                        ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(100, result, -1, itemCounter, cacheIndexValues));
                     }
                     catch (Exception ex)
                     {
