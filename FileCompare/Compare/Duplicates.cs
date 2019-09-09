@@ -142,12 +142,12 @@ namespace Compare
                             if (!cacheIndexValues.Contains(file.ToUpper()))
                             {
                                 System.Diagnostics.Debug.Print($"INDEX => {index}");
-                                if (!cacheLoaded && CacheDuplicateResult != null)
+                                if (!cacheLoaded)//&& CacheDuplicateResult != null
                                 {
                                     cacheLoaded = true;
                                     //itemCounter = CacheDuplicateResult.ItemCounter;
                                     //result = CacheDuplicateResult.DuplicatesResults;
-                                    index = CacheDuplicateResult.ProgressIndex;
+                                    //index = CacheDuplicateResult.ProgressIndex;
 
                                     var progressValue1 = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
                                     if (progressValue1 > progressValue)
@@ -160,7 +160,6 @@ namespace Compare
                                     ProcessFileProgress?.Invoke(this, 0);
                                     ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(0, result, index, itemCounter, cacheIndexValues));
                                 }
-                                itemCounter++;
 
                                 cacheIndexValues.Add(file.ToUpper());
                                 ProcessFile?.Invoke(this, file);
@@ -176,6 +175,7 @@ namespace Compare
                             {
                                 System.Diagnostics.Debug.Print($"Already collected File:{file}");
                             }
+                            itemCounter++;
                         });
                         ProcessFileProgress?.Invoke(this, 100);
                         ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(100, result, -1, itemCounter, cacheIndexValues));

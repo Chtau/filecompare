@@ -273,15 +273,21 @@ namespace Client.Features.JobService
             try
             {
                 var caches = await _dBContext.Instance.Table<Models.DuplicateResultProgress>().Where(x => x.JobId == jobId).ToListAsync();
-                foreach (var item in caches)
+                if (caches != null && caches.Count > 0)
                 {
-                    await _dBContext.Instance.DeleteAsync<Models.DuplicateResultProgress>(item);
+                    foreach (var item in caches)
+                    {
+                        await _dBContext.Instance.DeleteAsync<Models.DuplicateResultProgress>(item);
+                    }
                 }
 
                 var cachesIndex = await _dBContext.Instance.Table<Models.DuplicateResultProgressIndex>().Where(x => x.JobId == jobId).ToListAsync();
-                foreach (var item in cachesIndex)
+                if (cachesIndex != null && cachesIndex.Count > 0)
                 {
-                    await _dBContext.Instance.DeleteAsync<Models.DuplicateResultProgressIndex>(item);
+                    foreach (var item in cachesIndex)
+                    {
+                        await _dBContext.Instance.DeleteAsync<Models.DuplicateResultProgressIndex>(item);
+                    }
                 }
 
                 return true;

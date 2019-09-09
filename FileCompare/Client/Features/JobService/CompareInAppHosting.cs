@@ -221,13 +221,15 @@ namespace Client.Features.JobService
                 });
             };
             var cache = await OnGetDuplicateResultProgress(job);
-            cache.IndexCollection = new List<string>();
-            var cacheIndex = await _jobServiceRepository.GetDuplicateResultIndexCache(job.Id);
-            if (cacheIndex != null && cacheIndex.Count > 0)
+            if (cache != null)
             {
-                foreach (var item in cacheIndex)
+                var cacheIndex = await _jobServiceRepository.GetDuplicateResultIndexCache(job.Id);
+                if (cacheIndex != null && cacheIndex.Count > 0)
                 {
-                    cache.IndexCollection.Add(item.Value.ToUpper());
+                    foreach (var item in cacheIndex)
+                    {
+                        cache.IndexCollection.Add(item.Value.ToUpper());
+                    }
                 }
             }
             
