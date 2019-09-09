@@ -149,6 +149,7 @@
     <Compile Include="Features\JobService\JobService.cs" />
     <Compile Include="Features\JobService\JobServiceRepository.cs" />
     <Compile Include="Features\JobService\Models\DuplicateResultProgress.cs" />
+    <Compile Include="Features\JobService\Models\DuplicateResultProgressIndex.cs" />
     <Compile Include="Features\JobService\Models\DuplicateValue.cs" />
     <Compile Include="Features\JobService\Models\PathCompareValue.cs" />
     <Compile Include="Features\JobService\Models\PathDuplicate.cs" />

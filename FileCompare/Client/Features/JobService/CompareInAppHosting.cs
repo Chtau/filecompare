@@ -220,7 +220,18 @@ namespace Client.Features.JobService
                     await OnSaveDuplicateResultProgress(job, e);
                 });
             };
-            duplicates.SetCache(await OnGetDuplicateResultProgress(job));
+            var cache = await OnGetDuplicateResultProgress(job);
+            cache.IndexCollection = new List<string>();
+            var cacheIndex = await _jobServiceRepository.GetDuplicateResultIndexCache(job.Id);
+            if (cacheIndex != null && cacheIndex.Count > 0)
+            {
+                foreach (var item in cacheIndex)
+                {
+                    cache.IndexCollection.Add(item.Value.ToUpper());
+                }
+            }
+            
+            duplicates.SetCache(cache);
             var result = await duplicates.Find(maxPara);
 
             _mainManager.SetStatusBarInfoText($"Finish job");
@@ -270,7 +281,17 @@ namespace Client.Features.JobService
                             JobId = job.Id,
                             Cache = JsonConvert.SerializeObject(e)
                         };
-                        await _jobServiceRepository.ChangeDuplicateResultCache(cache);
+                        var indices = new List<Models.DuplicateResultProgressIndex>();
+                        foreach (var item in e.IndexCollection)
+                        {
+                            indices.Add(new Models.DuplicateResultProgressIndex
+                            {
+                                Id = Guid.NewGuid(),
+                                JobId = job.Id,
+                                Value = item.ToUpper()
+                            });
+                        }
+                        await _jobServiceRepository.ChangeDuplicateResultCache(cache, indices);
                     }
                 }
             } catch (Exception ex)

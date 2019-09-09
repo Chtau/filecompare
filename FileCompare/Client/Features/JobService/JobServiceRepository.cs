@@ -224,7 +224,7 @@ namespace Client.Features.JobService
             return false;
         }
 
-        public async Task<bool> ChangeDuplicateResultCache(DuplicateResultProgress duplicateResultProgress)
+        public async Task<bool> ChangeDuplicateResultCache(DuplicateResultProgress duplicateResultProgress, List<DuplicateResultProgressIndex> indices)
         {
             try
             {
@@ -244,6 +244,21 @@ namespace Client.Features.JobService
                     };
                     await _dBContext.Instance.InsertAsync(item);
                 }
+                var index = await GetDuplicateResultIndexCache(duplicateResultProgress.JobId);
+                foreach (var val in indices)
+                {
+                    if (!index.Any(x => x.Value == val.Value && x.JobId == val.JobId))
+                    {
+                        await _dBContext.Instance.InsertAsync(
+                            new DuplicateResultProgressIndex
+                            {
+                                Id = Guid.NewGuid(),
+                                JobId = duplicateResultProgress.JobId,
+                                Value = val.Value.ToUpper()
+                            });
+                    }
+                }
+
                 return true;
             }
             catch (Exception ex)
@@ -263,6 +278,12 @@ namespace Client.Features.JobService
                     await _dBContext.Instance.DeleteAsync<Models.DuplicateResultProgress>(item);
                 }
 
+                var cachesIndex = await _dBContext.Instance.Table<Models.DuplicateResultProgressIndex>().Where(x => x.JobId == jobId).ToListAsync();
+                foreach (var item in cachesIndex)
+                {
+                    await _dBContext.Instance.DeleteAsync<Models.DuplicateResultProgressIndex>(item);
+                }
+
                 return true;
             }
             catch (Exception ex)
@@ -275,6 +296,11 @@ namespace Client.Features.JobService
         public async Task<DuplicateResultProgress> GetDuplicateResultCache(Guid jobId)
         {
             return await _dBContext.Instance.Table<Models.DuplicateResultProgress>().FirstOrDefaultAsync(x => x.JobId == jobId);
+        }
+
+        public async Task<List<DuplicateResultProgressIndex>> GetDuplicateResultIndexCache(Guid jobId)
+        {
+            return await _dBContext.Instance.Table<Models.DuplicateResultProgressIndex>().Where(x => x.JobId == jobId).ToListAsync();
         }
     }
 }

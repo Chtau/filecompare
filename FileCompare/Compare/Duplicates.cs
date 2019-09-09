@@ -172,6 +172,9 @@ namespace Compare
                                     progressValue = progressValue2;
                                 ProcessFileProgress?.Invoke(this, progressValue);
                                 ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(progressValue, result, index, itemCounter, cacheIndexValues));
+                            } else
+                            {
+                                System.Diagnostics.Debug.Print($"Already collected File:{file}");
                             }
                         });
                         ProcessFileProgress?.Invoke(this, 100);

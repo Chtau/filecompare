@@ -39,6 +39,12 @@ namespace Client.Features.Jobs
                     var result4 = await _dBContext.Instance.Table<JobService.Models.DuplicateResultProgress>().FirstOrDefaultAsync(x => x.JobId == job.Id);
                     if (result4 != null)
                         await _dBContext.Instance.DeleteAsync(result4);
+                    var result5 = await _dBContext.Instance.Table<JobService.Models.DuplicateResultProgressIndex>().Where(x => x.JobId == job.Id).ToListAsync();
+                    if (result5 != null && result5.Count > 0)
+                        result5.ForEach(async item =>
+                        {
+                            await _dBContext.Instance.DeleteAsync(item);
+                        });
                     await _dBContext.Instance.DeleteAsync(job);
 
                     return true;
