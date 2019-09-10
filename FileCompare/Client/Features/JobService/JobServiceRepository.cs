@@ -277,7 +277,7 @@ namespace Client.Features.JobService
                 {
                     foreach (var item in caches)
                     {
-                        await _dBContext.Instance.DeleteAsync<Models.DuplicateResultProgress>(item);
+                        await _dBContext.Instance.DeleteAsync(item);
                     }
                 }
 
@@ -286,7 +286,7 @@ namespace Client.Features.JobService
                 {
                     foreach (var item in cachesIndex)
                     {
-                        await _dBContext.Instance.DeleteAsync<Models.DuplicateResultProgressIndex>(item);
+                        await _dBContext.Instance.DeleteAsync(item);
                     }
                 }
 

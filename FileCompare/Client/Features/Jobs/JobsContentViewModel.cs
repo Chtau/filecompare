@@ -14,6 +14,7 @@ namespace Client.Features.Jobs
         private readonly IJobRepository _repository;
         private readonly JobService.IJobService _jobService;
         private readonly JobService.ICompare _compare;
+        private readonly JobService.IJobServiceRepository _jobServiceRepository;
         private readonly IMainManager _mainManager;
 
         public JobsContentViewModel()
@@ -21,6 +22,7 @@ namespace Client.Features.Jobs
             _logger = (Internal.ILogger)Bootstrap.Instance.Services.GetService(typeof(Internal.ILogger));
             _repository = (IJobRepository)Bootstrap.Instance.Services.GetService(typeof(IJobRepository));
             _jobService = (JobService.IJobService)Bootstrap.Instance.Services.GetService(typeof(JobService.IJobService));
+            _jobServiceRepository = (JobService.IJobServiceRepository)Bootstrap.Instance.Services.GetService(typeof(JobService.IJobServiceRepository));
             _compare = (JobService.ICompare)Bootstrap.Instance.Services.GetService(typeof(JobService.ICompare));
             _compare.JobStateChanged += _compare_JobStateChanged;
             _mainManager = (IMainManager)Bootstrap.Instance.Services.GetService(typeof(IMainManager));
@@ -152,6 +154,11 @@ namespace Client.Features.Jobs
             {
                 _logger.Error(ex, "OnAddJob failed to execute");
             }
+        }
+
+        public void RowCacheResultClearCommand(Models.Job data)
+        {
+            _jobServiceRepository.RemoveDuplicateResultCache(data.Id);
         }
     }
 }

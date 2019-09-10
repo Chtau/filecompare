@@ -34,6 +34,16 @@
                     HeadersVisibility="All" IsReadOnly="True" RowHeight="1" HorizontalGridLinesBrush="#FF555555" VerticalGridLinesBrush="#FF505050" IsTextSearchEnabled="True" GridLinesVisibility="Horizontal"
                     FrozenColumnCount="1"
                     x:Name="jobsGrid">
+                <DataGrid.Resources>
+                    <ContextMenu x:Key="RowMenu" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                        <MenuItem Header="Clear result Cache" x:Name="clearCacheResult" Click="ClearCacheResult_Click" />
+                    </ContextMenu>
+                </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" >
+                        <Setter Property="ContextMenu" Value="{StaticResource RowMenu}" />
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <MenuItem Command="{Binding RefreshCommand}" Header="{Binding Source='Refresh',Converter={ StaticResource LocalizeConverter}}" >

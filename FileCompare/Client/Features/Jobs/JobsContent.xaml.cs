@@ -85,5 +85,17 @@ namespace Client.Features.Jobs
                 }
             }
         }
+
+        private void ClearCacheResult_Click(object sender, RoutedEventArgs e)
+        {
+            if (e.Source is MenuItem item && item.DataContext != null)
+            {
+                if (item.DataContext is Models.Job job)
+                {
+                    _viewModel.RowCacheResultClearCommand(job);
+                    _viewModel.RefreshCommand.Execute(null);
+                }
+            }
+        }
     }
 }
