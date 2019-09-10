@@ -160,5 +160,11 @@ namespace Client.Features.Jobs
         {
             _jobServiceRepository.RemoveDuplicateResultCache(data.Id);
         }
+
+        public void ResetJobToIdle(Models.Job job)
+        {
+            job.JobState = JobState.Idle;
+            _repository.Update(job);
+        }
     }
 }

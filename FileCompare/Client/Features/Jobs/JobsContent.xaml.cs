@@ -97,5 +97,17 @@ namespace Client.Features.Jobs
                 }
             }
         }
+
+        private void ResetToIdle_Click(object sender, RoutedEventArgs e)
+        {
+            if (e.Source is MenuItem item && item.DataContext != null)
+            {
+                if (item.DataContext is Models.Job job)
+                {
+                    _viewModel.ResetJobToIdle(job);
+                    _viewModel.RefreshCommand.Execute(null);
+                }
+            }
+        }
     }
 }
