@@ -126,12 +126,10 @@ namespace Compare
                     try
                     {
                         int itemCounter = 0;
-                        bool cacheLoaded = false;
                         decimal progressValue = 0;
                         List<string> cacheIndexValues = new List<string>();
                         if (CacheDuplicateResult != null)
                         {
-                            itemCounter = CacheDuplicateResult.ItemCounter;
                             result = CacheDuplicateResult.DuplicatesResults;
                             cacheIndexValues = CacheDuplicateResult.IndexCollection;
                         }
@@ -139,22 +137,9 @@ namespace Compare
                         Parallel.For(0, Files.Count, po, (int index) =>
                         {
                             string file = Files[index];
+                            System.Diagnostics.Debug.Print($"INDEX => {index}");
                             if (!cacheIndexValues.Contains(file.ToUpper()))
                             {
-                                System.Diagnostics.Debug.Print($"INDEX => {index}");
-                                if (!cacheLoaded)//&& CacheDuplicateResult != null
-                                {
-                                    cacheLoaded = true;
-                                    //itemCounter = CacheDuplicateResult.ItemCounter;
-                                    //result = CacheDuplicateResult.DuplicatesResults;
-                                    //index = CacheDuplicateResult.ProgressIndex;
-
-                                    var progressValue1 = Math.Round(((decimal)itemCounter / (decimal)Files.Count * 100), 2);
-                                    if (progressValue1 > progressValue)
-                                        progressValue = progressValue1;
-                                    ProcessFileProgress?.Invoke(this, progressValue);
-                                    ProcessFileProgressWithItems?.Invoke(this, new ProcessFileProgressItem(progressValue, result, index, itemCounter, cacheIndexValues));
-                                }
                                 if (itemCounter == 0)
                                 {
                                     ProcessFileProgress?.Invoke(this, 0);
